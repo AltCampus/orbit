@@ -31,5 +31,5 @@ i.e http://localhost:<your_env_port_variable>
 ``` 
 
 
-## Wiki links
+## Wiki
    [Wiki](https://github.com/AltCampus/orbit/wiki)
