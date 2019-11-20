@@ -1,7 +1,11 @@
 # Orbit - Automating AltCampus application process
 
 ## About Orbit
-This application aims to smoothen the applicant  application process at AltCampus. Users can login to see their application progress in real time. Users can download and submit assignments, solve questions and schedule an interview. Admins can grade the submited assignments and questions. Based on the score(both the objectively calculated and the one assigned by the admins) it will be determined whether the user is qualified for the interview or not.
+Orbit is an application management system for [altcampus](https://altcampus.io) to automate the application process for people who wish to enroll the program. The mentors will be able to review and keep track of the applicant’s progress. On this platform, people can log in and get assessed for enrollment depending on different stages of evaluation.
+
+Users can login to see their application progress in real time. Users can solve questions, submit assignments and if selected, get scheduled an interview.
+
+Admins can grade the submited assignments and questions. Based on the score(both the objectively calculated and the one assigned by the admins) it will be determined whether the user is qualified for the interview or not.
 
 ## How to launch the app locally?
 
