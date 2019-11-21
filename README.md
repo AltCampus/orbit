@@ -32,6 +32,7 @@ this command installs all the node related packages required to run the app loca
 - STEP 4-- Launch the application using below command:
 
 ```
+
 Below command will start as full web application(Backend+Frontend)
 >>> npm install -g nodemon
 >>> npm start
