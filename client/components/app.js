@@ -1,9 +1,17 @@
+import React, { Component } from "react";
+import Home from "./Home";
+import "../scss/app.scss";
 
-import React, { Component } from 'react';
-class App extends Component {
-    render() {
-        return (<h1>Hello World!</h1>)
-    }
+export class app extends Component {
+  render() {
+    return (
+      <>
+        <h1>
+          <Home />
+        </h1>
+      </>
+    );
+  }
 }
 
-export default App;
+export default app;

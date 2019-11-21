@@ -1,0 +1,62 @@
+.hero {
+    flex-wrap: wrap;
+    margin: 0 auto;
+    padding: 1.5 rem;
+    width: 70%;
+}
+
+.hero h3 {
+    font-weight: 400;
+    font-size: 1.8rem;
+}
+
+.hero p {
+    margin-top: 1.3rem;
+    margin-bottom: 2rem;
+    font-size: 0.85rem;
+    font-weight: 300;
+}
+
+.input-holder {
+    padding: 1rem;
+    margin: 1rem 5.5rem;
+    border-radius: 5px;
+    font-size: 20px;
+    border: 1px solid gray;
+    outline: none;
+    width: 65%;
+
+}
+
+.btn-primary {
+    border: none;
+    border-radius: 2rem;
+    margin-top: 2rem;
+}
+
+.box {
+    box-shadow: 0rem 0rem 1rem 0.1rem rgb(224, 224, 224);
+}
+
+.box h3 {
+    font-weight: 400;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.box {
+    height: 27rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+// .form_container {
+//     display: flex;
+//     justify-content: center;
+//     flex-direction: column;
+//     margin: 0 auto;
+// }
