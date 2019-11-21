@@ -33,3 +33,7 @@ The application will be running at http://localhost:3000
 if not then please check if you have set any default PORT in your environment/path variable
 i.e http://localhost:<your_env_port_variable>
 ``` 
+
+
+## Wiki
+   [Wiki](https://github.com/AltCampus/orbit/wiki)
