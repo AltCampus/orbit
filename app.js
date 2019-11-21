@@ -9,7 +9,7 @@ var usersRouter = require("./routes/users");
 require("dotenv").config();
 
 mongoose.connect(
-  process.env.DB_CONNECTS,
+  process.env.DB_CONNECT,
   { useUnifiedTopology: true, useNewUrlParser: true },
   err => {
     err ? console.log(err) : console.log("connected to DB");
