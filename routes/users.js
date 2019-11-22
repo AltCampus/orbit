@@ -21,24 +21,13 @@ router.post("/", async (req, res) => {
         .toString(36)
         .substring(2, 15);
     const user = await User.create(req.body);
+    //TODO: UnComment to sending mail once user Register
     // const mail = await Mailer.mail(user.email, user.name, user.hashMail);
     // console.log("mailer");
     res.status(201).json({ status: true, user });
   } catch (err) {
     console.log(err);
     res.status(400).json({ status: false, err });
-  }
-});
-
-router.post("/set-password/:hashMail", async (req, res) => {
-  let { password } = req.body;
-  try {
-    const user = await User.findOne({ hashMail });
-    user.password = password;
-    const UpdatedUser = await user.save();
-    res.status(201).json({ status: true, UpdatedUser });
-  } catch (err) {
-    res.status(301).json({ success: false, err });
   }
 });
 
