@@ -1,11 +1,12 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
+const User = require("../models/User");
 
 // on first login reset Password
 router.post("/:hashMail", async (req, res) => {
   let { password } = req.body;
-  let {hashMail} = req.params;
-  if(hashMail){
+  let { hashMail } = req.params;
+  if (hashMail) {
     try {
       const user = await User.findOne({ hashMail });
       user.password = password;
@@ -15,9 +16,11 @@ router.post("/:hashMail", async (req, res) => {
     } catch (err) {
       return res.status(301).json({ success: false, err });
     }
+  } else {
+    res
+      .status(301)
+      .json({ success: false, message: "User already Claimed there account" });
   }
-  else{
-  res.status(301).json({success:false,message:'User already Claimed there account'});}
 });
 
 module.exports = router;

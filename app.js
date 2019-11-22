@@ -5,6 +5,7 @@ var logger = require("morgan");
 var createError = require("http-errors");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+const userRouter = require("./routes/user");
 
 require("dotenv").config();
 
@@ -45,6 +46,7 @@ if (process.env.NODE_ENV === "development") {
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/user", usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
