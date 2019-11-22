@@ -1,0 +1,25 @@
+// Responsive Image
+.img-responsive {
+    width: 100%;
+    height: auto;
+}
+
+//media query
+@media all and (max-width: 768px) {
+    html {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+}
+
+@media all and (max-width: 768px) {
+    .grid-col2 {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .grid-col3 {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+}
