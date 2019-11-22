@@ -21,18 +21,18 @@ function getApplicationContent(studentName, hashMail) {
         margin: 0;
         padding: 0;
       }
-  
+
       table,
       td,
       tr {
         vertical-align: top;
         border-collapse: collapse;
       }
-  
+
       * {
         line-height: inherit;
       }
-  
+
       a[x-apple-data-detectors=true] {
         color: inherit !important;
         text-decoration: none !important;
@@ -40,68 +40,68 @@ function getApplicationContent(studentName, hashMail) {
     </style>
   <style id="media-query" type="text/css">
       @media (max-width: 625px) {
-  
+
         .block-grid,
         .col {
           min-width: 320px !important;
           max-width: 100% !important;
           display: block !important;
         }
-  
+
         .block-grid {
           width: 100% !important;
         }
-  
+
         .col {
           width: 100% !important;
         }
-  
+
         .col>div {
           margin: 0 auto;
         }
-  
+
         img.fullwidth,
         img.fullwidthOnMobile {
           max-width: 100% !important;
         }
-  
+
         .no-stack .col {
           min-width: 0 !important;
           display: table-cell !important;
         }
-  
+
         .no-stack.two-up .col {
           width: 50% !important;
         }
-  
+
         .no-stack .col.num4 {
           width: 33% !important;
         }
-  
+
         .no-stack .col.num8 {
           width: 66% !important;
         }
-  
+
         .no-stack .col.num4 {
           width: 33% !important;
         }
-  
+
         .no-stack .col.num3 {
           width: 25% !important;
         }
-  
+
         .no-stack .col.num6 {
           width: 50% !important;
         }
-  
+
         .no-stack .col.num9 {
           width: 75% !important;
         }
-  
+
         .video-block {
           max-width: none !important;
         }
-  
+
         .mobile_hide {
           min-height: 0px;
           max-height: 0px;
@@ -110,7 +110,7 @@ function getApplicationContent(studentName, hashMail) {
           overflow: hidden;
           font-size: 0px;
         }
-  
+
         .desktop_hide {
           display: block !important;
           max-height: none !important;
@@ -235,7 +235,7 @@ function getApplicationContent(studentName, hashMail) {
   </div>
   <!--[if mso]></td></tr></table><![endif]-->
   <div align="left" class="button-container" style="padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
-  <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr><td style="padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px" align="left"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://example.com" style="height:33pt; width:117pt; v-text-anchor:middle;" arcsize="57%" stroke="false" fillcolor="#28ac5c"><w:anchorlock/><v:textbox inset="0,0,0,0"><center style="color:#ffffff; font-family:Arial, sans-serif; font-size:12px"><![endif]--><a href="http://altcampus.io/${hashMail}" style="-webkit-text-size-adjust: none; text-decoration: none; display: inline-block; color: #ffffff; background-color: #28ac5c; border-radius: 25px; -webkit-border-radius: 25px; -moz-border-radius: 25px; width: auto; width: auto; border-top: 1px solid #28ac5c; border-right: 1px solid #28ac5c; border-bottom: 1px solid #28ac5c; border-left: 1px solid #28ac5c; padding-top: 10px; padding-bottom: 10px; font-family: 'Open Sans', Helvetica, Arial, sans-serif; text-align: center; mso-border-alt: none; word-break: keep-all;" target="_blank"><span style="padding-left:30px;padding-right:30px;font-size:12px;display:inline-block;"><span style="font-size: 12px; line-height: 2; mso-line-height-alt: 24px;">Login from here</span></span></a>
+  <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr><td style="padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px" align="left"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://orbit.altcampus.io/${hashMail}" style="height:33pt; width:117pt; v-text-anchor:middle;" arcsize="57%" stroke="false" fillcolor="#28ac5c"><w:anchorlock/><v:textbox inset="0,0,0,0"><center style="color:#ffffff; font-family:Arial, sans-serif; font-size:12px"><![endif]--><a href="http://orbit.altcampus.io/${hashMail}" style="-webkit-text-size-adjust: none; text-decoration: none; display: inline-block; color: #ffffff; background-color: #28ac5c; border-radius: 25px; -webkit-border-radius: 25px; -moz-border-radius: 25px; width: auto; width: auto; border-top: 1px solid #28ac5c; border-right: 1px solid #28ac5c; border-bottom: 1px solid #28ac5c; border-left: 1px solid #28ac5c; padding-top: 10px; padding-bottom: 10px; font-family: 'Open Sans', Helvetica, Arial, sans-serif; text-align: center; mso-border-alt: none; word-break: keep-all;" target="_blank"><span style="padding-left:30px;padding-right:30px;font-size:12px;display:inline-block;"><span style="font-size: 12px; line-height: 2; mso-line-height-alt: 24px;">Login from here</span></span></a>
   <!--[if mso]></center></v:textbox></v:roundrect></td></tr></table><![endif]-->
   </div>
   <table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation" style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;" valign="top" width="100%">
@@ -299,9 +299,9 @@ function getApplicationContent(studentName, hashMail) {
   <table activate="activate" align="right" alignment="alignment" cellpadding="0" cellspacing="0" class="social_table" role="presentation" style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: undefined; mso-table-tspace: 0; mso-table-rspace: 0; mso-table-bspace: 0; mso-table-lspace: 0;" to="to" valign="top">
   <tbody>
   <tr align="right" style="vertical-align: top; display: inline-block; text-align: right;" valign="top">
-  <td style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-right: 0px; padding-left: 5px;" valign="top"><a href="https://www.facebook.com/" target="_blank"><img alt="Facebook" height="32" src="images/facebook.png" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="Facebook" width="32"/></a></td>
-  <td style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-right: 0px; padding-left: 5px;" valign="top"><a href="http://twitter.com/" target="_blank"><img alt="Twitter" height="32" src="images/twitter.png" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="Twitter" width="32"/></a></td>
-  <td style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-right: 0px; padding-left: 5px;" valign="top"><a href="http://plus.google.com/" target="_blank"><img alt="Google+" height="32" src="images/googleplus.png" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="Google+" width="32"/></a></td>
+  <td style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-right: 0px; padding-left: 5px;" valign="top"><a href="https://www.facebook.com/AltCampusIO/" target="_blank"><img title='Altcampus Facebook' alt="Facebook" height="32" src="https://i.imgur.com/HkNgOJB.png" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="Facebook" width="32"/></a></td>
+  <td style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-right: 0px; padding-left: 5px;" valign="top"><a href="http://twitter.com/altcampus" target="_blank"><img alt="Twitter" height="32" title='AltCampus Twitter' src="https://i.imgur.com/nS8KaN8.png" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="Twitter" width="32"/></a></td>
+  <td style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-right: 0px; padding-left: 5px;" valign="top"><a href="https://www.instagram.com/altcampus/" target="_blank"><img alt="AltCampus Instagram" height="32" src="https://instagram-brand.com/wp-content/uploads/2016/11/Instagram_AppIcon_Aug2017.png?w=300" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="Instagram" width="32"/></a></td>
   </tr>
   </tbody>
   </table>
@@ -329,21 +329,31 @@ function getApplicationContent(studentName, hashMail) {
   </html>`;
   return Mail;
 }
-
-module.exports = {
-  mail: async (toAddress, studentName, hashMail) => {
-    await axios.post(
-      `https://mail.zoho.in/api/accounts/${process.env.accountId}/messages`,
+exports.mail = function(toAddress, studentName, hashMail) {
+  console.log(
+    toAddress,
+    studentName,
+    hashMail,
+    process.env.accountId,
+    process.env.oAuthToken
+  );
+  try {
+    axios.post(
+      `https://mail.zoho.com/api/accounts/${process.env.accountId}/messages`,
       {
         fromAddress: "prashant@altcampus.io",
-        toAddress,
+        toAddress: toAddress,
         subject: "AltCampus Application",
-        content: getApplicationContent(studentName,hashMail);
+        content: `${getApplicationContent(studentName, hashMail)}`
       },
       {
-        "Content-Type": "application/json",
-        Authorization: `Zoho-authtoken ${process.env.oAuthToken}`
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Zoho-authtoken ${process.env.oAuthToken}`
+        }
       }
     );
+  } catch (error) {
+    console.log(error);
   }
 };

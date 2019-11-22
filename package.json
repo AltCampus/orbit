@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=development node ./bin/www",
+    "start": "NODE_ENV=development nodemon ./bin/www",
     "webpack": "webpack-dev-server --config ./webpack.config.js --mode development",
     "build": "webpack --mode production"
   },
