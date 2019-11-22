@@ -11,18 +11,16 @@ exports.verToken = (req, res, next) => {
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, userToken) => {
       if (err) return res.status(401).json({ message: "invalid token" });
-      console.log(userToken, "userToken");
-      User.findOne(
-        { id: userToken.userId },
+      User.findById(
+        userToken.userId,
         "-password -createdAt -updatedAt -contact -post -description -__v",
         (err, user) => {
           if (err) return res.status(401).json({ message: "User not found" });
-          console.log(user, err, "user");
           req.user = user;
           // Admin user req
-          // if (user.email === process.env.email) {
-          //   req.isAdmin = true;
-          // }
+          if (user.email === process.env.email) {
+            req.isAdmin = true;
+          }
           next();
         }
       );
