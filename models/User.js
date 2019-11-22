@@ -5,21 +5,21 @@ const userSchema = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true, lowercase: true },
-    password: String,
-    phoneNo: {
-      type: Number,
-      required: true,
-      unique: true,
-      minlength: 10,
-      maxlength: 10
-    },
-    hashEmail: {
-      hashLink: { type: String, required: true, unique: true },
-      views: { type: Number, default: 0 }
-    },
-    socialProfile: { type: String, required: true },
-    motivation: { type: String, required: true, maxlength: 200 },
-    stage: { type: Number, default: 0 }
+    password: String
+    // phoneNo: {
+    //   type: Number,
+    //   required: true,
+    //   unique: true,
+    //   minlength: 10,
+    //   maxlength: 10
+    // },
+    // hashEmail: {
+    //   hashLink: { type: String, required: false, unique: true },
+    //   views: { type: Number, default: 0 }
+    // },
+    // socialProfile: { type: String, required: true },
+    // motivation: { type: String, required: false, maxlength: 200 },
+    // stage: { type: Number, default: 0 }
   },
   { timestamps: true }
 );
@@ -39,6 +39,11 @@ userSchema.pre("save", async function(next) {
   }
   next();
 });
+
+userSchema.methods.verifyPassword = function(password) {
+  return bcrypt.compareSync(password, this.password);
+};
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
