@@ -24,14 +24,14 @@ const userSchema = new Schema(
       ]
     },
     password: String,
-    phoneNo: {
-      type: Number,
-      required: true
-    },
-    hashMail: { type: String, unique: true },
-    socialProfile: { type: String, required: true },
-    motivation: { type: String, required: true, maxlength: 200 },
-    stage: { type: Number, default: 0 }
+    // phoneNo: {
+    //   type: Number,
+    //   required: true
+    // },
+    hashMail: { type: String, unique: true }
+    // socialProfile: { type: String, required: true },
+    // motivation: { type: String, required: true, maxlength: 200 },
+    // stage: { type: Number, default: 0 }
   },
   { timestamps: true }
 );
