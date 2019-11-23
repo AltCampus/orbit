@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 // function validate email
 var validateEmail = function(email) {
   var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  return re.test(email)
+  return re.test(email);
 };
 
 const userSchema = new Schema(
@@ -16,10 +16,13 @@ const userSchema = new Schema(
       trim: true,
       lowercase: true,
       unique: true,
-      required: 'Email address is required',
-      validate: [validateEmail, 'Please fill a valid email address'],
-      match: [/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/, 'Please fill a valid email address']
-  },
+      required: "Email address is required",
+      validate: [validateEmail, "Please fill a valid email address"],
+      match: [
+        /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/,
+        "Please fill a valid email address"
+      ]
+    },
     password: String,
     phoneNo: {
       type: Number,
@@ -40,6 +43,9 @@ userSchema.pre("save", async function(next) {
   next();
 });
 
+userSchema.methods.verifyPassword = function(password) {
+  return bcrypt.compareSync(password, this.password);
+};
 
 const User = mongoose.model("User", userSchema);
 
