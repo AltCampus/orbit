@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const Mailer = require("../utils/Mailer");
+// const Mailer = require("../utils/Mailer");
 const User = require("../models/User");
 const Auth = require("../utils/auth");
 
@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
         .substring(2, 15);
     const user = await User.create(req.body);
     //TODO: UnComment to sending mail once user Register
-    const mail = await Mailer.mail(user.email, user.name, user.hashMail);
+    // const mail = await Mailer.mail(user.email, user.name, user.hashMail);
     // console.log("mailer");
     res.status(201).json({ status: true, user });
   } catch (err) {
