@@ -10,11 +10,11 @@ router.post("/:hashMail", async (req, res) => {
     try {
       const user = await User.findOne({ hashMail });
       user.password = password;
-      delete user.hashMail;
-      const UpdatedUser = await user.save();
-      return res.status(201).json({ status: true, UpdatedUser });
+      user.hashMail = null;
+      const updatedUser = await user.save();
+      res.status(201).json({ status: true, updatedUser });
     } catch (err) {
-      return res.status(301).json({ success: false, err });
+      res.status(301).json({ success: false, err });
     }
   } else {
     res
