@@ -43,7 +43,7 @@ router.post("/login", async (req, res) => {
         .status(400)
         .json({ status: "failed", message: "Invaild password" });
     }
-    const token = await Auth.genToken(user.id);
+    const token = await Auth.generateToken(user.id);
     res.status(200).json({ status: "success", user, token });
   } catch (err) {
     res.status(400).json({ status: "failed", err });

@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-exports.genToken = userId => {
+exports.generateToken = userId => {
   return jwt.sign({ userId }, process.env.JWT_SECRET_KEY, { expiresIn: "14d" });
 };
 
-exports.verToken = (req, res, next) => {
+exports.verifyToken = (req, res, next) => {
   //Note: First character is lower case for some error reasons, authorization.
   let token = req.headers.authorization || "";
   if (token) {
@@ -17,7 +17,7 @@ exports.verToken = (req, res, next) => {
         (err, user) => {
           if (err) return res.status(401).json({ message: "User not found" });
           req.user = user;
-          // Admin user req
+          // Admin user request
           if (user.email === process.env.email) {
             req.isAdmin = true;
           }
