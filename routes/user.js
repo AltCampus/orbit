@@ -12,7 +12,7 @@ router.post("/:hashMail", async (req, res) => {
       user.password = password;
       user.hashMail = null;
       const updatedUser = await user.save();
-      res.status(201).json({ status: true, updatedUser });
+      res.status(201).json({ status: true, user: updatedUser });
     } catch (err) {
       res.status(301).json({ success: false, err });
     }
