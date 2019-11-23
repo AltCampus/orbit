@@ -1,13 +1,10 @@
 import React, { Component } from "react";
-import "../scss/app.scss";
-import Header from "./Header";
-import Login from "./Login";
-
+import Login from "./components/login/Login";
+import "./css-reset.scss";
 export class app extends Component {
   render() {
     return (
       <>
-        <Header />
         <Login />
       </>
     );
