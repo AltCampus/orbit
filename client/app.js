@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { Route, Switch, Link } from "react-router-dom";
 import Login from "./components/login/Login";
 import ResetForm from "./components/resetForm/ResetForm";
 import Register from "./components/register/Register";
@@ -30,8 +30,26 @@ export class app extends Component {
       .catch(err => console.error(err));
   };
 
-  protectedRoutes = () => {};
-  unprotectedRoutes = () => {};
+  Routes = user => {
+    // Protected Routes
+    if (user) {
+      return (
+        <Switch>
+          {/* TODO: Add dasboard route */}
+          {/* <Route exact path="/dashboard" component={Dashboard} /> */}
+        </Switch>
+      );
+    }
+    // Unprotected Routes
+    else {
+      return (
+        <Switch>
+          <Route path="/reset" component={ResetForm} />
+          <Route path="/login" component={Login} />
+        </Switch>
+      );
+    }
+  };
 
   componentDidMount = () => {
     if (localStorage.authToken) {
@@ -40,14 +58,7 @@ export class app extends Component {
   };
 
   render() {
-    return (
-      // <Register />
-      <Switch>
-        <Route exact path="/" component={ResetForm} />
-        <Route path="/register" component={Register} />
-        <Route path="/login" component={Login} />
-      </Switch>
-    );
+    return <>{this.Routes(this.state.user)}</>;
   }
 }
 
