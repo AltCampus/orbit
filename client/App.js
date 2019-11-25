@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import Login from "./components/login/Login";
 import ResetForm from "./components/resetForm/ResetForm";
-import Register from "./components/register/Register";
 import UserDashboard from "./components/dashboard/UserDashboard";
 import "./css-reset.scss";
 import "./App.scss";
