@@ -6,6 +6,7 @@ var createError = require("http-errors");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 const userRouter = require("./routes/user");
+const dashboardRouter = require("./routes/dashboard");
 
 require("dotenv").config();
 
@@ -45,6 +46,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.use("/", indexRouter);
+app.use("/dashboard", dashboardRouter);
 app.use("/users", usersRouter);
 app.use("/user", userRouter);
 
