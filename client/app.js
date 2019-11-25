@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import Login from "./components/login/Login";
 import ResetForm from "./components/resetForm/ResetForm";
 import Register from "./components/register/Register";
@@ -11,6 +11,7 @@ export class app extends Component {
       user: null
     };
   }
+
   loggedUserToken = userToken => {
     fetch("http://localhost:3000/api/user/", {
       headers: {
@@ -37,8 +38,16 @@ export class app extends Component {
       this.loggedUserToken(JSON.parse(localStorage.authToken));
     }
   };
+
   render() {
-    return <Register />;
+    return (
+      // <Register />
+      <Switch>
+        <Route exact path="/" component={ResetForm} />
+        <Route path="/register" component={Register} />
+        <Route path="/login" component={Login} />
+      </Switch>
+    );
   }
 }
 
