@@ -44,7 +44,7 @@ export class app extends Component {
     else {
       return (
         <Switch>
-          <Route path="/reset" component={ResetForm} />
+          <Route path="/reset/:hashmail" component={ResetForm} />
           <Route path="/login" component={Login} />
         </Switch>
       );
