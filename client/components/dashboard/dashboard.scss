@@ -23,3 +23,18 @@
   align-items: center;
   margin: 16px 0;
 }
+.ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .user-details {
+    margin-top: auto;
+    margin-bottom: 15px;
+    .user-details-avatar {
+      margin-right: 15px;
+    }
+    .user-details-name {
+      color: white;
+    }
+  }
+}
