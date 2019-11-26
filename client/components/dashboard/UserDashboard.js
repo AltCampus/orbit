@@ -30,7 +30,7 @@ class UserDashboard extends React.Component {
           collapsedWidth={this.state.broken ? "0" : "80"}
           collapsed={this.state.collapsed}
         >
-          <div className='logo' />
+          <div className='logo'>Alt Campus</div>
           <Menu theme='dark' mode='inline' defaultSelectedKeys={["1"]}>
             <Menu.Item key='1'>
               <Icon type='layout' />
