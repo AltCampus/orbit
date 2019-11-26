@@ -24,8 +24,12 @@ export class app extends Component {
         } else return response.json();
       })
       .then(user => {
-        localStorage.setItem("authToken", JSON.stringify(userToken));
-        this.setState({ user });
+        if (user.email) {
+          this.setState({ user });
+        } else {
+          localStorage.clear();
+          this.props.history.push("/login");
+        }
       })
       .catch(err => console.error(err));
   };
