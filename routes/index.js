@@ -13,4 +13,8 @@ router.get("/dashboard", Auth.verifyToken, (req, res) => {
   res.status(200).json({ status: true, isAdmin: false, user: req.user });
 });
 
+router.get("/login", (req, res) => {
+  res.render("index", { title: 'Orbit'});
+});
+
 module.exports = router;
