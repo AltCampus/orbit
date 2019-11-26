@@ -15,6 +15,11 @@
 
 .logo {
   height: 32px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px;
+  font-size: large;
+  color: #fff;
+  font-weight: 900;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  margin: 16px 0;
 }
