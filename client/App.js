@@ -3,8 +3,10 @@ import { Route, Switch, Link } from "react-router-dom";
 import Login from "./components/login/Login";
 import ResetForm from "./components/resetForm/ResetForm";
 import Register from "./components/register/Register";
+import LandingPage from "./components/static/LandingPage";
 import "./css-reset.scss";
-export class app extends Component {
+
+class App extends Component {
   constructor() {
     super();
     this.state = {
@@ -13,7 +15,7 @@ export class app extends Component {
   }
 
   loggedUserToken = userToken => {
-    fetch("http://localhost:3000/api/user/", {
+    fetch("http://localhost:3000/api/v1/user/", {
       headers: {
         authorization: userToken
       }
@@ -34,6 +36,9 @@ export class app extends Component {
       .catch(err => console.error(err));
   };
 
+
+  // TODO : Change this into a seperate protected component
+
   Routes = user => {
     // Protected Routes
     if (user) {
@@ -48,6 +53,7 @@ export class app extends Component {
     else {
       return (
         <Switch>
+          <Route exact path="/" component={LandingPage} />
           <Route path="/reset/:hashmail" component={ResetForm} />
           <Route path="/login" component={Login} />
         </Switch>
@@ -66,4 +72,4 @@ export class app extends Component {
   }
 }
 
-export default app;
+export default App;

@@ -55,10 +55,10 @@ mongoose.connect(
   }
 );
 
-app.use("/", indexRouter);
-app.use("/dashboard", dashboardRouter);
-app.use("/users", usersRouter);
+app.use("/api/v1/dashboard", dashboardRouter);
+app.use("/api/v1/users", usersRouter);
 app.use("/user", userRouter);
+app.use("/", indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

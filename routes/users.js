@@ -11,8 +11,11 @@ router.get("/", function(req, res, next) {
     res.status(201).json({ status: true, users });
   });
 });
+
 /* POST req from altcampus to orbit and create user */
 router.post("/", async (req, res) => {
+  // TODO: add validations.
+
   try {
     req.body.hashMail =
       Math.random()
@@ -37,13 +40,19 @@ router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     const password = req.body.password;
-    if (!user) return res.json({ status: "failed", message: "User not found" });
+
+    if (!user) {
+      return res.json({ status: "failed", message: "User not found" });
+    }
+    
     if (!user.verifyPassword(password)) {
       return res
         .status(400)
         .json({ status: "failed", message: "Invaild password" });
     }
+
     const token = await Auth.generateToken(user.id);
+    
     res.status(200).json({ status: "success", user, token });
   } catch (err) {
     res.status(400).json({ status: "failed", err });

@@ -7,6 +7,7 @@ module.exports = {
       expiresIn: "14d"
     });
   },
+
   verifyToken: function(req, res, next) {
     //Note: First character is lower case for some error reasons, authorization.
     let token = req.headers.authorization || "";
@@ -19,6 +20,8 @@ module.exports = {
           (err, user) => {
             if (err) return res.status(401).json({ message: "User not found" });
             req.user = user;
+
+            // TODO: remove the admin emails from env and move it to DB.
             // Admin user request
             if (user.email === process.env.email) {
               req.isAdmin = true;
@@ -27,6 +30,8 @@ module.exports = {
           }
         );
       });
-    } else res.status(401).json({ message: "unauthorized access" });
+    } else {
+      res.status(401).json({ message: "unauthorized access" });
+    }
   }
 };
