@@ -6,6 +6,7 @@ const User = require("../models/User");
 router.post("/:hashMail", async (req, res) => {
   let { password } = req.body;
   let { hashMail } = req.params;
+
   if (hashMail) {
     try {
       const user = await User.findOne({ hashMail });
@@ -21,6 +22,7 @@ router.post("/:hashMail", async (req, res) => {
       .status(301)
       .json({ success: false, message: "User already Claimed there account" });
   }
+  
 });
 
 module.exports = router;

@@ -31,10 +31,12 @@ const userSchema = new Schema(
     hashMail: { type: String, unique: true },
     socialProfile: { type: String, required: true },
     motivation: { type: String, required: true, maxlength: 200 },
+    isProfileClaimed: { type: Boolean, default: false },
     stage: { type: Number, default: 0 }
   },
   { timestamps: true }
 );
+
 userSchema.pre("save", async function(next) {
   if (this.password) {
     var salt = bcrypt.genSaltSync(10);

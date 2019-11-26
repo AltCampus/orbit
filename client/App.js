@@ -1,19 +1,24 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
+
+import { Route, Switch, Link } from "react-router-dom";
 import Login from "./components/login/Login";
 import ResetForm from "./components/resetForm/ResetForm";
+import Register from "./components/register/Register";
+import LandingPage from "./components/static/LandingPage";
 import UserDashboard from "./components/dashboard/UserDashboard";
 import "./css-reset.scss";
 import "./App.scss";
-export class app extends Component {
+
+class App extends Component {
   constructor() {
     super();
     this.state = {
       user: null
     };
   }
+
   loggedUserToken = userToken => {
-    fetch("http://localhost:3000/api/user/", {
+    fetch("http://localhost:3000/api/v1/user/", {
       headers: {
         authorization: userToken
       }
@@ -24,14 +29,27 @@ export class app extends Component {
         } else return response.json();
       })
       .then(user => {
-        localStorage.setItem("authToken", JSON.stringify(userToken));
-        this.setState({ user });
+        if (user.email) {
+          this.setState({ user });
+        } else {
+          localStorage.clear();
+          this.props.history.push("/login");
+        }
       })
       .catch(err => console.error(err));
   };
 
+  // TODO : Change this into a seperate protected component
   protectedRoutes = () => {};
-  unprotectedRoutes = () => {};
+  unprotectedRoutes = () => {
+    return (
+      <Switch>
+        <Route exact path='/' component={LandingPage} />
+        <Route path='/reset/:hashmail' component={ResetForm} />
+        <Route path='/login' component={Login} />
+      </Switch>
+    );
+  };
 
   componentDidMount = () => {
     if (localStorage.authToken) {
@@ -43,4 +61,4 @@ export class app extends Component {
   }
 }
 
-export default app;
+export default App;
