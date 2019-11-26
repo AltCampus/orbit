@@ -1,21 +1,16 @@
-/***
- * TODO:
- * 
- * Make all the variable declarations consistent.
- */
-
-var express = require("express");
+const express = require("express");
 const mongoose = require("mongoose");
-var path = require("path");
-var logger = require("morgan");
-var createError = require("http-errors");
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+const path = require("path");
+const logger = require("morgan");
+const createError = require("http-errors");
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
 const userRouter = require("./routes/user");
+const dashboardRouter = require("./routes/dashboard");
 
 require("dotenv").config();
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -26,10 +21,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
+// Connect database
+mongoose.connect(
+  process.env.DB_CONNECT,
+  { useUnifiedTopology: true, useNewUrlParser: true },
+  err => {
+    err ? console.log(err) : console.log("connected to DB");
+  }
+);
+
+mongoose.set("useCreateIndex", true);
+
 if (process.env.NODE_ENV === "development") {
-  var webpack = require("webpack");
-  var webpackConfig = require("./webpack.config");
-  var compiler = webpack(webpackConfig);
+  const webpack = require("webpack");
+  const webpackConfig = require("./webpack.config");
+  const compiler = webpack(webpackConfig);
 
   app.use(
     require("webpack-dev-middleware")(compiler, {
@@ -50,6 +56,7 @@ mongoose.connect(
 );
 
 app.use("/", indexRouter);
+app.use("/dashboard", dashboardRouter);
 app.use("/users", usersRouter);
 app.use("/user", userRouter);
 

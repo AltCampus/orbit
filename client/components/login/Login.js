@@ -7,11 +7,26 @@ export default class Login extends React.Component {
     email: "",
     password: ""
   };
+
   handleSubmit = e => {
     e.preventDefault();
+    this.postUserData();
   };
+
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+  };
+
+  postUserData = () => {
+    // Post the user data
+    axios
+      .post(`http://localhost:3000/users/login`, this.state)
+      .then(data => {
+        localStorage.setItem("authToken", JSON.stringify(data.data.token));
+        // TODO: Add logic to render different dashboard
+        this.props.history.push("/dashboard");
+      })
+      .catch(err => console.error(err));
   };
 
   render() {

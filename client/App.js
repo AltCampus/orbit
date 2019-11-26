@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Route, Switch, Link } from "react-router-dom";
 import Login from "./components/login/Login";
 import ResetForm from "./components/resetForm/ResetForm";
 import Register from "./components/register/Register";
@@ -11,6 +11,7 @@ export class app extends Component {
       user: null
     };
   }
+
   loggedUserToken = userToken => {
     fetch("http://localhost:3000/api/user/", {
       headers: {
@@ -23,22 +24,45 @@ export class app extends Component {
         } else return response.json();
       })
       .then(user => {
-        localStorage.setItem("authToken", JSON.stringify(userToken));
-        this.setState({ user });
+        if (user.email) {
+          this.setState({ user });
+        } else {
+          localStorage.clear();
+          this.props.history.push("/login");
+        }
       })
       .catch(err => console.error(err));
   };
 
-  protectedRoutes = () => {};
-  unprotectedRoutes = () => {};
+  Routes = user => {
+    // Protected Routes
+    if (user) {
+      return (
+        <Switch>
+          {/* TODO: Add dasboard route */}
+          {/* <Route exact path="/dashboard" component={Dashboard} /> */}
+        </Switch>
+      );
+    }
+    // Unprotected Routes
+    else {
+      return (
+        <Switch>
+          <Route path="/reset/:hashmail" component={ResetForm} />
+          <Route path="/login" component={Login} />
+        </Switch>
+      );
+    }
+  };
 
   componentDidMount = () => {
     if (localStorage.authToken) {
       this.loggedUserToken(JSON.parse(localStorage.authToken));
     }
   };
+
   render() {
-    return <Register />;
+    return <>{this.Routes(this.state.user)}</>;
   }
 }
 
