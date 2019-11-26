@@ -1,6 +1,6 @@
 import React from "react";
 import "antd/dist/antd.css";
-import "./dashboard.scss";
+import "./../dashboard.scss";
 import { Layout, Menu, Icon, Avatar } from "antd";
 
 const { Header, Sider, Content } = Layout;
@@ -49,7 +49,7 @@ class UserDashboard extends React.Component {
               <span>nav 4</span>
             </Menu.Item>
           </Menu>
-          <div className='gx-flex-row gx-align-items-center gx-mb-4 gx-avatar-row'>
+          {/* <div className='gx-flex-row gx-align-items-center gx-mb-4 gx-avatar-row'>
             <Avatar
               src='https://via.placeholder.com/150x150'
               className='gx-size-40 gx-pointer gx-mr-3'
@@ -59,7 +59,7 @@ class UserDashboard extends React.Component {
               Rob Farnandies
               <i className='icon icon-chevron-down gx-fs-xxs gx-ml-2' />
             </span>
-          </div>
+          </div> */}
         </Sider>
         <Layout
           style={{

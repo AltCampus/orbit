@@ -5,7 +5,8 @@ import Login from "./components/login/Login";
 import ResetForm from "./components/resetForm/ResetForm";
 import Register from "./components/register/Register";
 import LandingPage from "./components/static/LandingPage";
-import UserDashboard from "./components/dashboard/UserDashboard";
+import UserDashboard from "./components/dashboard/user/Dashboard";
+import AdminDashboard from "./components/dashboard/admin/Dashboard";
 import "./css-reset.scss";
 import "./App.scss";
 
@@ -57,7 +58,11 @@ class App extends Component {
     }
   };
   render() {
-    return <UserDashboard />;
+    return (
+      <React.Fragment>
+        this.state.user?this.protectedRoutes():this.unprotectedRoutes
+      </React.Fragment>
+    );
   }
 }
 
