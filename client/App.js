@@ -26,11 +26,7 @@ class App extends Component {
           authorization: authToken
         }
       });
-      console.log(user);
-      let {
-        data: { user }
-      } = user;
-      this.setState({ user });
+      this.setState({ user: user.data.user });
       this.props.history.push("/dashboard");
     } catch (error) {
       console.error(error);
