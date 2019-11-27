@@ -36,12 +36,19 @@ class App extends Component {
 
   // TODO : Change this into a seperate protected component
   protectedRoutes = () => {
-    return (
-      <Switch>
-        <Route path='/dashboard' component={UserDashboard} />
-        <Route path='/admindashboard' component={AdminDashboard} />
-      </Switch>
-    );
+    if (this.state.user.isAdmin) {
+      return (
+        <Switch>
+          <Route path='/admindashboard' component={AdminDashboard} />
+        </Switch>
+      );
+    } else {
+      return (
+        <Switch>
+          <Route path='/admindashboard' component={AdminDashboard} />
+        </Switch>
+      );
+    }
   };
   unprotectedRoutes = () => {
     return (
