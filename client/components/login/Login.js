@@ -21,7 +21,7 @@ export default class Login extends React.Component {
     // Post the user data
     Axios.post(`http://localhost:3000/api/v1/users/login`, this.state)
       .then(res => {
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        localStorage.setItem("authToken", JSON.stringify(res.data.authToken));
         // TODO: Add logic to render different dashboard
         this.props.history.push("/dashboard");
       })
@@ -30,25 +30,25 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <div className="login-container">
-        <div className="login-content">
-          <div className="login-header">
-            <h1 className="login-title">Sign In</h1>
+      <div className='login-container'>
+        <div className='login-content'>
+          <div className='login-header'>
+            <h1 className='login-title'>Sign In</h1>
           </div>
-          <form className="login-form" onSubmit={this.handleSubmit}>
+          <form className='login-form' onSubmit={this.handleSubmit}>
             <input
-              type="email"
-              name="email"
-              placeholder="Email"
+              type='email'
+              name='email'
+              placeholder='Email'
               onChange={this.handleChange}
             />
             <input
-              type="password"
-              name="password"
-              placeholder="Password"
+              type='password'
+              name='password'
+              placeholder='Password'
               onChange={this.handleChange}
             />
-            <button type="submit">Login</button>
+            <button type='submit'>Login</button>
           </form>
         </div>
       </div>
