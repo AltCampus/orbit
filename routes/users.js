@@ -36,24 +36,23 @@ router.post("/", async (req, res) => {
 //Login route
 router.post("/login", async (req, res) => {
   try {
+    let { email, password } = req.body;
+    if (!email || !password) {
+      throw new Error("Please Fill Both Fields");
+    }
     const user = await User.findOne({ email: req.body.email });
-    const password = req.body.password;
 
     if (!user) {
-      return res.json({ status: "failed", message: "User not found" });
+      throw new Error("User not found!!!");
     }
 
     if (!user.verifyPassword(password)) {
-      return res
-        .status(400)
-        .json({ status: "failed", message: "Invaild password" });
+      throw new Error("Invaild password");
     }
 
     const token = await Auth.generateToken(user.id);
 
-    res
-      .status(200)
-      .json({ status: "success", user: { user, authToken: token } });
+    res.status(200).json({ status: "success", authToken: token });
   } catch (err) {
     res.status(400).json({ status: "failed", err });
   }
