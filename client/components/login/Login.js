@@ -1,8 +1,9 @@
 import React from "react";
 import Axios from "axios";
+import { withRouter } from "react-router-dom";
 import "./Login.scss";
 
-export default class Login extends React.Component {
+class Login extends React.Component {
   state = {
     email: "",
     password: ""
@@ -22,7 +23,7 @@ export default class Login extends React.Component {
     Axios.post(`http://localhost:3000/api/v1/users/login`, this.state)
       .then(res => {
         localStorage.setItem("authToken", JSON.stringify(res.data.authToken));
-        // TODO: Add logic to render different dashboard
+        this.props.verifyToken(res.data.authToken);
         this.props.history.push("/dashboard");
       })
       .catch(err => console.error(err));
@@ -55,3 +56,4 @@ export default class Login extends React.Component {
     );
   }
 }
+export default withRouter(Login);
