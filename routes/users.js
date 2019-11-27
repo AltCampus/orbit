@@ -15,13 +15,14 @@ router.get("/", Auth.verifyToken, function(req, res) {
 
 /* POST req from altcampus to orbit and create user */
 router.post("/", async (req, res) => {
-  // TODO: add validations.
-
+  let { name, email, phoneNo, socialProfile, motivation } = req.body;
   try {
+    // validations for required profile
+    if (!name || !email || !phoneNo || !socialProfile || !motivation) {
+      throw new Error("Please fill all Required data");
+    }
     req.body.hashMail =
-      Math.random()
-        .toString(36)
-        .substring(2, 15) +
+      Date.now() +
       Math.random()
         .toString(36)
         .substring(2, 15);
@@ -40,6 +41,7 @@ router.post("/", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     let { email, password } = req.body;
+    // validations for required profile
     if (!email || !password) {
       throw new Error("Please Fill Both Fields");
     }
@@ -59,6 +61,28 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json({ status: "failed", err });
+  }
+});
+
+// on first login reset Password
+router.post("/:hashMail", async (req, res) => {
+  let { password } = req.body;
+  let { hashMail } = req.params;
+  try {
+    const user = await User.findOne({ hashMail });
+    if (!user.isProfileClaimed) {
+      user.password = password;
+      user.isProfileClaimed = true;
+      const updatedUser = await user.save();
+      res.status(201).json({ status: true, user: updatedUser });
+    } else {
+      res.status(301).json({
+        success: false,
+        message: "User already Claimed there account"
+      });
+    }
+  } catch (err) {
+    res.status(301).json({ success: false, err });
   }
 });
 
