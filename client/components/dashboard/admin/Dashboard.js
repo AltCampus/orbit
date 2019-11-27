@@ -73,7 +73,7 @@ class UserDashboard extends React.Component {
               minHeight: 280
             }}
           >
-            Content
+            Admin Content
           </Content>
         </Layout>
       </Layout>
