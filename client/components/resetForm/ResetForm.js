@@ -23,7 +23,7 @@ export default class ResetForm extends React.Component {
     password = JSON.stringify(password);
     // Post the user password
     axios
-      .post(`http://localhost:3000/user/${hashmail}`, password)
+      .post(`http://localhost:3000/api/v1/user/${hashmail}`, password)
       .then(res =>
         res.status ? this.props.history.push("/login") : console.error(res)
       )

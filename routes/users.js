@@ -5,11 +5,9 @@ const User = require("../models/User");
 const Auth = require("../utils/auth");
 
 //current Login User
-router.get("/", function(req, res, next) {
-  User.find({}, (err, users) => {
-    if (err) return res.status(400).json({ status: false, err });
-    res.status(201).json({ status: true, users });
-  });
+router.get("/", Auth.verifyToken, function(req, res) {
+  if (err) return res.status(400).json({ status: false, err });
+  res.status(201).json({ status: true, users: req.user });
 });
 
 /* POST req from altcampus to orbit and create user */
@@ -44,7 +42,7 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res.json({ status: "failed", message: "User not found" });
     }
-    
+
     if (!user.verifyPassword(password)) {
       return res
         .status(400)
@@ -52,8 +50,10 @@ router.post("/login", async (req, res) => {
     }
 
     const token = await Auth.generateToken(user.id);
-    
-    res.status(200).json({ status: "success", user, token });
+
+    res
+      .status(200)
+      .json({ status: "success", user: { user, authToken: token } });
   } catch (err) {
     res.status(400).json({ status: "failed", err });
   }

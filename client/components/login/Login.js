@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import Axios from "axios";
 import "./Login.scss";
 
 export default class Login extends React.Component {
@@ -10,19 +10,18 @@ export default class Login extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.postUserData();
+    this.userLogin();
   };
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  postUserData = () => {
+  userLogin = () => {
     // Post the user data
-    axios
-      .post(`http://localhost:3000/users/login`, this.state)
-      .then(data => {
-        localStorage.setItem("authToken", JSON.stringify(data.data.token));
+    Axios.post(`http://localhost:3000/api/v1/users/login`, this.state)
+      .then(res => {
+        localStorage.setItem("user", JSON.stringify(res.data.user));
         // TODO: Add logic to render different dashboard
         this.props.history.push("/dashboard");
       })

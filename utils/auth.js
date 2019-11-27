@@ -20,11 +20,11 @@ module.exports = {
           (err, user) => {
             if (err) return res.status(401).json({ message: "User not found" });
             req.user = user;
-
+            req.user.isAdmin = false;
             // TODO: remove the admin emails from env and move it to DB.
             // Admin user request
             if (user.email === process.env.email) {
-              req.isAdmin = true;
+              req.user.isAdmin = true;
             }
             next();
           }

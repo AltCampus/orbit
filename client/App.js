@@ -9,6 +9,7 @@ import UserDashboard from "./components/dashboard/user/Dashboard";
 import AdminDashboard from "./components/dashboard/admin/Dashboard";
 import "./css-reset.scss";
 import "./App.scss";
+import Axios from "axios";
 
 class App extends Component {
   constructor() {
@@ -18,51 +19,49 @@ class App extends Component {
     };
   }
 
-  loggedUserToken = userToken => {
-    fetch("http://localhost:3000/api/v1/user/", {
+  loggedUserToken = ({ authToken }) => {
+    Axios.get("http://localhost:3000/api/v1/users/", {
       headers: {
         authorization: userToken
       }
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok.");
-        } else return response.json();
-      })
       .then(user => {
-        if (user.email) {
-          this.setState({ user });
-        } else {
-          localStorage.clear();
-          this.props.history.push("/login");
-        }
+        this.setState({ user: user.data.user });
+        this.props.history.push("/dashboard");
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error(err);
+        localStorage.clear();
+        this.props.history.push("/login");
+      });
   };
 
   // TODO : Change this into a seperate protected component
-  protectedRoutes = () => {};
+  protectedRoutes = () => {
+    return (
+      <Switch>
+        <Route path="/dashboard" component={UserDashboard} />
+        <Route path="/admindashboard" component={AdminDashboard} />
+      </Switch>
+    );
+  };
   unprotectedRoutes = () => {
     return (
       <Switch>
-        <Route exact path='/' component={LandingPage} />
-        <Route path='/reset/:hashmail' component={ResetForm} />
-        <Route path='/login' component={Login} />
+        <Route exact path="/" component={LandingPage} />
+        <Route path="/reset/:hashmail" component={ResetForm} />
+        <Route path="/login" component={Login} />
       </Switch>
     );
   };
 
   componentDidMount = () => {
-    if (localStorage.authToken) {
-      this.loggedUserToken(JSON.parse(localStorage.authToken));
+    if (localStorage.user) {
+      this.loggedUserToken(JSON.parse(localStorage.user));
     }
   };
   render() {
-    return (
-      <React.Fragment>
-        this.state.user?this.protectedRoutes():this.unprotectedRoutes
-      </React.Fragment>
-    );
+    return this.state.user ? this.protectedRoutes() : this.unprotectedRoutes();
   }
 }
 
