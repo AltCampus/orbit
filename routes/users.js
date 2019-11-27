@@ -6,8 +6,11 @@ const Auth = require("../utils/auth");
 
 //current Login User
 router.get("/", Auth.verifyToken, function(req, res) {
-  if (err) return res.status(400).json({ status: false, err });
-  res.status(201).json({ status: true, users: req.user });
+  try {
+    return res.status(201).json({ status: true, user: req.user });
+  } catch (error) {
+    return res.status(400).json({ status: false, error });
+  }
 });
 
 /* POST req from altcampus to orbit and create user */
@@ -50,10 +53,11 @@ router.post("/login", async (req, res) => {
       throw new Error("Invaild password");
     }
 
-    const token = await Auth.generateToken(user.id);
+    const authToken = await Auth.generateToken(user.id);
 
-    res.status(200).json({ status: "success", authToken: token });
+    res.status(200).json({ status: "success", authToken });
   } catch (err) {
+    console.log(err);
     res.status(400).json({ status: "failed", err });
   }
 });
