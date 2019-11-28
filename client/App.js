@@ -1,13 +1,17 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
-import { withRouter } from "react-router-dom";
+import { Route, Switch, withRouter, Redirect } from "react-router-dom";
 import Axios from "axios";
+import "antd/dist/antd.css";
+// import { message } from "antd";
+
 import Login from "./components/login/Login";
-import ResetForm from "./components/resetForm/ResetForm";
+import ResetPasswordForm from "./components/resetPasswordForm/ResetPasswordForm";
+// TODO: Remove register components after test done.
 import Register from "./components/register/Register";
 import LandingPage from "./components/static/LandingPage";
 import UserDashboard from "./components/dashboard/user/Dashboard";
 import AdminDashboard from "./components/dashboard/admin/Dashboard";
+
 import "./css-reset.scss";
 import "./App.scss";
 
@@ -26,26 +30,30 @@ class App extends Component {
           authorization: authToken
         }
       });
-      this.setState({ user: user.data.user });
-      this.props.history.push("/dashboard");
+      let { data } = userLogin;
+      if (!data.status) {
+        message.error(data.message);
+      } else {
+        this.setState({ user: user.data.user });
+        this.props.history.push("/dashboard");
+      }
     } catch (error) {
-      console.error(error);
+      message.warning(error || "Token expire login again");
       this.props.history.push("/login");
     }
   };
 
-  // TODO : Change this into a seperate protected component
   protectedRoutes = () => {
     if (this.state.user.isAdmin) {
       return (
         <Switch>
-          <Route path='/admindashboard' component={AdminDashboard} />
+          <Route path='/dashboard' component={AdminDashboard} />
         </Switch>
       );
     } else {
       return (
         <Switch>
-          <Route path='/admindashboard' component={AdminDashboard} />
+          <Route path='/dashboard' component={UserDashboard} />
         </Switch>
       );
     }
@@ -53,8 +61,11 @@ class App extends Component {
   unprotectedRoutes = () => {
     return (
       <Switch>
+        <Route exact path='/dashboard'>
+          <Redirect to='/login' />
+        </Route>
         <Route exact path='/' component={LandingPage} />
-        <Route path='/reset/:hashmail' component={ResetForm} />
+        <Route path='/reset/:hashmail' component={ResetPasswordForm} />
         <Route
           path='/login'
           render={() => <Login verifyToken={this.verifyToken} />}

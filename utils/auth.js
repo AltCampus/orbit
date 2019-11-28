@@ -31,7 +31,7 @@ module.exports = {
         );
       });
     } else {
-      res.status(401).json({ message: "Unauthorized access" });
+      res.status(401).json({ status: false, message: "Unauthorized access" });
     }
   }
 };

@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
   try {
     // validations for required profile
     if (!name || !email || !phoneNo || !socialProfile || !motivation) {
-      throw new Error("Please fill all Required data");
+      res.json({ status: false, message: "Please fill all Required data" });
     }
     req.body.hashMail =
       Date.now() +
@@ -31,9 +31,8 @@ router.post("/", async (req, res) => {
     // const mail = await Mailer.mail(user.email, user.name, user.hashMail);
     // console.log("mailer");
     res.status(201).json({ status: true, user });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({ status: false, err });
+  } catch (error) {
+    res.status(400).json({ status: false, error });
   }
 });
 
@@ -43,24 +42,23 @@ router.post("/login", async (req, res) => {
     let { email, password } = req.body;
     // validations for required profile
     if (!email || !password) {
-      throw new Error("Please Fill Both Fields");
+      res.json({ status: false, message: "Please Fill Both Fields" });
     }
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      throw new Error("User not found!!!");
+      res.json({ status: false, message: "User not found!!!" });
     }
 
     if (!user.verifyPassword(password)) {
-      throw new Error("Invaild password");
+      res.json({ status: false, message: "Invaild password" });
     }
 
     const authToken = await Auth.generateToken(user.id);
-
+    console.log("done");
     res.status(200).json({ status: "success", authToken });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({ status: "failed", err });
+  } catch (error) {
+    res.status(400).json({ status: "failed", error });
   }
 });
 
@@ -81,8 +79,8 @@ router.post("/:hashMail", async (req, res) => {
         message: "User already Claimed there account"
       });
     }
-  } catch (err) {
-    res.status(301).json({ success: false, err });
+  } catch (error) {
+    res.status(301).json({ success: false, error });
   }
 });
 

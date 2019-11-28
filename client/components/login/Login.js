@@ -1,6 +1,8 @@
 import React from "react";
-import Axios from "axios";
 import { withRouter } from "react-router-dom";
+import Axios from "axios";
+import "antd/dist/antd.css";
+import { message } from "antd";
 import "./Login.scss";
 
 class Login extends React.Component {
@@ -18,15 +20,29 @@ class Login extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  userLogin = () => {
-    // Post the user data
-    Axios.post(`http://localhost:3000/api/v1/users/login`, this.state)
-      .then(res => {
-        localStorage.setItem("authToken", JSON.stringify(res.data.authToken));
-        this.props.verifyToken(res.data.authToken);
-        this.props.history.push("/dashboard");
-      })
-      .catch(err => console.error(err));
+  userLogin = async () => {
+    try {
+      if (!this.state.email || !this.state.password) {
+        message.error("Please Fill Both Fields");
+      } else {
+        // Post the user data
+        const userLogin = await Axios.post(
+          `http://localhost:3000/api/v1/users/login`,
+          this.state
+        );
+        let { data } = userLogin;
+        if (!data.status) {
+          message.error(data.message);
+          console.error(data.message);
+        } else {
+          localStorage.setItem("authToken", JSON.stringify(data.authToken));
+          this.props.verifyToken(data.authToken);
+        }
+      }
+    } catch (error) {
+      message.warning(error);
+      this.props.history.push("/login");
+    }
   };
 
   render() {
