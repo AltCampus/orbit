@@ -5,7 +5,7 @@ import { Layout, Menu, Icon, Avatar } from "antd";
 
 const { Header, Sider, Content } = Layout;
 
-class UserDashboard extends React.Component {
+class AdminDashboard extends React.Component {
   state = {
     collapsed: false,
     broken: false
@@ -81,4 +81,4 @@ class UserDashboard extends React.Component {
   }
 }
 
-export default UserDashboard;
+export default AdminDashboard;
