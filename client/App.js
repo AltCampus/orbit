@@ -29,7 +29,7 @@ class App extends Component {
           authorization: authToken
         }
       });
-      let { data } = userLogin;
+      let { data } = user;
       if (!data.status) {
         message.error(data.message);
       } else {
