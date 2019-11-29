@@ -1,6 +1,4 @@
 import React from "react";
-import "antd/dist/antd.css";
-import "./../dashboard.scss";
 import { Layout, Menu, Icon, Avatar } from "antd";
 
 const { Header, Sider, Content } = Layout;

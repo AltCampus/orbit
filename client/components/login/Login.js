@@ -1,7 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import Axios from "axios";
-import "antd/dist/antd.css";
+import axios from "axios";
 import { message } from "antd";
 import "./Login.scss";
 
@@ -26,7 +25,7 @@ class Login extends React.Component {
         message.error("Please Fill Both Fields");
       } else {
         // Post the user data
-        const userLogin = await Axios.post(
+        const userLogin = await axios.post(
           `http://localhost:3000/api/v1/users/login`,
           this.state
         );

@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch, withRouter, Redirect } from "react-router-dom";
-import Axios from "axios";
-import "antd/dist/antd.css";
-// import { message } from "antd";
+import axios from "axios";
+import { message } from "antd";
 
 import Login from "./components/login/Login";
 import ResetPasswordForm from "./components/resetPasswordForm/ResetPasswordForm";
@@ -25,7 +24,7 @@ class App extends Component {
 
   verifyToken = async authToken => {
     try {
-      const user = await Axios.get("http://localhost:3000/api/v1/users/", {
+      const user = await axios.get("http://localhost:3000/api/v1/users/", {
         headers: {
           authorization: authToken
         }
