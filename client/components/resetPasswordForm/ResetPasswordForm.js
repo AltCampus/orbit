@@ -23,7 +23,7 @@ export default class ResetForm extends React.Component {
     password = JSON.stringify(password);
     // Post the user password
     axios
-      .post(`http://localhost:3000/api/v1/user/${hashmail}`, password)
+      .post(`http://localhost:3000/api/v1/users/${hashmail}`, password)
       .then(res =>
         res.status ? this.props.history.push("/login") : console.error(res)
       )
@@ -32,19 +32,19 @@ export default class ResetForm extends React.Component {
 
   render() {
     return (
-      <div className="login-container">
-        <div className="login-content">
-          <div className="login-header">
-            <h1 className="login-title">Set password for your account</h1>
+      <div className='login-container'>
+        <div className='login-content'>
+          <div className='login-header'>
+            <h1 className='login-title'>Set password for your account</h1>
           </div>
-          <form className="login-form" onSubmit={this.handleSubmit}>
+          <form className='login-form' onSubmit={this.handleSubmit}>
             <input
-              type="password"
-              name="password"
-              placeholder="Password"
+              type='password'
+              name='password'
+              placeholder='Password'
               onChange={this.handleChange}
             />
-            <button type="submit">Set</button>
+            <button type='submit'>Set</button>
           </form>
         </div>
       </div>
