@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const Auth = require("../utils/auth");
+const auth = require("../utils/auth");
 
-router.get("/dashboard", Auth.verifyToken, (req, res) => {
+router.get("/dashboard", auth.verifyToken, (req, res) => {
   if (req.isAdmin) {
     return res
       .status(200)

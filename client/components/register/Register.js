@@ -1,11 +1,11 @@
 import React from "react";
-import "../login/Login";
-import Axios from "axios";
+import axios from "axios";
 export default class ResetForm extends React.Component {
   state = {};
   handleSubmit = e => {
     e.preventDefault();
-    Axios.post("http://localhost:3000/users/", this.state)
+    axios
+      .post("http://localhost:3000/users/", this.state)
       .then(data => data.json())
       .then(user => console.log(user));
   };
@@ -15,25 +15,25 @@ export default class ResetForm extends React.Component {
 
   render() {
     return (
-      <div className="login-container">
-        <div className="login-content">
-          <div className="login-header">
-            <h1 className="login-title">Register</h1>
+      <div className='login-container'>
+        <div className='login-content'>
+          <div className='login-header'>
+            <h1 className='login-title'>Register</h1>
           </div>
-          <form className="login-form" onSubmit={this.handleSubmit}>
+          <form className='login-form' onSubmit={this.handleSubmit}>
             <input
-              type="text"
-              name="name"
-              placeholder="Name"
+              type='text'
+              name='name'
+              placeholder='Name'
               onChange={this.handleChange}
             />
             <input
-              type="email"
-              name="email"
-              placeholder="Email"
+              type='email'
+              name='email'
+              placeholder='Email'
               onChange={this.handleChange}
             />
-            <button type="submit">Register</button>
+            <button type='submit'>Register</button>
           </form>
         </div>
       </div>

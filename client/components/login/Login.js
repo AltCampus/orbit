@@ -1,8 +1,10 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import axios from "axios";
+import { message } from "antd";
 import "./Login.scss";
 
-export default class Login extends React.Component {
+class Login extends React.Component {
   state = {
     email: "",
     password: ""
@@ -10,49 +12,64 @@ export default class Login extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.postUserData();
+    this.userLogin();
   };
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  postUserData = () => {
-    // Post the user data
-    axios
-      .post(`http://localhost:3000/users/login`, this.state)
-      .then(data => {
-        localStorage.setItem("authToken", JSON.stringify(data.data.token));
-        // TODO: Add logic to render different dashboard
-        this.props.history.push("/dashboard");
-      })
-      .catch(err => console.error(err));
+  userLogin = async () => {
+    try {
+      if (!this.state.email || !this.state.password) {
+        message.error("Please Fill Both Fields");
+      } else {
+        // Post the user data
+        const userLogin = await axios.post(
+          `http://localhost:3000/api/v1/users/login`,
+          this.state
+        );
+        let { data } = userLogin;
+        if (!data.status) {
+          message.error(data.message);
+          console.error(data.message);
+        } else {
+          localStorage.setItem("authToken", JSON.stringify(data.authToken));
+          this.props.verifyToken(data.authToken);
+        }
+      }
+    } catch (error) {
+      message.warning(error);
+      this.props.history.push("/login");
+    }
   };
 
   render() {
     return (
-      <div className="login-container">
-        <div className="login-content">
-          <div className="login-header">
-            <h1 className="login-title">Sign In</h1>
+      <div className='login-container'>
+        <div className='login-content'>
+          <div className='login-header'>
+            <h1 className='login-title'>Sign In</h1>
           </div>
-          <form className="login-form" onSubmit={this.handleSubmit}>
+          <form className='login-form' onSubmit={this.handleSubmit}>
             <input
-              type="email"
-              name="email"
-              placeholder="Email"
+              type='email'
+              name='email'
+              placeholder='Email'
+              pattern='[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$'
               onChange={this.handleChange}
             />
             <input
-              type="password"
-              name="password"
-              placeholder="Password"
+              type='password'
+              name='password'
+              placeholder='Password'
               onChange={this.handleChange}
             />
-            <button type="submit">Login</button>
+            <button type='submit'>Login</button>
           </form>
         </div>
       </div>
     );
   }
 }
+export default withRouter(Login);

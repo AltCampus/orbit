@@ -26,12 +26,15 @@ const userSchema = new Schema(
     password: String,
     phoneNo: {
       type: Number,
-      required: true
+      required: true,
+      minlength: 10,
+      maxlength: 10
     },
     hashMail: { type: String, unique: true },
     socialProfile: { type: String, required: true },
     motivation: { type: String, required: true, maxlength: 200 },
     isProfileClaimed: { type: Boolean, default: false },
+    isAdmin: { type: Boolean, default: false },
     stage: { type: Number, default: 0 }
   },
   { timestamps: true }
