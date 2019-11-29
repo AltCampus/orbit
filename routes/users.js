@@ -2,10 +2,10 @@ var express = require("express");
 var router = express.Router();
 // const Mailer = require("../utils/Mailer");
 const User = require("../models/User");
-const Auth = require("../utils/auth");
+const auth = require("../utils/auth");
 
 //current Login User
-router.get("/", Auth.verifyToken, function(req, res) {
+router.get("/", auth.verifyToken, function(req, res) {
   try {
     return res.status(201).json({ status: true, user: req.user });
   } catch (error) {
@@ -54,7 +54,7 @@ router.post("/login", async (req, res) => {
       res.json({ status: false, message: "Invaild password" });
     }
 
-    const authToken = await Auth.generateToken(user.id);
+    const authToken = await auth.generateToken(user.id);
     console.log("done");
     res.status(200).json({ status: "success", authToken });
   } catch (error) {
