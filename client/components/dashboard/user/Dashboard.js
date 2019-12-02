@@ -17,9 +17,9 @@ class UserDashboard extends React.Component {
 
   render() {
     return (
-      <Layout className='wrapper'>
+      <Layout className="wrapper">
         <Sider
-          breakpoint='sm'
+          breakpoint="sm"
           onBreakpoint={broken => {
             this.setState({ broken });
           }}
@@ -28,23 +28,23 @@ class UserDashboard extends React.Component {
           collapsedWidth={this.state.broken ? "0" : "80"}
           collapsed={this.state.collapsed}
         >
-          <div className='logo'>Alt Campus</div>
-          <Menu theme='dark' mode='inline' defaultSelectedKeys={["1"]}>
-            <Menu.Item key='1'>
-              <Icon type='layout' />
-              <span>nav 1</span>
+          <div className="logo">Alt Campus</div>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+            <Menu.Item key="1">
+              <Icon type="html5" />
+              <span>HTML/CSS</span>
             </Menu.Item>
-            <Menu.Item key='2' disabled>
-              <Icon type='code' />
-              <span>nav 2</span>
+            <Menu.Item key="2" disabled>
+              <Icon type="code" />
+              <span>CodeWars</span>
             </Menu.Item>
-            <Menu.Item key='3' disabled>
-              <Icon type='question' />
-              <span>nav 3</span>
+            <Menu.Item key="3" disabled>
+              <Icon type="question" />
+              <span>Q/A</span>
             </Menu.Item>
-            <Menu.Item key='4' disabled>
-              <Icon type='video-camera' />
-              <span>nav 4</span>
+            <Menu.Item key="4" disabled>
+              <Icon type="video-camera" />
+              <span>Video Call</span>
             </Menu.Item>
           </Menu>
           {/* <div className='gx-flex-row gx-align-items-center gx-mb-4 gx-avatar-row'>
@@ -66,7 +66,7 @@ class UserDashboard extends React.Component {
         >
           <Header style={{ background: "#fff", padding: 0 }}>
             <Icon
-              className='trigger'
+              className="trigger"
               type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
               onClick={this.toggle}
             />
