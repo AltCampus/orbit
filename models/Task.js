@@ -4,6 +4,18 @@ const Schema = mongoose.Schema;
 const taskSchema = new Schema(
   {
     html: {
+      instruction: {
+        type: String,
+        required: true
+      },
+      taskImage: {
+        type: String,
+        required: true
+      },
+      resourceLink: {
+        type: String,
+        required: true
+      },
       startTime: {
         type: Date,
         required: true
@@ -26,6 +38,14 @@ const taskSchema = new Schema(
       }
     },
     codewars: {
+      instruction: {
+        type: String,
+        required: true
+      },
+      resourceLink: {
+        type: String,
+        required: true
+      },
       startTime: {
         type: Date,
         required: true
