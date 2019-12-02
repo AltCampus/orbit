@@ -9,7 +9,7 @@ User.find({ isAdmin: true }, (err, adminUser) => {
       socialProfile: "https://twitter.com/altcampus",
       motivation: "The Alternative to College That You Wish Existed.",
       isAdmin: true,
-      password: "qwerty"
+      password: "qwerty121"
     });
     Admin.save();
   }
