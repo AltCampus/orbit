@@ -217,5 +217,18 @@ router.put("/:id", auth.verifyToken, async (req, res) => {
     res.status(400).json({ status: false, error: "Some Error Occured" });
   }
 });
+router.delete("/:id", auth.verifyToken, async (req, res) => {
+  if (req.user.isAdmin !== true) {
+    return res
+      .status(401)
+      .json({ status: false, message: "Unauthorized access" });
+  }
+  try {
+    const deletedQuestion = await Question.findByIdAndDelete(req.params.id);
+    res.status(200).json({ status: true, message: "Question deleted." });
+  } catch (error) {
+    res.status(400).json({ status: false, error: "Some Error Occured" });
+  }
+});
 
 module.exports = router;
