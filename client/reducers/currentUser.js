@@ -1,4 +1,4 @@
-import { USER_LOGIN_SUCCESS } from "./../actions/types";
+import { USER_LOGIN_SUCCESS, NO_TOKEN } from "./../actions/types";
 
 const initialState = {
   user: null,
@@ -15,6 +15,14 @@ const currentUser = (state = initialState, action) => {
         user: action.data.user,
         isAuthenticated: true,
         isAuthInProgress: false
+      };
+    case LOG_OUT:
+    case NO_TOKEN:
+      return {
+        ...state,
+        isAuthInProgress: false,
+        token: "",
+        isAuthenticated: false
       };
   }
 };
