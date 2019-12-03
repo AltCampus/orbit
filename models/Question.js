@@ -5,10 +5,10 @@ const questionSchema = new Schema({
   question: { type: String, required: true },
   type: { type: String, required: true },
   options: {
-    A: { type: String },
-    B: { type: String },
-    C: { type: String },
-    D: { type: String }
+    a: { type: String },
+    b: { type: String },
+    c: { type: String },
+    d: { type: String }
   },
   answer: { type: String },
   point: { type: Number },
