@@ -1,3 +1,5 @@
+import { USER_LOGIN_SUCCESS } from "./../actions/types";
+
 const initialState = {
   user: null,
   token: localStorage.authToken || "",
@@ -7,6 +9,13 @@ const initialState = {
 
 const currentUser = (state = initialState, action) => {
   switch (action.type) {
+    case USER_LOGIN_SUCCESS:
+      return {
+        ...state,
+        user: action.data.user,
+        isAuthenticated: true,
+        isAuthInProgress: false
+      };
   }
 };
 
