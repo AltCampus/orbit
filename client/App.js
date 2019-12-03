@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { Route, Switch, withRouter, Redirect } from "react-router-dom";
 import axios from "axios";
 import { message } from "antd";
-
+import { connect } from "react-redux";
+import { updateToken, getCurrentUser } from "./actions/users";
 import Login from "./components/login/Login";
 import ResetPasswordForm from "./components/resetPasswordForm/ResetPasswordForm";
 // TODO: Remove register components after test done.
@@ -15,58 +16,59 @@ import "./css-reset.scss";
 import "./App.scss";
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      user: null
-    };
-  }
+  // constructor() {
+  //   super();
+  //   this.state = {
+  //     user: null
+  //   };
+  // }
 
-  verifyToken = async authToken => {
-    try {
-      const user = await axios.get("http://localhost:3000/api/v1/users/", {
-        headers: {
-          authorization: authToken
-        }
-      });
-      let { data } = user;
-      if (!data.status) {
-        message.error(data.message);
-      } else {
-        this.setState({ user: user.data.user });
-        this.props.history.push("/dashboard");
-      }
-    } catch (error) {
-      message.warning(error || "Token expire login again");
-      this.props.history.push("/login");
-    }
-  };
+  // verifyToken = async authToken => {
+  //   try {
+  //     const user = await axios.get("http://localhost:3000/api/v1/users/", {
+  //       headers: {
+  //         authorization: authToken
+  //       }
+  //     });
+  //     let { data } = user;
+  //     if (!data.status) {
+  //       message.error(data.message);
+  //     } else {
+  //       this.setState({ user: user.data.user });
+  //       this.props.history.push("/dashboard");
+  //     }
+  //   } catch (error) {
+  //     message.warning(error || "Token expire login again");
+  //     this.props.history.push("/login");
+  //   }
+  // };
 
   protectedRoutes = () => {
-    if (this.state.user.isAdmin) {
+    if (this.props.user.isAdmin) {
       return (
         <Switch>
-          <Route path='/dashboard' component={AdminDashboard} />
+          <Route path="/dashboard" component={AdminDashboard} />
         </Switch>
       );
     } else {
       return (
         <Switch>
-          <Route path='/dashboard' component={UserDashboard} />
+          <Route path="/dashboard" component={UserDashboard} />
         </Switch>
       );
     }
   };
+
   unprotectedRoutes = () => {
     return (
       <Switch>
-        <Route exact path='/dashboard'>
-          <Redirect to='/login' />
+        <Route exact path="/dashboard">
+          <Redirect to="/login" />
         </Route>
-        <Route exact path='/' component={LandingPage} />
-        <Route path='/reset/:hashmail' component={ResetPasswordForm} />
+        <Route exact path="/" component={LandingPage} />
+        <Route path="/reset/:hashmail" component={ResetPasswordForm} />
         <Route
-          path='/login'
+          path="/login"
           render={() => <Login verifyToken={this.verifyToken} />}
         />
       </Switch>
@@ -75,16 +77,28 @@ class App extends Component {
 
   componentDidMount = () => {
     if (localStorage.authToken) {
-      this.verifyToken(JSON.parse(localStorage.authToken));
+      // this.verifyToken(JSON.parse(localStorage.authToken));
+      // const token = JSON.parse(localStorage.getItem("authToken"));
+      this.props.getCurrentUser();
     }
   };
+
   render() {
     return (
       <React.Fragment>
-        {this.state.user ? this.protectedRoutes() : this.unprotectedRoutes()}
+        {this.props.user ? this.protectedRoutes() : this.unprotectedRoutes()}
       </React.Fragment>
     );
   }
 }
 
-export default withRouter(App);
+const mapStateToProps = state => {
+  const { user } = state.currentUser;
+  return {
+    user
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, { updateToken, getCurrentUser })(App)
+);
