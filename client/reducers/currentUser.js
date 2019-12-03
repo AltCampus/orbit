@@ -1,8 +1,8 @@
-import { USER_LOGIN_SUCCESS, NO_TOKEN } from "./../actions/types";
+import { USER_LOGIN_SUCCESS, LOG_OUT, NO_TOKEN } from "./../actions/types";
 
 const initialState = {
   user: null,
-  token: localStorage.authToken || "",
+  token: localStorage.getItem("authToken"),
   isAuthenticated: false,
   isAuthInProgress: true
 };
@@ -21,9 +21,12 @@ const currentUser = (state = initialState, action) => {
       return {
         ...state,
         isAuthInProgress: false,
-        token: "",
+        token: null,
+        user: null,
         isAuthenticated: false
       };
+    default:
+      return state;
   }
 };
 
