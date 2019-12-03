@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+
 const questionSchema = new Schema({
   question: { type: String, required: true },
   type: { type: String, required: true },
@@ -11,7 +12,8 @@ const questionSchema = new Schema({
   },
   answer: { type: String },
   point: { type: Number },
-  isActive: { type: Boolean, default: false }
+  isActive: { type: Boolean, default: false },
+  isRandom: { type: Boolean, default: true }
 });
 
 const Question = mongoose.model("Question", questionSchema);
