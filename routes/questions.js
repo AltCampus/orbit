@@ -18,7 +18,7 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
   // Admin Protected route for adding new question
   try {
     const {
-      question,
+      questionTitle,
       isRandom,
       isActive,
       point,
@@ -27,7 +27,7 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
       answer = ""
     } = req.body;
 
-    if (question.length === 0) {
+    if (questionTitle.length === 0) {
       return res
         .status(400)
         .json({ status: false, message: "Invalid Question" });
@@ -81,7 +81,7 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
       });
     }
     const newQuestion = await Question.create({
-      question,
+      questionTitle,
       type,
       options: {
         a: options.a,
@@ -106,7 +106,7 @@ router.put("/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const updates = {};
     const {
-      question,
+      questionTitle,
       isRandom,
       isActive,
       point,
@@ -115,14 +115,14 @@ router.put("/:id", auth.verifyAdminToken, async (req, res) => {
       answer
     } = req.body;
 
-    if (question) {
-      // If question is to be updated
-      if (question.length === 0) {
+    if (questionTitle) {
+      // If questionTitle is to be updated
+      if (questionTitle.length === 0) {
         return res
           .status(400)
           .json({ status: false, message: "Invalid Question" });
       }
-      updates.question = question;
+      updates.questionTitle = questionTitle;
     }
     if (isRandom) {
       // If isRandom is to be updated
