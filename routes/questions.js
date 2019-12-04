@@ -5,12 +5,8 @@ const auth = require("./../utils/auth");
 const Question = require("./../models/Question");
 
 // list all questions
-router.get("/", auth.verifyToken, async (req, res) => {
-  if (req.user.isAdmin !== true) {
-    return res
-      .status(401)
-      .json({ status: false, message: "Unauthorized access" });
-  }
+router.get("/", auth.verifyAdminToken, async (req, res) => {
+  // Admin Protected route for getting all questions
   try {
     const questions = await Question.find({});
     return res.status(200).json({ status: true, questions });
@@ -18,13 +14,8 @@ router.get("/", auth.verifyToken, async (req, res) => {
     return res.status(400).json({ status: "failed", error });
   }
 });
-router.post("/", auth.verifyToken, async (req, res) => {
+router.post("/", auth.verifyAdminToken, async (req, res) => {
   // Admin Protected route for adding new question
-  if (req.user.isAdmin !== true) {
-    return res
-      .status(401)
-      .json({ status: false, message: "Unauthorized access" });
-  }
   try {
     const {
       question,
@@ -111,12 +102,7 @@ router.post("/", auth.verifyToken, async (req, res) => {
       .json({ status: "failed", error: "Some Error Occured" });
   }
 });
-router.put("/:id", auth.verifyToken, async (req, res) => {
-  if (req.user.isAdmin !== true) {
-    return res
-      .status(401)
-      .json({ status: false, message: "Unauthorized access" });
-  }
+router.put("/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const updates = {};
     const {
@@ -217,12 +203,7 @@ router.put("/:id", auth.verifyToken, async (req, res) => {
     res.status(400).json({ status: false, error: "Some Error Occured" });
   }
 });
-router.delete("/:id", auth.verifyToken, async (req, res) => {
-  if (req.user.isAdmin !== true) {
-    return res
-      .status(401)
-      .json({ status: false, message: "Unauthorized access" });
-  }
+router.delete("/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const deletedQuestion = await Question.findByIdAndDelete(req.params.id);
     res.status(200).json({ status: true, message: "Question deleted." });
