@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const questionSchema = new Schema({
-  question: { type: String, required: true },
-  type: { type: String, required: true },
+  questionTitle: { type: String, required: true },
+  type: { type: String, required: true, enum: ["MCQ", "subjective"] },
   options: {
     a: { type: String },
     b: { type: String },
