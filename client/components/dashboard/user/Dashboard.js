@@ -48,7 +48,7 @@ class UserDashboard extends React.Component {
           collapsed={this.state.collapsed}
         >
           <div className="logo"> Alt Campus </div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={["0"]}>
             <Menu.Item onClick={() => this.setState({ tabIndex: 0 })} key="0">
               <Icon type="paper-clip" />
               <span> Instructions </span>

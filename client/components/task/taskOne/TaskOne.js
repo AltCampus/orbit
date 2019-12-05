@@ -37,7 +37,7 @@ class TaskOne extends Component {
                   <ul>
                     <li>
                       <p>
-                        Task one is simple.All you have to do is convert the
+                        Task one is simple. All you have to do is convert the
                         layout in the image into HTML format.
                       </p>
                     </li>

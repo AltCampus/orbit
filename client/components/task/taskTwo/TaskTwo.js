@@ -12,15 +12,21 @@ export default function TaskTwo() {
                 <ul>
                   <li>
                     <p>
-                      Kudos on solving your first task. Task Two is also realively simply. You would need to SignUp at <a>CodeWars</a> 
-                      and solve some basic programming questions.
+                      Kudos on solving your first task. Task Two is learning
+                      based. You need to create an account on
+                      <a href="https://www.codewars.com/" target="_blank">
+                        <mark>CodeWars</mark>
+                      </a>
+                      and solve the katas based on your learning from the
+                      resources.
                     </p>
                   </li>
                   <li>
                     <p>
-                      This task is very open ended, its upto you that how many questions do you want to solve. However it will affect
-                      your final score. After signing up you need to submit your CodeWars username here. You will be given a
-                      three day time limit to solve as many questions as you want.
+                      This task is to test your problem solving skills, critical
+                      thinking and ability to learn. You have to take help from
+                      the resources and solve the katas based on your learning.
+                      This task has a deadline of three days.
                     </p>
                   </li>
                   <li>
@@ -49,13 +55,23 @@ export default function TaskTwo() {
                     </a>
                   </li>
                 </ul>
+                <div className="image-container">
+                  <img
+                    src="https://www.indiemakers.tools/media/images/codewars.jpg"
+                    alt="task"
+                    border="0"
+                  ></img>
+                </div>
               </div>
             </Card>
           </Col>
         </Row>
       </div>
       <div className="url-input">
-        <Input size="large" placeholder="Submit your CodeWars username here..." />
+        <Input
+          size="large"
+          placeholder="Submit your CodeWars username here..."
+        />
         <Button className="url-submit" type="primary">
           Submit
         </Button>
