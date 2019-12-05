@@ -12,9 +12,6 @@ const taskSchema = new Schema(
       taskUrl: {
         type: String
       },
-      userId: {
-        type: String
-      },
       startTime: {
         type: Date
       },

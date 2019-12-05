@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 // const Mailer = require("../utils/Mailer");
 const User = require("../models/User");
+const Task = require("../models/Task");
 const auth = require("../utils/auth");
 
 //current Login User
@@ -70,6 +71,20 @@ router.post("/:hashMail", async (req, res) => {
     const user = await User.findOne({ hashMail });
     if (!user.isProfileClaimed) {
       user.password = password;
+
+      // Start the timer for HTML task and link it to user model.
+      const task = await Task.create({
+        user: user.id,
+        html: {
+          startTime: Date.now()
+        }
+      });
+      user.task = task.id;
+
+      // Set User stage to 1
+      user.stage = 1;
+
+      // Set user profile to be claimed.
       user.isProfileClaimed = true;
       const updatedUser = await user.save();
       res.status(201).json({ status: true, user: updatedUser });
