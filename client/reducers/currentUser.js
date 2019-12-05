@@ -1,31 +1,48 @@
 import {
   USER_LOGIN_SUCCESS,
   GET_USER_SUCCESS,
+  GET_USER_PENDING,
   LOG_OUT,
   NO_TOKEN,
-  UPDATE_TOKEN
+  SET_ERROR
 } from "./../actions/types";
 
 const initialState = {
   user: null,
-  token: localStorage.getItem("authToken"),
+  token: null,
   isAuthenticated: false,
-  isAuthInProgress: true
+  isAuthInProgress: false,
+  isError: false
 };
 
 const currentUser = (state = initialState, action) => {
   switch (action.type) {
-    case USER_LOGIN_SUCCESS:
+    case SET_ERROR: {
+      return {
+        ...state,
+        isError: true
+      };
+    }
+    case USER_LOGIN_SUCCESS: {
       return {
         ...state,
         token: action.data,
         isAuthenticated: true,
         isAuthInProgress: false
       };
+    }
+    case GET_USER_PENDING: {
+      return {
+        ...state,
+        isAuthInProgress: true
+      };
+    }
     case GET_USER_SUCCESS: {
       return {
         ...state,
-        user: action.data
+        user: action.data,
+        isAuthenticated: true,
+        isAuthInProgress: false
       };
     }
     case LOG_OUT:
@@ -33,9 +50,9 @@ const currentUser = (state = initialState, action) => {
       return {
         ...state,
         isAuthInProgress: false,
+        isAuthenticated: false,
         token: null,
-        user: null,
-        isAuthenticated: false
+        user: null
       };
     default:
       return state;
