@@ -1,9 +1,7 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
-import axios from "axios";
 import { message } from "antd";
 import { connect } from "react-redux";
-import { userLogin } from "../../actions/users";
+import { userLogin, getCurrentUser } from "../../actions/users";
 import "./Login.scss";
 
 class Login extends React.Component {
@@ -12,41 +10,17 @@ class Login extends React.Component {
     password: ""
   };
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
-    this.props.userLogin(this.state);
-    // TODO: Redirect the user after request success
-    this.props.history.push("/dashboard");
+    // Makes fetch post request
+    await this.props.userLogin(this.state);
+    // Makes fetch current user
+    this.props.getCurrentUser();
   };
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-
-  // userLogin = async () => {
-  //   try {
-  //     if (!this.state.email || !this.state.password) {
-  //       message.error("Please Fill Both Fields");
-  //     } else {
-  //       // Post the user data
-  //       const userLogin = await axios.post(
-  //         `http://localhost:3000/api/v1/users/login`,
-  //         this.state
-  //       );
-  //       let { data } = userLogin;
-  //       if (!data.status) {
-  //         message.error(data.message);
-  //         console.error(data.message);
-  //       } else {
-  //         localStorage.setItem("authToken", JSON.stringify(data.authToken));
-  //         // this.props.verifyToken(data.authToken);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     message.warning(error);
-  //     this.props.history.push("/login");
-  //   }
-  // };
 
   render() {
     return (
@@ -77,4 +51,12 @@ class Login extends React.Component {
   }
 }
 
-export default withRouter(connect(null, { userLogin })(Login));
+const mapStateToProps = state => {
+  const { isAuthenticated, isError } = state.currentUser;
+  return {
+    isAuthenticated,
+    isError
+  };
+};
+
+export default connect(mapStateToProps, { userLogin, getCurrentUser })(Login);
