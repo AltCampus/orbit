@@ -1,12 +1,16 @@
 import React from "react";
-import { Layout, Menu, Icon, Avatar } from "antd";
+import { Layout, Menu, Icon, Avatar, Button, Switch } from "antd";
+
+import TaskOne from "../../task/taskOne/TaskOne";
+import TaskTwo from "../../task/taskTwo/TaskTwo";
 
 const { Header, Sider, Content } = Layout;
 
 class UserDashboard extends React.Component {
   state = {
     collapsed: false,
-    broken: false
+    broken: false,
+    tabIndex: 0
   };
 
   toggle = () => {
@@ -15,71 +19,124 @@ class UserDashboard extends React.Component {
     });
   };
 
+  renderTask = data => {
+    switch (data) {
+      case 1:
+        return <TaskOne />;
+        break;
+      case 2:
+        return <TaskTwo />;
+
+      default:
+        break;
+    }
+  };
+
   render() {
     return (
       <Layout className="wrapper">
         <Sider
           breakpoint="sm"
           onBreakpoint={broken => {
-            this.setState({ broken });
+            this.setState({
+              broken
+            });
           }}
           trigger={null}
           collapsible
           collapsedWidth={this.state.broken ? "0" : "80"}
           collapsed={this.state.collapsed}
         >
-          <div className="logo">Alt Campus</div>
+          <div className="logo"> Alt Campus </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-            <Menu.Item key="1">
+            <Menu.Item onClick={() => this.setState({ tabIndex: 0 })} key="0">
+              <Icon type="paper-clip" />
+              <span> Instructions </span>
+            </Menu.Item>
+            <Menu.Item onClick={() => this.setState({ tabIndex: 1 })} key="1">
               <Icon type="html5" />
-              <span>HTML/CSS</span>
+              <span> HTML / CSS </span>
             </Menu.Item>
-            <Menu.Item key="2" disabled>
+            <Menu.Item onClick={() => this.setState({ tabIndex: 2 })} key="2">
               <Icon type="code" />
-              <span>CodeWars</span>
+              <span> CodeWars </span>
             </Menu.Item>
-            <Menu.Item key="3" disabled>
+            <Menu.Item
+              onClick={() => this.setState({ tabIndex: 3 })}
+              key="3"
+              disabled
+            >
               <Icon type="question" />
-              <span>Q/A</span>
+              <span> Q / A </span>
             </Menu.Item>
-            <Menu.Item key="4" disabled>
+            <Menu.Item
+              onClick={() => this.setState({ tabIndex: 4 })}
+              key="4"
+              disabled
+            >
               <Icon type="video-camera" />
-              <span>Video Call</span>
+              <span> Interview </span>
             </Menu.Item>
           </Menu>
-          {/* <div className='gx-flex-row gx-align-items-center gx-mb-4 gx-avatar-row'>
-            <Avatar
-              src='https://via.placeholder.com/150x150'
-              className='gx-size-40 gx-pointer gx-mr-3'
-              alt=''
-            />
-            <span className='gx-avatar-name'>
-              Rob Farnandies
-              <i className='icon icon-chevron-down gx-fs-xxs gx-ml-2' />
-            </span>
-          </div> */}
         </Sider>
+        {/* Display container */}
         <Layout
           style={{
             borderRadius: "10px"
           }}
         >
-          <Header style={{ background: "#fff", padding: 0 }}>
+          {/* Header  */}
+          <Header
+            style={{
+              background: "#fff",
+              padding: "0",
+              display: "flex",
+              justifyContent: "space-between"
+            }}
+          >
             <Icon
               className="trigger"
               type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
               onClick={this.toggle}
+              style={{
+                padding: "16px"
+              }}
             />
+            <div
+              style={{
+                marginRight: "20px"
+              }}
+            >
+              <Avatar
+                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                size={50}
+                style={{
+                  marginRight: "6px"
+                }}
+              />
+              <Button
+                title="Logout"
+                type="danger"
+                shape="circle"
+                icon="logout"
+              />
+            </div>
           </Header>
           <Content
             style={{
-              margin: "24px 16px",
-              padding: 24,
-              background: "#fff",
-              minHeight: 280
+              margin: "24px 16px 0",
+              overflow: "initial"
             }}
           >
-            Content
+            <div
+              style={{
+                padding: 24,
+                background: "#fff",
+                textAlign: "left"
+              }}
+            >
+              {this.renderTask(this.state.tabIndex)}
+            </div>
           </Content>
         </Layout>
       </Layout>

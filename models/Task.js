@@ -1,70 +1,47 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const taskSchema = new Schema(
   {
     html: {
-      instruction: {
-        type: String,
-        required: true
-      },
-      taskImage: {
-        type: String,
-        required: true
-      },
-      resourceLink: {
-        type: String,
-        required: true
+      taskUrl: {
+        type: String
       },
       startTime: {
-        type: Date,
-        required: true
+        type: Date
       },
       submitTime: {
-        type: Date,
-        required: true
-      },
-      timeLimit: {
-        type: Number,
-        required: true
+        type: Date
       },
       score: {
-        type: Number,
-        required: true
+        type: Number
       },
       review: {
-        type: String,
-        required: true
+        type: String
       }
     },
     codewars: {
-      instruction: {
-        type: String,
-        required: true
-      },
-      resourceLink: {
-        type: String,
-        required: true
+      taskUrl: {
+        type: String
       },
       startTime: {
-        type: Date,
-        required: true
+        type: Date
       },
       timeLimit: {
-        type: Number,
-        required: true
+        type: Number
       },
       katasSolved: {
-        type: Number,
-        required: true
+        type: Number
       },
       score: {
-        type: Number,
-        required: true
+        type: Number
       }
     }
   },
-  { timestamps: true }
+  {
+    timestamps: true
+  }
 );
 
 const Task = mongoose.model("Task", taskSchema);

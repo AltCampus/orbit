@@ -13,6 +13,7 @@ import AdminDashboard from "./components/dashboard/admin/Dashboard";
 
 import "./css-reset.scss";
 import "./App.scss";
+import TaskOne from "./components/task/taskOne/TaskOne";
 
 class App extends Component {
   constructor() {
@@ -46,13 +47,14 @@ class App extends Component {
     if (this.state.user.isAdmin) {
       return (
         <Switch>
-          <Route path='/dashboard' component={AdminDashboard} />
+          <Route path="/" component={AdminDashboard} />
         </Switch>
       );
     } else {
       return (
         <Switch>
-          <Route path='/dashboard' component={UserDashboard} />
+          <Route path="/" component={UserDashboard} />
+          <Route path="/dashboard/task/one" component={UserDashboard} />
         </Switch>
       );
     }
@@ -60,13 +62,13 @@ class App extends Component {
   unprotectedRoutes = () => {
     return (
       <Switch>
-        <Route exact path='/dashboard'>
-          <Redirect to='/login' />
+        <Route exact path="/dashboard">
+          <Redirect to="/login" />
         </Route>
-        <Route exact path='/' component={LandingPage} />
-        <Route path='/reset/:hashmail' component={ResetPasswordForm} />
+        <Route exact path="/" component={LandingPage} />
+        <Route path="/reset/:hashmail" component={ResetPasswordForm} />
         <Route
-          path='/login'
+          path="/login"
           render={() => <Login verifyToken={this.verifyToken} />}
         />
       </Switch>
