@@ -3,8 +3,9 @@ import axios from "axios";
 import {
   USER_LOGIN_SUCCESS,
   NO_TOKEN,
-  UPDATE_TOKEN,
-  GET_USER_SUCCESS
+  GET_USER_PENDING,
+  GET_USER_SUCCESS,
+  SET_ERROR
 } from "./types";
 
 const rootUrl = "http://localhost:3000/api/v1/users/";
@@ -17,6 +18,9 @@ const setTokenToAxios = token => {
 export const getCurrentUser = () => {
   return async dispatch => {
     try {
+      await dispatch({
+        type: GET_USER_PENDING
+      });
       const res = await axios.get(rootUrl, {
         headers: {
           Authorization: JSON.parse(localStorage.getItem("authToken"))
@@ -27,6 +31,7 @@ export const getCurrentUser = () => {
         data: res.data.user
       });
     } catch (error) {
+      dispatch({ type: SET_ERROR });
       console.error(error);
     }
   };
@@ -40,23 +45,18 @@ export const userLogin = data => {
       // Set token
       setTokenToAxios(res.data.authToken);
       await dispatch({
-        type: UPDATE_TOKEN,
+        type: USER_LOGIN_SUCCESS,
         data: res.data.authToken
       });
     } catch (error) {
+      dispatch({ type: SET_ERROR });
       console.error(error);
     }
   };
 };
 
 export const logOut = () => {
+  // Clear the localStorage
   localStorage.clear();
   return { type: NO_TOKEN };
 };
-
-// export const updateToken = () => {
-//   // localStorage.setItem("authToken", token);
-//   let token = JSON.parse(localStorage.getItem("authToken"));
-//   setTokenToAxios(token);
-//   return { type: UPDATE_TOKEN, data: { token } };
-// };
