@@ -12,17 +12,15 @@ export default function TaskTwo() {
                 <ul>
                   <li>
                     <p>
-                      Task one is simple.All you have to do is convert the
-                      layout in the image into HTML format.
+                      Kudos on solving your first task. Task Two is also realively simply. You would need to SignUp at <a>CodeWars</a> 
+                      and solve some basic programming questions.
                     </p>
                   </li>
                   <li>
                     <p>
-                      You need to complete the assignment on
-                      <a href="https://codesandbox.io/" target="_blank">
-                        <mark>CodeSandbox</mark>
-                      </a>
-                      and submit the URL link below.
+                      This task is very open ended, its upto you that how many questions do you want to solve. However it will affect
+                      your final score. After signing up you need to submit your CodeWars username here. You will be given a
+                      three day time limit to solve as many questions as you want.
                     </p>
                   </li>
                   <li>
@@ -37,34 +35,27 @@ export default function TaskTwo() {
                 <ul>
                   <li>
                     <a href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72">
-                      <mark>freecodecamp</mark>
+                      <mark>JavaScript.info</mark>
                     </a>
                   </li>
                   <li>
                     <a href="https://learn.shayhowe.com/html-css/building-your-first-web-page/">
-                      <mark>shayhowe</mark>
+                      <mark>resources 2</mark>
                     </a>
                   </li>
                   <li>
                     <a href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css">
-                      <mark>abeautifulsite</mark>
+                      <mark>resources</mark>
                     </a>
                   </li>
                 </ul>
-              </div>
-              <div className="image-container">
-                <img
-                  src="https://i.ibb.co/chGQtD8/task.png"
-                  alt="task"
-                  border="0"
-                ></img>
               </div>
             </Card>
           </Col>
         </Row>
       </div>
       <div className="url-input">
-        <Input size="large" placeholder="Submit your codesandbox URL here..." />
+        <Input size="large" placeholder="Submit your CodeWars username here..." />
         <Button className="url-submit" type="primary">
           Submit
         </Button>

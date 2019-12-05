@@ -8,6 +8,9 @@ const taskSchema = new Schema(
       taskUrl: {
         type: String
       },
+       userId: {
+         type: String
+       },
       startTime: {
         type: Date
       },
@@ -22,7 +25,7 @@ const taskSchema = new Schema(
       }
     },
     codewars: {
-      taskUrl: {
+      codewarsUsername: {
         type: String
       },
       startTime: {
