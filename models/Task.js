@@ -4,13 +4,17 @@ const { Schema } = mongoose;
 
 const taskSchema = new Schema(
   {
+    user: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "User"
+    },
     html: {
       taskUrl: {
         type: String
       },
-       userId: {
-         type: String
-       },
+      userId: {
+        type: String
+      },
       startTime: {
         type: Date
       },
