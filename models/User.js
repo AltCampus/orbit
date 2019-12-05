@@ -33,6 +33,10 @@ const userSchema = new Schema(
     hashMail: { type: String, unique: true },
     socialProfile: { type: String, required: true },
     motivation: { type: String, required: true, maxlength: 200 },
+    task: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Task"
+    },
     isProfileClaimed: { type: Boolean, default: false },
     isAdmin: { type: Boolean, default: false },
     stage: { type: Number, default: 0 }
