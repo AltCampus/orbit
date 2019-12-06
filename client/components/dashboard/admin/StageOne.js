@@ -4,6 +4,7 @@ import axios from "axios";
 import { Table, Divider, Tag } from "antd";
 const { Column, ColumnGroup } = Table;
 import {Link} from "react-router-dom"
+import { Spin, Icon } from "antd";
 
 const columns = [
   {
@@ -73,8 +74,6 @@ class StageOne extends Component {
       "http://localhost:3000/api/v1/users/users"
     );
     this.setState({ users: response });
-
-    // fetch("http://localhost:3000/api/v1/users/users").then(e=> e.json()).then(res=> qwe = res)
   }
 
   renderTable = props => {
@@ -116,7 +115,7 @@ class StageOne extends Component {
         {console.log(Boolean(this.state.users.data))}
         <div>
           {!this.state.users.data ? (
-            <h1>...LOADING</h1>
+             <Icon type="loading" style={{ fontSize: 100, width: "100%", paddingTop: "7rem"  }} spin />
           ) : (
             <div>
               {this.renderTable(this.props.name)}
