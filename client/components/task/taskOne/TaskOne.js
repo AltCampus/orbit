@@ -26,7 +26,7 @@ class TaskOne extends Component {
         }
       );
       message.success(res.status && "Your Project has been submitted.");
-      console.log(res);
+      this.props.getCurrentUser();
     } catch (error) {
       if (error.response) {
         /*
@@ -133,4 +133,11 @@ class TaskOne extends Component {
   }
 }
 
-export default TaskOne;
+const mapStateToProps = state => {
+  const { user } = state.currentUser;
+  return {
+    user
+  };
+};
+
+export default connect(mapStateToProps, { getCurrentUser })(TaskOne);

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { updateToken, getCurrentUser } from "../../../actions/users";
+
 import { Card, Col, Row, Input, Button, message } from "antd";
 
 class TaskTwo extends Component {
@@ -28,7 +30,7 @@ class TaskTwo extends Component {
       message.success(
         res.status && "Your codewars username has been submitted."
       );
-      console.log(res);
+      this.props.getCurrentUser();
     } catch (error) {
       if (error.response) {
         /*
@@ -130,4 +132,11 @@ class TaskTwo extends Component {
   }
 }
 
-export default TaskTwo;
+const mapStateToProps = state => {
+  const { user } = state.currentUser;
+  return {
+    user
+  };
+};
+
+export default connect(mapStateToProps, { getCurrentUser })(TaskTwo);

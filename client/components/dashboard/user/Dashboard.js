@@ -1,9 +1,12 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { Layout, Menu, Icon, Avatar, Button } from "antd";
+import { connect } from "react-redux";
+import { updateToken, getCurrentUser } from "../../../actions/users";
 
 import TaskOne from "../../task/taskOne/TaskOne";
 import TaskTwo from "../../task/taskTwo/TaskTwo";
+import TaskCompleted from "../../task/taskCompleted/TaskCompleted";
 
 const { Header, Sider, Content } = Layout;
 
@@ -30,10 +33,18 @@ class UserDashboard extends React.Component {
     // console.log(this.props);
     switch (this.state.tabIndex) {
       case 1: {
-        return <TaskOne />;
+        return this.props.user.stage === 1 ? (
+          <TaskOne />
+        ) : (
+          <TaskCompleted title="HTML Task" />
+        );
       }
       case 2:
-        return <TaskTwo />;
+        return this.props.user.stage === 2 ? (
+          <TaskOne />
+        ) : (
+          <TaskCompleted title="Codewars Task" />
+        );
       default:
         break;
     }
@@ -147,4 +158,13 @@ class UserDashboard extends React.Component {
   }
 }
 
-export default withRouter(UserDashboard);
+const mapStateToProps = state => {
+  const { user } = state.currentUser;
+  return {
+    user
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, { getCurrentUser })(UserDashboard)
+);
