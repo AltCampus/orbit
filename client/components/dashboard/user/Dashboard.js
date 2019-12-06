@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Route, Switch } from "react-router-dom";
 import { Layout, Menu, Icon, Avatar, Button } from "antd";
 import { connect } from "react-redux";
 import { updateToken, getCurrentUser } from "../../../actions/users";
@@ -7,153 +7,59 @@ import { updateToken, getCurrentUser } from "../../../actions/users";
 import TaskOne from "../../task/taskOne/TaskOne";
 import TaskTwo from "../../task/taskTwo/TaskTwo";
 import TaskCompleted from "../../task/taskCompleted/TaskCompleted";
+import UserWrapper from "./UserWrapper";
 
 const { Header, Sider, Content } = Layout;
 
 class UserDashboard extends React.Component {
-  state = {
-    collapsed: false,
-    broken: false,
-    tabIndex: Number(this.props.match.params.taskId) || 0
-  };
+  // state = {
+  //   collapsed: false,
+  //   broken: false,
+  //   tabIndex: Number(this.props.match.params.taskId) || 0
+  // };
 
-  toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  };
+  // toggle = () => {
+  //   this.setState({
+  //     collapsed: !this.state.collapsed
+  //   });
+  // };
 
-  handleNav = e => {
-    const key = Number(e.key);
-    this.props.history.push(`/task/${key}`);
-    this.setState({ tabIndex: key });
-  };
+  // handleNav = e => {
+  //   const key = Number(e.key);
+  //   this.props.history.push(`/task/${key}`);
+  //   this.setState({ tabIndex: key });
+  // };
 
-  renderTask = () => {
-    // console.log(this.props);
-    switch (this.state.tabIndex) {
-      case 1: {
-        return this.props.user.stage === 1 ? (
-          <TaskOne />
-        ) : (
-          <TaskCompleted title="HTML Task" next={this.state.tabIndex + 1} />
-        );
-      }
-      case 2:
-        return this.props.user.stage === 2 ? (
-          <TaskOne />
-        ) : (
-          <TaskCompleted title="Codewars Task" next={this.state.tabIndex + 1} />
-        );
-      default:
-        break;
-    }
-  };
+  // renderTask = () => {
+  //   // console.log(this.props);
+  //   switch (this.state.tabIndex) {
+  //     case 1: {
+  //       return this.props.user.stage === 1 ? (
+  //         <TaskOne />
+  //       ) : (
+  //         <TaskCompleted title="HTML Task" next={this.state.tabIndex + 1} />
+  //       );
+  //     }
+  //     case 2:
+  //       return this.props.user.stage === 2 ? (
+  //         <TaskTwo />
+  //       ) : (
+  //         <TaskCompleted title="Codewars Task" next={this.state.tabIndex + 1} />
+  //       );
+  //     default:
+  //       break;
+  //   }
+  // };
 
   render() {
     return (
-      <Layout className="wrapper">
-        <Sider
-          breakpoint="sm"
-          onBreakpoint={broken => {
-            this.setState({
-              broken
-            });
-          }}
-          trigger={null}
-          collapsible
-          collapsedWidth={this.state.broken ? "0" : "80"}
-          collapsed={this.state.collapsed}
-        >
-          <div className="logo"> Alt Campus </div>
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={[`${this.state.tabIndex}`]}
-          >
-            <Menu.Item onClick={this.handleNav} key="0">
-              <Icon type="paper-clip" />
-              <span> Instructions </span>
-            </Menu.Item>
-            <Menu.Item onClick={this.handleNav} key="1">
-              <Icon type="html5" />
-              <span> HTML / CSS </span>
-            </Menu.Item>
-            <Menu.Item onClick={this.handleNav} key="2">
-              <Icon type="code" />
-              <span> CodeWars </span>
-            </Menu.Item>
-            <Menu.Item onClick={this.handleNav} key="3" disabled>
-              <Icon type="question" />
-              <span> Q / A </span>
-            </Menu.Item>
-            <Menu.Item onClick={this.handleNav} key="4" disabled>
-              <Icon type="video-camera" />
-              <span> Interview </span>
-            </Menu.Item>
-          </Menu>
-        </Sider>
-        {/* Display container */}
-        <Layout
-          style={{
-            borderRadius: "10px"
-          }}
-        >
-          {/* Header  */}
-          <Header
-            style={{
-              background: "#fff",
-              padding: "0",
-              display: "flex",
-              justifyContent: "space-between"
-            }}
-          >
-            <Icon
-              className="trigger"
-              type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
-              onClick={this.toggle}
-              style={{
-                padding: "16px"
-              }}
-            />
-            <div
-              style={{
-                marginRight: "20px"
-              }}
-            >
-              <Avatar
-                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                size={50}
-                style={{
-                  marginRight: "6px"
-                }}
-              />
-              <Button
-                title="Logout"
-                type="danger"
-                shape="circle"
-                icon="logout"
-              />
-            </div>
-          </Header>
-          <Content
-            style={{
-              margin: "24px 16px 0",
-              overflow: "initial"
-            }}
-          >
-            <div
-              style={{
-                padding: 24,
-                background: "#fff",
-                textAlign: "left"
-              }}
-            >
-              {this.renderTask()}
-            </div>
-          </Content>
-        </Layout>
-      </Layout>
+      <UserWrapper activeKey={"0"}>
+        <Switch>
+          <Route path="/task/1" component={TaskOne}></Route>
+          <Route path="/task/2" component={TaskOne}></Route>
+        </Switch>
+        {/* {this.renderTask()} */}
+      </UserWrapper>
     );
   }
 }

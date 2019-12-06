@@ -3,6 +3,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { updateToken, getCurrentUser } from "../../../actions/users";
 import { Card, Col, Row, Input, Button, message } from "antd";
+import UserWrapper from "../../dashboard/user/UserWrapper";
 
 class TaskOne extends Component {
   state = {
@@ -44,7 +45,7 @@ class TaskOne extends Component {
 
   render() {
     return (
-      <>
+      <UserWrapper activeKey={"1"}>
         <div className="task-container">
           <Row gutter={16}>
             <Col span={25}>
@@ -130,7 +131,7 @@ class TaskOne extends Component {
             </Button>
           </form>
         </div>
-      </>
+      </UserWrapper>
     );
   }
 }
