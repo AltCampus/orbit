@@ -5,6 +5,7 @@ const logger = require("morgan");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const userRouter = require("./routes/user")
 const dashboardRouter = require("./routes/dashboard");
 const taskRouter = require("./routes/tasks");
 
@@ -53,6 +54,7 @@ mongoose.set("useCreateIndex", true);
 
 app.use("/api/v1/dashboard", dashboardRouter);
 app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/user", userRouter);
 app.use("/api/v1/tasks", taskRouter);
 app.use("/", indexRouter);
 
