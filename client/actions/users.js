@@ -8,7 +8,7 @@ import {
   SET_ERROR
 } from "./types";
 
-const rootUrl = "http://localhost:3000/api/v1/users/";
+const rootUrl = "http://localhost:3000/api/v1/users";
 
 const setTokenToAxios = token => {
   const newToken = token || "";
