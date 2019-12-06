@@ -41,7 +41,7 @@ class UserDashboard extends React.Component {
       }
       case 2:
         return this.props.user.stage === 2 ? (
-          <TaskOne />
+          <TaskTwo />
         ) : (
           <TaskCompleted title="Codewars Task" next={this.state.tabIndex + 1} />
         );
