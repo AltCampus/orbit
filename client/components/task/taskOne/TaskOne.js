@@ -28,8 +28,15 @@ class TaskOne extends Component {
       message.success(res.status && "Your Project has been submitted.");
       console.log(res);
     } catch (error) {
-      message.error("Please try again");
-      console.log(error);
+      if (error.response) {
+        /*
+         * The request was made and the server responded with a
+         * status code that falls out of the range of 2xx
+         */
+        message.error(error.response.data.error);
+      } else {
+        message.error("An error occured");
+      }
     }
   };
 
