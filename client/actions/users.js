@@ -7,6 +7,7 @@ import {
   GET_USER_SUCCESS,
   SET_ERROR
 } from "./types";
+import { message } from "antd";
 
 const rootUrl = "http://localhost:3000/api/v1/users";
 
@@ -16,6 +17,9 @@ const setTokenToAxios = token => {
 };
 
 export const getCurrentUser = () => {
+  if (!localStorage.authToken) {
+    return;
+  }
   return async dispatch => {
     try {
       await dispatch({
@@ -41,6 +45,7 @@ export const userLogin = data => {
   return async dispatch => {
     try {
       const res = await axios.post(`${rootUrl}/login`, data);
+      console.log("invalid");
       localStorage.setItem("authToken", JSON.stringify(res.data.authToken));
       // Set token
       setTokenToAxios(res.data.authToken);
@@ -49,7 +54,10 @@ export const userLogin = data => {
         data: res.data.authToken
       });
     } catch (error) {
-      dispatch({ type: SET_ERROR });
+      if (error.response) {
+        dispatch({ type: SET_ERROR, data: error.response.data.message });
+        // message.error(error.response.data.message);
+      }
       console.error(error);
     }
   };

@@ -6,6 +6,7 @@ import {
   NO_TOKEN,
   SET_ERROR
 } from "./../actions/types";
+import { message } from "antd";
 
 const initialState = {
   user: null,
@@ -18,6 +19,7 @@ const initialState = {
 const currentUser = (state = initialState, action) => {
   switch (action.type) {
     case SET_ERROR: {
+      message.error(action.data);
       return {
         ...state,
         isError: true
