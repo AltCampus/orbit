@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { getCurrentUser } from "../../../actions/users";
 import axios from "axios";
 import { Card, Col, Row, Input, Button, message } from "antd";
 
