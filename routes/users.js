@@ -114,4 +114,15 @@ router.post("/:hashMail", async (req, res) => {
   }
 });
 
+// Get Users
+router.get("/users", async (req,res)=> {
+  try {
+    const users = await User.find({});
+    if (!users) res.status(200).json({message: "No users yet", status: true})
+    res.status(200).json({users, status: true});
+  } catch(error) {
+    res.status(400).json({message: "Something went wrong", status:false})
+  }
+})
+
 module.exports = router;

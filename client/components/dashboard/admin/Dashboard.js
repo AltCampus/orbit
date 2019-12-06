@@ -1,6 +1,8 @@
 import React from "react";
 import { Layout, Menu, Icon, Avatar } from "antd";
 
+import DisplayApplicants from "./DisplayApplicants"
+
 const { Header, Sider, Content } = Layout;
 
 class AdminDashboard extends React.Component {
@@ -65,13 +67,13 @@ class AdminDashboard extends React.Component {
           </Header>
           <Content
             style={{
-              margin: "24px 16px",
-              padding: 24,
+              // margin: "24px 16px",
+              // padding: 24,
               background: "#fff",
               minHeight: 280
             }}
           >
-            Admin Content
+            <DisplayApplicants/>
           </Content>
         </Layout>
       </Layout>
