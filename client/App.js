@@ -17,19 +17,23 @@ import TaskOne from "./components/task/taskOne/TaskOne";
 
 class App extends Component {
   protectedRoutes = () => {
+    console.log(this.user);
     if (this.props.user.isAdmin) {
       return (
         <Switch>
-          <Route path="/" component={AdminDashboard} />
+          <Route exact path="/" component={AdminDashboard} />
+          <Route path="/login">
+            <Redirect to="/" />
+          </Route>
         </Switch>
       );
     } else {
       return (
         <Switch>
-          <Route path="/dashboard" component={UserDashboard} />
+          <Route path="/" component={UserDashboard} />
           {/* Redirects the user to login if user attempts to login */}
           <Route path="/login">
-            <Redirect to="/dashboard" />
+            <Redirect to="/" />
           </Route>
         </Switch>
       );
