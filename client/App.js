@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Route, Switch, withRouter, Redirect } from "react-router-dom";
-import axios from "axios";
 import { message } from "antd";
-
+import { connect } from "react-redux";
+import { updateToken, getCurrentUser } from "./actions/users";
 import Login from "./components/login/Login";
 import ResetPasswordForm from "./components/resetPasswordForm/ResetPasswordForm";
 // TODO: Remove register components after test done.
@@ -16,35 +16,8 @@ import "./App.scss";
 import TaskOne from "./components/task/taskOne/TaskOne";
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      user: null
-    };
-  }
-
-  verifyToken = async authToken => {
-    try {
-      const user = await axios.get("http://localhost:3000/api/v1/users/", {
-        headers: {
-          authorization: authToken
-        }
-      });
-      let { data } = user;
-      if (!data.status) {
-        message.error(data.message);
-      } else {
-        this.setState({ user: user.data.user });
-        this.props.history.push("/dashboard");
-      }
-    } catch (error) {
-      message.warning(error || "Token expire login again");
-      this.props.history.push("/login");
-    }
-  };
-
   protectedRoutes = () => {
-    if (this.state.user.isAdmin) {
+    if (this.props.user.isAdmin) {
       return (
         <Switch>
           <Route path="/" component={AdminDashboard} />
@@ -53,12 +26,16 @@ class App extends Component {
     } else {
       return (
         <Switch>
-          <Route path="/" component={UserDashboard} />
-          <Route path="/dashboard/task/one" component={UserDashboard} />
+          <Route path="/dashboard" component={UserDashboard} />
+          {/* Redirects the user to login if user attempts to login */}
+          <Route path="/login">
+            <Redirect to="/dashboard" />
+          </Route>
         </Switch>
       );
     }
   };
+
   unprotectedRoutes = () => {
     return (
       <Switch>
@@ -67,26 +44,40 @@ class App extends Component {
         </Route>
         <Route exact path="/" component={LandingPage} />
         <Route path="/reset/:hashmail" component={ResetPasswordForm} />
-        <Route
-          path="/login"
-          render={() => <Login verifyToken={this.verifyToken} />}
-        />
+        <Route path="/login" component={Login} />} />
       </Switch>
     );
   };
 
   componentDidMount = () => {
-    if (localStorage.authToken) {
-      this.verifyToken(JSON.parse(localStorage.authToken));
+    if (localStorage.getItem("authToken")) {
+      this.props.getCurrentUser();
     }
   };
+
   render() {
     return (
       <React.Fragment>
-        {this.state.user ? this.protectedRoutes() : this.unprotectedRoutes()}
+        {/* Conditional Routing, Checks if isAuthInProgress true or false, Checks
+        if user is available or not */}
+        {this.props.isAuthInProgress
+          ? null
+          : this.props.user
+          ? this.protectedRoutes()
+          : this.unprotectedRoutes()}
       </React.Fragment>
     );
   }
 }
 
-export default withRouter(App);
+const mapStateToProps = state => {
+  const { user, isAuthInProgress } = state.currentUser;
+  return {
+    user,
+    isAuthInProgress
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, { updateToken, getCurrentUser })(App)
+);
