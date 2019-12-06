@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getCurrentUser } from "../../../actions/users";
 import axios from "axios";
+import { connect } from "react-redux";
+import { updateToken, getCurrentUser } from "../../../actions/users";
 import { Card, Col, Row, Input, Button, message } from "antd";
 
 class TaskOne extends Component {
@@ -23,7 +25,7 @@ class TaskOne extends Component {
         },
         {
           headers: {
-            authorization: JSON.parse(localStorage.getItem("authToken"))
+            authorization: JSON.parse(localStorage.authToken)
           }
         }
       );

@@ -36,14 +36,14 @@ class UserDashboard extends React.Component {
         return this.props.user.stage === 1 ? (
           <TaskOne />
         ) : (
-          <TaskCompleted title="HTML Task" />
+          <TaskCompleted title="HTML Task" next={this.state.tabIndex + 1} />
         );
       }
       case 2:
         return this.props.user.stage === 2 ? (
           <TaskOne />
         ) : (
-          <TaskCompleted title="Codewars Task" />
+          <TaskCompleted title="Codewars Task" next={this.state.tabIndex + 1} />
         );
       default:
         break;
