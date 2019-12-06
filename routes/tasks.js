@@ -79,8 +79,8 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
             };
             await newTask.save();
 
-            // // Update user stage to 2
-            // await User.findByIdAndUpdate(req.user.id, { stage: 2 });
+            // Update user stage to 3
+            await User.findByIdAndUpdate(req.user.id, { stage: 3 });
             return res.status(201).json({ status: true, success: true });
           } catch (error) {
             console.log(error);
