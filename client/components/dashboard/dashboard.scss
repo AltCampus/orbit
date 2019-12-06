@@ -1,6 +1,7 @@
 .wrapper {
   height: 100vh;
 }
+
 .trigger {
   font-size: 18px;
   line-height: 64px;
@@ -23,18 +24,32 @@
   align-items: center;
   margin: 16px 0;
 }
+
 .ant-layout-sider-children {
   display: flex;
   flex-direction: column;
   align-items: center;
+
   .user-details {
     margin-top: auto;
     margin-bottom: 15px;
+
     .user-details-avatar {
       margin-right: 15px;
     }
+
     .user-details-name {
       color: white;
     }
   }
+}
+
+.search-result-list {
+  margin-top: 16px;
+  border: 1px dashed #e9e9e9;
+  border-radius: 6px;
+  background-color: #fafafa;
+  min-height: 200px;
+  text-align: center;
+  padding-top: 80px;
 }
