@@ -45,7 +45,6 @@ export const userLogin = data => {
   return async dispatch => {
     try {
       const res = await axios.post(`${rootUrl}/login`, data);
-      console.log("invalid");
       localStorage.setItem("authToken", JSON.stringify(res.data.authToken));
       // Set token
       setTokenToAxios(res.data.authToken);

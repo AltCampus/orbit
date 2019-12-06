@@ -13,10 +13,16 @@ class Login extends React.Component {
   handleSubmit = async e => {
     e.preventDefault();
     // Makes fetch post request
-    await this.props.userLogin(this.state);
-    if (localStorage.authToken) {
-      // Makes fetch current user
-      this.props.getCurrentUser();
+    if (!this.state.email || !this.state.password) {
+      message.error("Please fill both fields");
+    } else if (this.state.password.length <= 5) {
+      message.error("Password must contain 6 letter!");
+    } else {
+      await this.props.userLogin(this.state);
+      if (localStorage.authToken) {
+        // Makes fetch current user
+        this.props.getCurrentUser();
+      }
     }
   };
 
