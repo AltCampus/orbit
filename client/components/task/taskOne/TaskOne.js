@@ -23,7 +23,7 @@ class TaskOne extends Component {
         },
         {
           headers: {
-            authorization: JSON.parse(localStorage.getItem("authToken"))
+            authorization: JSON.parse(localStorage.authToken)
           }
         }
       );
