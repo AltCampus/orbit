@@ -14,8 +14,10 @@ class Login extends React.Component {
     e.preventDefault();
     // Makes fetch post request
     await this.props.userLogin(this.state);
-    // Makes fetch current user
-    this.props.getCurrentUser();
+    if (localStorage.authToken) {
+      // Makes fetch current user
+      this.props.getCurrentUser();
+    }
   };
 
   handleChange = e => {
