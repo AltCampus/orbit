@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
         message: "Please fill all Required data"
       });
     }
-    req.body.hashMail =
+    hashMail =
       Date.now() +
       Math.random()
         .toString(36)
@@ -35,7 +35,8 @@ router.post("/", async (req, res) => {
       email,
       phoneNo,
       socialProfile,
-      motivation
+      motivation,
+      hashMail
     });
     //TODO: UnComment to sending mail once user Register
     // const mail = await Mailer.mail(user.email, user.name, user.hashMail);
