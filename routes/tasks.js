@@ -55,7 +55,7 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
     // Check if user already is on stage 2
     return res.status(400).json({
       status: false,
-      error: "You've already send your HTML assignment link"
+      error: "You've already send your codewars username."
     });
   }
   https
