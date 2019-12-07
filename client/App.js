@@ -16,8 +16,6 @@ import "./App.scss";
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
 
-
-
 class App extends Component {
   protectedRoutes = () => {
     // console.log(this.props.user);
@@ -26,7 +24,6 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={AdminDashboard} />
           <Route path="/user/:id" component={UserProfile} />
-          
           <Route path="/login">
             <Redirect to="/" />
           </Route>
