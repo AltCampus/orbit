@@ -1,18 +1,17 @@
 .user-info {
     height: 75vh;
 }
+
 .card-child {
     font-size: 1.5rem;
     padding: 1.2rem;
 }
+
 .user-container {
     display: flex;
     margin-top: 3rem;
     padding: 3rem;
     justify-content: space-between;
-    
-    
-}
-body {
-    background-color: #001529;
+
+
 }
