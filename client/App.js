@@ -14,6 +14,7 @@ import AdminDashboard from "./components/dashboard/admin/Dashboard";
 import "./css-reset.scss";
 import "./App.scss";
 import TaskOne from "./components/task/taskOne/TaskOne";
+import TaskTwo from "./components/task/taskTwo/TaskTwo";
 
 class App extends Component {
   protectedRoutes = () => {
@@ -31,6 +32,8 @@ class App extends Component {
       return (
         <Switch>
           <Route exact path="/" component={UserDashboard} />
+          <Route exact path="/task/1" component={TaskOne} />
+          <Route exact path="/task/2" component={TaskTwo} />
           <Route path="/task/:taskId" component={UserDashboard} />
           {/* Redirects the user to login if user attempts to login */}
           <Route path="/login">
