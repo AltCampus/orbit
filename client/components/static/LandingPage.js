@@ -10,8 +10,8 @@ const LandingPage = () => {
           <Col span={15}>
             <img
               className="image-wrapper"
-              src="https://i.ibb.co/f9mjDPC/banner.png"
-              alt="banner"
+              src="https://i.ibb.co/crHbt2j/undraw-code-thinking-1jeh-2.png"
+              alt="undraw-code-thinking-1jeh-2"
               border="0"
             />
           </Col>
@@ -21,7 +21,9 @@ const LandingPage = () => {
               <p>to Orbit</p>
             </div>
             <Link to="/login">
-              <Button type="primary">Login</Button>
+              <Button className="btn" shape="round" size="large">
+                Login
+              </Button>
             </Link>
           </Col>
         </Row>
