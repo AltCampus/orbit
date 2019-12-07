@@ -19,6 +19,12 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
     };
 
     render() {
+      const radioStyle = {
+        display: "block",
+        height: "30px",
+        lineHeight: "30px",
+        marginBottom: "3px"
+      };
       const { visible, onCancel, onCreate, form } = this.props;
       const { getFieldDecorator } = form;
       return (
@@ -55,12 +61,20 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
               )}
             </Form.Item>
             {this.state.questionType === "mcq" ? (
-              <Form.Item label="Options">
+              <Form.Item style={{ width: "100%" }} label="Options">
                 <Radio.Group name="radiogroup" defaultValue={1}>
-                  <Radio value={1}>A</Radio>
-                  <Radio value={2}>B</Radio>
-                  <Radio value={3}>C</Radio>
-                  <Radio value={4}>D</Radio>
+                  <Radio style={radioStyle} value={1}>
+                    <Input placeholder="A" />
+                  </Radio>
+                  <Radio style={radioStyle} value={2}>
+                    <Input placeholder="B" />
+                  </Radio>
+                  <Radio style={radioStyle} value={3}>
+                    <Input placeholder="C" />
+                  </Radio>
+                  <Radio style={radioStyle} value={4}>
+                    <Input placeholder="D" />
+                  </Radio>
                 </Radio.Group>
               </Form.Item>
             ) : null}

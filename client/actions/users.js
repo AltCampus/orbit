@@ -16,6 +16,9 @@ const setTokenToAxios = token => {
 };
 
 export const getCurrentUser = () => {
+  if (!localStorage.getItem("authToken")) {
+    return;
+  }
   return async dispatch => {
     try {
       await dispatch({
