@@ -1,7 +1,9 @@
 import React from "react";
 import { Layout, Menu, Icon, Avatar } from "antd";
+import Questionnaire from "../../questionnaire/Questionnaire";
+import QuestionList from "../../questionnaire/QuestionList";
 
-import DisplayApplicants from "./DisplayApplicants"
+import DisplayApplicants from "./DisplayApplicants";
 
 const { Header, Sider, Content } = Layout;
 
@@ -19,9 +21,9 @@ class AdminDashboard extends React.Component {
 
   render() {
     return (
-      <Layout className='wrapper'>
+      <Layout className="wrapper">
         <Sider
-          breakpoint='sm'
+          breakpoint="sm"
           onBreakpoint={broken => {
             this.setState({ broken });
           }}
@@ -30,14 +32,14 @@ class AdminDashboard extends React.Component {
           collapsedWidth={this.state.broken ? "0" : "80"}
           collapsed={this.state.collapsed}
         >
-          <div className='logo'>Alt Campus</div>
-          <Menu theme='dark' mode='inline' defaultSelectedKeys={["1"]}>
-            <Menu.Item key='1'>
-              <Icon type='layout' />
+          <div className="logo">Alt Campus</div>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+            <Menu.Item key="1">
+              <Icon type="layout" />
               <span>All applicants</span>
             </Menu.Item>
-            <Menu.Item key='2'>
-              <Icon type='code' />
+            <Menu.Item key="2">
+              <Icon type="code" />
               <span>Add Question</span>
             </Menu.Item>
           </Menu>
@@ -60,7 +62,7 @@ class AdminDashboard extends React.Component {
         >
           <Header style={{ background: "#fff", padding: 0 }}>
             <Icon
-              className='trigger'
+              className="trigger"
               type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
               onClick={this.toggle}
             />
@@ -73,7 +75,9 @@ class AdminDashboard extends React.Component {
               minHeight: 280
             }}
           >
-            <DisplayApplicants/>
+            <DisplayApplicants />
+            <Questionnaire />
+            <QuestionList />
           </Content>
         </Layout>
       </Layout>

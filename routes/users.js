@@ -6,7 +6,7 @@ const Task = require("../models/Task");
 const auth = require("../utils/auth");
 
 //current Login User
-router.get("/", auth.verifyToken, function(req, res) {
+router.get("/", auth.verifyToken, async (req, res) => {
   try {
     return res.status(201).json({ status: true, user: req.user });
   } catch (error) {

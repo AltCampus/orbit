@@ -6,7 +6,6 @@ import { updateToken, getCurrentUser } from "./actions/users";
 import Login from "./components/login/Login";
 import ResetPasswordForm from "./components/resetPasswordForm/ResetPasswordForm";
 // TODO: Remove register components after test done.
-import Register from "./components/register/Register";
 import LandingPage from "./components/static/LandingPage";
 import UserDashboard from "./components/dashboard/user/Dashboard";
 import AdminDashboard from "./components/dashboard/admin/Dashboard";
