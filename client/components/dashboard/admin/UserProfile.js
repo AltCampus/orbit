@@ -25,7 +25,7 @@ class UserProfile extends Component {
             spin
           />
         ) : (
-          <div>
+          <div className="user-container">
             <div className="user-info">
               <Card
                 headStyle={{ fontSize: "1.5rem" }}
@@ -47,6 +47,13 @@ class UserProfile extends Component {
                 <p className="card-child">Stage:{this.state.user.data.user.stage}</p>
                 <p className="card-child">SignUp Time:{this.state.user.data.user.createdAt}</p>
               </Card>
+            </div>
+            <div className="user-taskinfo">
+                <Card
+                    title="User Progress"
+                    headStyle={{ fontSize: "1.5rem" }}
+                    style={{ width: 1150, height: "75vh", borderRadius: "5px" }}
+                ></Card>
             </div>
           </div>
         )}
