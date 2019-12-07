@@ -116,7 +116,7 @@ router.post("/:hashMail", async (req, res) => {
 });
 
 // Get Users
-router.get("/users", async (req,res)=> {
+router.get("/get", async (req,res)=> {
   try {
     const users = await User.find({});
     if (!users) res.status(200).json({message: "No users yet", status: true})

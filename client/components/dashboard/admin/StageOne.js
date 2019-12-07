@@ -5,6 +5,7 @@ import { Table, Divider, Tag } from "antd";
 const { Column, ColumnGroup } = Table;
 import {Link} from "react-router-dom"
 import { Spin, Icon } from "antd";
+import { Item } from "rc-menu";
 
 const columns = [
   {
@@ -71,14 +72,20 @@ class StageOne extends Component {
 
   async componentWillMount() {
     const response = await axios.get(
-      "http://localhost:3000/api/v1/users/users"
+      "http://localhost:3000/api/v1/users/get"
     );
     this.setState({ users: response });
   }
 
+  getItemId = props => {
+    props.forEach(user => {
+      return user._id
+    });
+  }
+
   renderTable = props => {
     var dataSource = this.state.users.data.users;
-    console.log(dataSource);
+    console.log(dataSource,"DATASOURCE");
     console.log(props);
     switch (props) {
       case "all":
@@ -104,22 +111,19 @@ class StageOne extends Component {
     }
     return (
       <div>
-        <Table columns={columns} dataSource={dataSource} />
+        <Table  columns={columns} dataSource={dataSource} />
       </div>
     );
   };
   render() {
-    console.log("Amaan", this.props.name);
     return (
       <Fragment>
-        {console.log(Boolean(this.state.users.data))}
         <div>
           {!this.state.users.data ? (
              <Icon type="loading" style={{ fontSize: 100, width: "100%", paddingTop: "7rem"  }} spin />
           ) : (
             <div>
               {this.renderTable(this.props.name)}
-              {console.log(this.state.users.data.users, "ASS")}
             </div>
           )}
         </div>

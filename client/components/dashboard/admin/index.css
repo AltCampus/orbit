@@ -1,0 +1,13 @@
+.user-info {
+    padding-top: 4rem;
+    padding: 3rem;
+    height: 75vh;
+    margin-top: 3rem;
+}
+.card-child {
+    font-size: 1.5rem;
+    padding: 1.2rem;
+}
+body {
+    background-color: #001529;
+}
