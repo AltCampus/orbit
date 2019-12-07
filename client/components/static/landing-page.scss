@@ -1,0 +1,29 @@
+.banner-container {
+    margin: 0 auto;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    margin-top: 15rem;
+}
+
+.image-wrapper {
+    width: 100%;
+}
+
+.content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    div {
+        margin-top: 3rem;
+    }
+
+    p {
+        font-size: 3rem;
+    }
+
+    strong {
+        font-size: 5rem;
+    }
+}
