@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { updateToken, getCurrentUser } from "../../../actions/users";
 import { Card, Col, Row, Input, Button, message } from "antd";
 import UserWrapper from "../../dashboard/user/UserWrapper";
+
+import { getCurrentUser } from "../../../actions/users";
 
 class TaskOne extends Component {
   state = {

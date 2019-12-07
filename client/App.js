@@ -10,11 +10,14 @@ import Register from "./components/register/Register";
 import LandingPage from "./components/static/LandingPage";
 import UserDashboard from "./components/dashboard/user/Dashboard";
 import AdminDashboard from "./components/dashboard/admin/Dashboard";
+import UserProfile from "./components/dashboard/admin/UserProfile";
 
 import "./css-reset.scss";
 import "./App.scss";
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
+
+
 
 class App extends Component {
   protectedRoutes = () => {
@@ -23,6 +26,8 @@ class App extends Component {
       return (
         <Switch>
           <Route exact path="/" component={AdminDashboard} />
+          <Route path="/user/:id" component={UserProfile} />
+          
           <Route path="/login">
             <Redirect to="/" />
           </Route>

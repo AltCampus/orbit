@@ -30,26 +30,26 @@ class UserDashboard extends React.Component {
   //   this.setState({ tabIndex: key });
   // };
 
-  // renderTask = () => {
-  //   // console.log(this.props);
-  //   switch (this.state.tabIndex) {
-  //     case 1: {
-  //       return this.props.user.stage === 1 ? (
-  //         <TaskOne />
-  //       ) : (
-  //         <TaskCompleted title="HTML Task" next={this.state.tabIndex + 1} />
-  //       );
-  //     }
-  //     case 2:
-  //       return this.props.user.stage === 2 ? (
-  //         <TaskTwo />
-  //       ) : (
-  //         <TaskCompleted title="Codewars Task" next={this.state.tabIndex + 1} />
-  //       );
-  //     default:
-  //       break;
-  //   }
-  // };
+  renderTask = () => {
+    // console.log(this.props);
+    switch (this.state.tabIndex) {
+      case 1: {
+        return this.props.user.stage === 1 ? (
+          <TaskOne />
+        ) : (
+          <TaskCompleted title="HTML Task" next={this.state.tabIndex + 1} />
+        );
+      }
+      case 2:
+        return this.props.user.stage === 2 ? (
+          <TaskTwo />
+        ) : (
+          <TaskCompleted title="Codewars Task" next={this.state.tabIndex + 1} />
+        );
+      default:
+        break;
+    }
+  };
 
   render() {
     return (
