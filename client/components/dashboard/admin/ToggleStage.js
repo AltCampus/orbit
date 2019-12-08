@@ -7,12 +7,12 @@ import { Icon } from "antd";
 const columns = [
   {
     title: "Id",
-    dataIndex: "_id",
+    dataIndex: "id",
     key: "_id",
     render: id => (
-      <Link to={`/user/${id}`}>
+      <Link to={`/user/${id.id}`}>
         {" "}
-        <a>{id}</a>{" "}
+        <a>{id.email}</a>{" "}
       </Link>
     )
   },
@@ -57,13 +57,18 @@ class ToggleStage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: {}
+      users: null
     };
   }
 
   async componentDidMount() {
     const response = await axios.get("http://localhost:3000/api/v1/users/get");
-    this.setState({ users: response });
+    this.setState({
+      users: response.data.users.map(user => ({
+        ...user,
+        id: { email: user.email, id: user._id }
+      }))
+    });
   }
 
   getItemId = props => {
@@ -73,7 +78,7 @@ class ToggleStage extends Component {
   };
 
   renderTable = props => {
-    var dataSource = this.state.users.data.users;
+    var dataSource = this.state.users;
     switch (props) {
       case "all":
         break;
@@ -106,7 +111,7 @@ class ToggleStage extends Component {
     return (
       <Fragment>
         <div>
-          {!this.state.users.data ? (
+          {!this.state.users ? (
             <Icon
               type="loading"
               style={{ fontSize: 100, width: "100%", paddingTop: "7rem" }}
