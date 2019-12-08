@@ -16,7 +16,6 @@ import "./App.scss";
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
 import Question from "./components/questionnaire/Question";
-import StageOne from "./components/dashboard/admin/StageOne";
 import QuestionList from "./components/questionnaire/QuestionList";
 import Dashboard from "./components/dashboard/user/Dashboard";
 import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
