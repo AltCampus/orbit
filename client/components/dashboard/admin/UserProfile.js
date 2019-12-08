@@ -73,7 +73,6 @@ class UserProfile extends Component {
     // const { match: { params } } = this.props;
     const response = await axios.get(
       `http://localhost:3000/api/v1/user/${this.props.match.params.id}`,
-      {},
       {
         headers: {
           authorization: JSON.parse(localStorage.authToken)

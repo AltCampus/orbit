@@ -24,7 +24,7 @@ class QuestionList extends React.Component {
       <div className="search-result-list">
         {this.state.data && (
           <Table dataSource={this.state.data}>
-            <Column title="Question" dataIndex="question" key="_id" />
+            <Column title="Question" dataIndex="questionTitle" key="_id" />
             <Column title="Type" dataIndex="type" key="age" />
             <Column title="Point" dataIndex="point" key="address" />
             {/* <Column title="Is Active" dataIndex="isActive" key="address" />

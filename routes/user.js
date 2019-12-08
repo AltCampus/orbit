@@ -5,7 +5,7 @@ const Task = require("../models/Task");
 const auth = require("../utils/auth");
 
 /* GET User Progess */
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth.verifyAdminToken, async (req, res) => {
   const userId = req.params.id;
   console.log(userId);
   try {
