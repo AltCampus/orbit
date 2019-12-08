@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import { Table, Divider, Tag } from "antd";
 const { Column, ColumnGroup } = Table;
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 import { Spin, Icon } from "antd";
 import { Item } from "rc-menu";
 
@@ -12,12 +12,17 @@ const columns = [
     title: "Id",
     dataIndex: "_id",
     key: "_id",
-    render: id =><Link to={`/user/${id}`} > <a>{id}</a> </Link>
+    render: id => (
+      <Link to={`/user/${id}`}>
+        {" "}
+        <a>{id}</a>{" "}
+      </Link>
+    )
   },
   {
     title: "Name",
     dataIndex: "name",
-    key: "name",
+    key: "name"
   },
   {
     title: "Email",
@@ -70,22 +75,20 @@ class StageOne extends Component {
     };
   }
 
-  async componentWillMount() {
-    const response = await axios.get(
-      "http://localhost:3000/api/v1/users/get"
-    );
+  async componentDidMount() {
+    const response = await axios.get("http://localhost:3000/api/v1/users/get");
     this.setState({ users: response });
   }
 
   getItemId = props => {
     props.forEach(user => {
-      return user._id
+      return user._id;
     });
-  }
+  };
 
   renderTable = props => {
     var dataSource = this.state.users.data.users;
-    console.log(dataSource,"DATASOURCE");
+    console.log(dataSource, "DATASOURCE");
     console.log(props);
     switch (props) {
       case "all":
@@ -111,7 +114,7 @@ class StageOne extends Component {
     }
     return (
       <div>
-        <Table  columns={columns} dataSource={dataSource} />
+        <Table columns={columns} dataSource={dataSource} />
       </div>
     );
   };
@@ -120,11 +123,13 @@ class StageOne extends Component {
       <Fragment>
         <div>
           {!this.state.users.data ? (
-             <Icon type="loading" style={{ fontSize: 100, width: "100%", paddingTop: "7rem"  }} spin />
+            <Icon
+              type="loading"
+              style={{ fontSize: 100, width: "100%", paddingTop: "7rem" }}
+              spin
+            />
           ) : (
-            <div>
-              {this.renderTable(this.props.name)}
-            </div>
+            <div>{this.renderTable(this.props.name)}</div>
           )}
         </div>
       </Fragment>

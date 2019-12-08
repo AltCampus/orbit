@@ -77,7 +77,7 @@ class AdminDashboard extends React.Component {
           >
             <DisplayApplicants />
             <Questionnaire />
-            <QuestionList />
+            {/* <QuestionList /> */}
           </Content>
         </Layout>
       </Layout>

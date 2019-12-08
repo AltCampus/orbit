@@ -4,6 +4,8 @@ import "antd/dist/antd.css";
 import { Menu, Icon } from "antd";
 
 import StageOne from "./StageOne";
+import AdminDashboard from "./Dashboard";
+import AdminWrapper from "./AdminWrapper";
 
 class DisplayApplicants extends React.Component {
   state = {
@@ -18,7 +20,7 @@ class DisplayApplicants extends React.Component {
 
   render() {
     return (
-      <Fragment>
+      <AdminWrapper activeKey={"0"}>
         <Menu
           onClick={this.handleClick}
           selectedKeys={[this.state.current]}
@@ -53,7 +55,7 @@ class DisplayApplicants extends React.Component {
         <div className="content">
           <StageOne name={this.state.current} />
         </div>
-      </Fragment>
+      </AdminWrapper>
     );
   }
 }
