@@ -1,11 +1,8 @@
 import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
 import axios from "axios";
-import { Table, Divider, Tag } from "antd";
-const { Column, ColumnGroup } = Table;
+import { Table } from "antd";
 import { Link } from "react-router-dom";
-import { Spin, Icon } from "antd";
-import { Item } from "rc-menu";
+import { Icon } from "antd";
 
 const columns = [
   {
@@ -54,20 +51,9 @@ const columns = [
     dataIndex: "createdAt",
     key: "createdAt"
   }
-  // {
-  //   title: "Action",
-  //   key: "action",
-  //   render: (text, record) => (
-  //     <span>
-  //       <a>Invite {record.name}</a>
-  //       <Divider type="vertical" />
-  //       <a>Delete</a>
-  //     </span>
-  //   )
-  // }
 ];
 
-class StageOne extends Component {
+class ToggleStage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -88,15 +74,13 @@ class StageOne extends Component {
 
   renderTable = props => {
     var dataSource = this.state.users.data.users;
-    console.log(dataSource, "DATASOURCE");
-    console.log(props);
     switch (props) {
       case "all":
         break;
       case "stageZero":
         dataSource = dataSource.filter(user => user.stage === 0);
         break;
-      case "stageOne":
+      case "ToggleStage":
         dataSource = dataSource.filter(user => user.stage === 1);
         break;
       case "stageTwo":
@@ -137,4 +121,4 @@ class StageOne extends Component {
   }
 }
 
-export default StageOne;
+export default ToggleStage;

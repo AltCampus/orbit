@@ -3,9 +3,8 @@ import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
 import { Menu, Icon } from "antd";
 
-import StageOne from "./StageOne";
-import AdminDashboard from "./Dashboard";
 import AdminWrapper from "./AdminWrapper";
+import ToggleStage from "./ToggleStage";
 
 class DisplayApplicants extends React.Component {
   state = {
@@ -53,7 +52,7 @@ class DisplayApplicants extends React.Component {
           </Menu.Item>
         </Menu>
         <div className="content">
-          <StageOne name={this.state.current} />
+          <ToggleStage name={this.state.current} />
         </div>
       </AdminWrapper>
     );

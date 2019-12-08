@@ -16,7 +16,6 @@ class UserProfile extends Component {
   }
 
   render() {
-    console.log(!this.state.user.data);
     return (
       <AdminWrapper>
         {!this.state.user.data ? (
@@ -69,8 +68,6 @@ class UserProfile extends Component {
   }
 
   async componentDidMount() {
-    console.log(this.props.match.params.id);
-    // const { match: { params } } = this.props;
     const response = await axios.get(
       `http://localhost:3000/api/v1/user/${this.props.match.params.id}`,
       {
@@ -84,20 +81,3 @@ class UserProfile extends Component {
 }
 
 export default withRouter(UserProfile);
-
-{
-  /* {console.log(this.state.user.data.task.html)}
-              <h3>StartTime:{this.state.user.data.task.html.startTime}</h3>
-              <h3>SumbitTime:{this.state.user.data.task.html.submitTime}</h3>
-                    <a target="_blank" href={`${this.state.user.data.task.html.taskUrl}`}>
-                  <Icon type="codepen" style={{fontSize: 100,}} />
-                  </a>
-                  <input value={this.state.user.htmlScore} size="large" placeholder="Assign Score" className="htmlScore" />
-                  <input className="htmlReview" /> */
-}
-{
-  /* <Progress
-percent={25 * this.state.user.data.user.stage}
-status="active"
-/> */
-}

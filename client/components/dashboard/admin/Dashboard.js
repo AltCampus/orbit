@@ -1,7 +1,6 @@
 import React from "react";
 import { Layout, Menu, Icon, Avatar } from "antd";
 import Questionnaire from "../../questionnaire/Questionnaire";
-import QuestionList from "../../questionnaire/QuestionList";
 
 import DisplayApplicants from "./DisplayApplicants";
 
@@ -43,17 +42,6 @@ class AdminDashboard extends React.Component {
               <span>Add Question</span>
             </Menu.Item>
           </Menu>
-          {/* <div className='gx-flex-row gx-align-items-center gx-mb-4 gx-avatar-row'>
-            <Avatar
-              src='https://via.placeholder.com/150x150'
-              className='gx-size-40 gx-pointer gx-mr-3'
-              alt=''
-            />
-            <span className='gx-avatar-name'>
-              Rob Farnandies
-              <i className='icon icon-chevron-down gx-fs-xxs gx-ml-2' />
-            </span>
-          </div> */}
         </Sider>
         <Layout
           style={{
@@ -69,15 +57,12 @@ class AdminDashboard extends React.Component {
           </Header>
           <Content
             style={{
-              // margin: "24px 16px",
-              // padding: 24,
               background: "#fff",
               minHeight: 280
             }}
           >
             <DisplayApplicants />
             <Questionnaire />
-            {/* <QuestionList /> */}
           </Content>
         </Layout>
       </Layout>
