@@ -6,25 +6,14 @@ import { Icon } from "antd";
 
 const columns = [
   {
-    title: "Id",
-    dataIndex: "id",
+    title: "Email",
+    dataIndex: "email",
     key: "_id",
-    render: id => (
-      <Link to={`/user/${id.id}`}>
-        {" "}
-        <a>{id.email}</a>{" "}
-      </Link>
-    )
+    render: (id, data) => <Link to={`/user/${data._id}`}> {id}</Link>
   },
   {
     title: "Name",
-    dataIndex: "name",
-    key: "name"
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "email"
+    dataIndex: "name"
   },
   {
     title: "PhoneNumber",
@@ -33,23 +22,23 @@ const columns = [
   },
   {
     title: "Stage",
-    dataIndex: "stage",
-    key: "stage"
+    dataIndex: "stage"
   },
   {
     title: "Social Profile",
     dataIndex: "socialProfile",
     key: "socialProfile",
-    render: text => (
-      <a target="_blank" href={text}>
-        {text}
+    render: profileLink => (
+      <a target="_blank" href={profileLink}>
+        {profileLink}
       </a>
     )
   },
   {
     title: "SignUp Time",
     dataIndex: "createdAt",
-    key: "createdAt"
+    key: "createdAt",
+    render: time => new Date(time).toLocaleString()
   }
 ];
 
@@ -64,10 +53,7 @@ class ToggleStage extends Component {
   async componentDidMount() {
     const response = await axios.get("http://localhost:3000/api/v1/users/get");
     this.setState({
-      users: response.data.users.map(user => ({
-        ...user,
-        id: { email: user.email, id: user._id }
-      }))
+      users: response.data.users
     });
   }
 
@@ -103,7 +89,7 @@ class ToggleStage extends Component {
     }
     return (
       <div>
-        <Table columns={columns} dataSource={dataSource} />
+        <Table columns={columns} dataSource={dataSource} rowKey="_id" />
       </div>
     );
   };
