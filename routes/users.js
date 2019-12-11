@@ -2,10 +2,11 @@ var express = require("express");
 var router = express.Router();
 // const Mailer = require("../utils/Mailer");
 const User = require("../models/User");
+const Task = require("../models/Task");
 const auth = require("../utils/auth");
 
 //current Login User
-router.get("/", auth.verifyToken, function(req, res) {
+router.get("/", auth.verifyToken, async (req, res) => {
   try {
     return res.status(201).json({ status: true, user: req.user });
   } catch (error) {
@@ -19,20 +20,30 @@ router.post("/", async (req, res) => {
   try {
     // validations for required profile
     if (!name || !email || !phoneNo || !socialProfile || !motivation) {
-      res.json({ status: false, message: "Please fill all Required data" });
+      return res.status(400).json({
+        status: false,
+        message: "Please fill all Required data"
+      });
     }
-    req.body.hashMail =
+    hashMail =
       Date.now() +
       Math.random()
         .toString(36)
         .substring(2, 15);
-    const user = await User.create(req.body);
+    const user = await User.create({
+      name,
+      email,
+      phoneNo,
+      socialProfile,
+      motivation,
+      hashMail
+    });
     //TODO: UnComment to sending mail once user Register
     // const mail = await Mailer.mail(user.email, user.name, user.hashMail);
     // console.log("mailer");
-    res.status(201).json({ status: true, user });
+    return res.status(201).json({ status: true, user });
   } catch (error) {
-    res.status(400).json({ status: false, error });
+    return res.status(400).json({ status: false, error });
   }
 });
 
@@ -42,23 +53,29 @@ router.post("/login", async (req, res) => {
     let { email, password } = req.body;
     // validations for required profile
     if (!email || !password) {
-      res.json({ status: false, message: "Please Fill Both Fields" });
+      return res
+        .status(400)
+        .json({ status: false, message: "Please Fill Both Fields" });
     }
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      res.json({ status: false, message: "User not found!!!" });
+      return res
+        .status(400)
+        .json({ status: false, message: "User not found!!!" });
     }
 
     if (!user.verifyPassword(password)) {
-      res.json({ status: false, message: "Invaild password" });
+      return res
+        .status(400)
+        .json({ status: false, message: "Invaild password" });
     }
 
     const authToken = await auth.generateToken(user.id);
     console.log("done");
-    res.status(200).json({ status: "success", authToken });
+    return res.status(200).json({ status: "success", authToken });
   } catch (error) {
-    res.status(400).json({ status: "failed", error });
+    return res.status(400).json({ status: "failed", error });
   }
 });
 
@@ -70,18 +87,43 @@ router.post("/:hashMail", async (req, res) => {
     const user = await User.findOne({ hashMail });
     if (!user.isProfileClaimed) {
       user.password = password;
+
+      // Start the timer for HTML task and link it to user model.
+      const task = await Task.create({
+        user: user.id,
+        html: {
+          startTime: Date.now()
+        }
+      });
+      user.task = task.id;
+
+      // Set User stage to 1
+      user.stage = 1;
+
+      // Set user profile to be claimed.
       user.isProfileClaimed = true;
       const updatedUser = await user.save();
-      res.status(201).json({ status: true, user: updatedUser });
+      return res.status(201).json({ status: true, user: updatedUser });
     } else {
-      res.status(301).json({
+      return res.status(301).json({
         success: false,
         message: "User already Claimed there account"
       });
     }
   } catch (error) {
-    res.status(301).json({ success: false, error });
+    return res.status(301).json({ success: false, error });
   }
 });
+
+// Get Users
+router.get("/get", async (req,res)=> {
+  try {
+    const users = await User.find({});
+    if (!users) res.status(200).json({message: "No users yet", status: true})
+    res.status(200).json({users, status: true});
+  } catch(error) {
+    res.status(400).json({message: "Something went wrong", status:false})
+  }
+})
 
 module.exports = router;

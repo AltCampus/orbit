@@ -6,33 +6,44 @@ import { updateToken, getCurrentUser } from "./actions/users";
 import Login from "./components/login/Login";
 import ResetPasswordForm from "./components/resetPasswordForm/ResetPasswordForm";
 // TODO: Remove register components after test done.
-import Register from "./components/register/Register";
 import LandingPage from "./components/static/LandingPage";
 import UserDashboard from "./components/dashboard/user/Dashboard";
 import AdminDashboard from "./components/dashboard/admin/Dashboard";
+import UserProfile from "./components/dashboard/admin/UserProfile";
 
 import "./css-reset.scss";
 import "./App.scss";
+import TaskOne from "./components/task/taskOne/TaskOne";
+import TaskTwo from "./components/task/taskTwo/TaskTwo";
+import Question from "./components/questionnaire/Question";
+import QuestionList from "./components/questionnaire/QuestionList";
+import Dashboard from "./components/dashboard/user/Dashboard";
+import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
 
 class App extends Component {
   protectedRoutes = () => {
+    // console.log(this.props.user);
     if (this.props.user.isAdmin) {
       return (
         <Switch>
-          <Route path="/dashboard" component={AdminDashboard} />
-          {/* Redirects the user to login if user attempts to login */}
+          <Route exact path="/" component={DisplayApplicants} />
+          <Route path="/questions" component={Question} />
+          <Route path="/user/:id" component={UserProfile} />
           <Route path="/login">
-            <Redirect to="/dashboard" />
+            <Redirect to="/" />
           </Route>
         </Switch>
       );
     } else {
       return (
         <Switch>
-          <Route path="/dashboard" component={UserDashboard} />
+          <Route exact path="/" component={UserDashboard} />
+          <Route exact path="/task/1" component={TaskOne} />
+          <Route exact path="/task/2" component={TaskTwo} />
+          <Route path="/task/:taskId" component={UserDashboard} />
           {/* Redirects the user to login if user attempts to login */}
           <Route path="/login">
-            <Redirect to="/dashboard" />
+            <Redirect to="/" />
           </Route>
         </Switch>
       );
@@ -47,7 +58,7 @@ class App extends Component {
         </Route>
         <Route exact path="/" component={LandingPage} />
         <Route path="/reset/:hashmail" component={ResetPasswordForm} />
-        <Route path="/login" component={Login} />} />
+        <Route path="/login" component={Login} />
       </Switch>
     );
   };

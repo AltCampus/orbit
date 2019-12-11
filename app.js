@@ -2,9 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const logger = require("morgan");
+
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const userRouter = require("./routes/user");
 const dashboardRouter = require("./routes/dashboard");
+const taskRouter = require("./routes/tasks");
+const questionsRouter = require("./routes/questions");
 
 require("dotenv").config();
 
@@ -51,6 +55,9 @@ mongoose.set("useCreateIndex", true);
 
 app.use("/api/v1/dashboard", dashboardRouter);
 app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/tasks", taskRouter);
+app.use("/api/v1/questions", questionsRouter);
 app.use("/", indexRouter);
 
 // catch 404 and forward to error handler
