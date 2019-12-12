@@ -3,6 +3,7 @@ import axios from "axios";
 import {
   USER_LOGIN_SUCCESS,
   NO_TOKEN,
+  LOG_OUT,
   GET_USER_PENDING,
   GET_USER_SUCCESS,
   SET_ERROR
@@ -62,8 +63,12 @@ export const userLogin = data => {
   };
 };
 
-export const logOut = () => {
-  // Clear the localStorage
-  localStorage.clear();
-  return { type: NO_TOKEN };
+export const userLogOut = (callback) => {
+    // Clear the localStorage
+    localStorage.clear();
+    // Invoke the callback function
+    callback();
+    return {
+      type: LOG_OUT
+    }
 };
