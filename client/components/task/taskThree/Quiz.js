@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Divider, Button, Icon, Pagination } from "antd";
-import QuizPagination from "./QuizPagination";
 import "./quiz.scss";
 import TextArea from "antd/lib/input/TextArea";
 
@@ -79,10 +78,11 @@ class Quiz extends Component {
     return (
       <>
         <section style={{ textAlign: "center" }}>
-          <QuizPagination
-            questions={this.state.questions.length}
-            active={this.state.currentQuestion}
-            changeActive={index => this.changeActive(index)}
+          <Pagination
+            pageSize={1}
+            defaultCurrent={this.state.currentQuestion}
+            total={this.state.questions.length}
+            onChange={index => this.changeActive(index)}
           />
         </section>
         <div className="container">
