@@ -206,7 +206,7 @@ class Questionnaire extends React.Component {
         a: values.optionA,
         b: values.optionB,
         c: values.optionC,
-        d: values.optionC
+        d: values.optionD
       };
 
       if (values.questionTitle && values.questionTitle.length < 6) {
