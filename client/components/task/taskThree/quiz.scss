@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.middle {
+    width: 50%;
+}
+
+.btn-container-left {
+    margin-left: 2px;
+    margin-right: 20px;
+}
+
+.btn-container-right {
+    margin-left: 20px;
+    margin-right: 2px;
+}
+
+p {
+    font-size: 1.5rem;
+    ;
+}
