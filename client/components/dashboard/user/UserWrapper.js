@@ -46,7 +46,7 @@ function UserWrapper(props) {
               <span> CodeWars </span>
             </Link>
           </Menu.Item>
-          <Menu.Item key="3" disabled>
+          <Menu.Item key="3">
             <Link to="/task/3">
               <Icon type="question" />
               <span> Q / A </span>

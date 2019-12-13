@@ -14,6 +14,7 @@ import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
 import Question from "./components/questionnaire/Question";
 import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
+import TaskThree from "./components/task/taskThree/TaskThree";
 
 class App extends Component {
   protectedRoutes = () => {
@@ -35,6 +36,7 @@ class App extends Component {
           <Route exact path="/" component={UserDashboard} />
           <Route exact path="/task/1" component={TaskOne} />
           <Route exact path="/task/2" component={TaskTwo} />
+          <Route exact path="/task/3" component={TaskThree} />
           <Route path="/task/:taskId" component={UserDashboard} />
           {/* Redirects the user to login if user attempts to login */}
           <Route path="/login">
