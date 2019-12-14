@@ -8,6 +8,7 @@ const usersRouter = require("./routes/users");
 const userRouter = require("./routes/user");
 const dashboardRouter = require("./routes/dashboard");
 const taskRouter = require("./routes/tasks");
+const reviewRouter = require("./routes/review");
 const questionsRouter = require("./routes/questions");
 
 require("dotenv").config();
@@ -57,6 +58,7 @@ app.use("/api/v1/dashboard", dashboardRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/tasks", taskRouter);
+app.use("/api/v1/task/review", reviewRouter);
 app.use("/api/v1/questions", questionsRouter);
 app.use("/", indexRouter);
 
