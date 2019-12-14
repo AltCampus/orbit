@@ -15,6 +15,7 @@ import "./css-reset.scss";
 import "./App.scss";
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
+import UserProgress from "./components/dashboard/user/UserProgress"
 import Question from "./components/questionnaire/Question";
 import QuestionList from "./components/questionnaire/QuestionList";
 import Dashboard from "./components/dashboard/user/Dashboard";
@@ -41,6 +42,7 @@ class App extends Component {
           <Route exact path="/task/1" component={TaskOne} />
           <Route exact path="/task/2" component={TaskTwo} />
           <Route path="/task/:taskId" component={UserDashboard} />
+          <Route exact path="/profile" component={UserProgress} />
           {/* Redirects the user to login if user attempts to login */}
           <Route path="/login">
             <Redirect to="/" />
