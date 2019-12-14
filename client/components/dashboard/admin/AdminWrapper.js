@@ -1,15 +1,24 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
+import { connect } from "react-redux";
 import { Layout, Menu, Icon, Avatar, Button, Anchor } from "antd";
+import { userLogOut } from "../../../actions/users";
 
 const { Header, Sider, Content } = Layout;
 
 function AdminWrapper(props) {
+  
   const [broken, setBroken] = React.useState(false);
   const [collapsed, setCollapsed] = React.useState(false);
+
   const toggle = () => {
     setCollapsed(!collapsed);
   };
+
+  const handleClick = () => {
+    props.userLogOut(() => props.history.push("/"))
+  }
+
   return (
     <Layout className="wrapper">
       <Sider
@@ -95,7 +104,7 @@ function AdminWrapper(props) {
                 marginRight: "6px"
               }}
             />
-            <Button title="Logout" type="danger" shape="circle" icon="logout" />
+            <Button onClick={handleClick} title="Logout" type="danger" shape="circle" icon="logout" />
           </div>
         </Header>
         <Content
@@ -119,4 +128,4 @@ function AdminWrapper(props) {
   );
 }
 
-export default AdminWrapper;
+export default withRouter(connect(null, { userLogOut })(AdminWrapper));
