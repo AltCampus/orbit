@@ -1,6 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Layout, Menu, Icon, Avatar, Button, Anchor } from "antd";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Layout, Menu, Icon, Avatar, Button, Anchor } from 'antd';
 
 const { Header, Sider, Content } = Layout;
 
@@ -19,7 +19,7 @@ function UserWrapper(props) {
         }}
         trigger={null}
         collapsible
-        collapsedWidth={broken ? "0" : "80"}
+        collapsedWidth={broken ? '0' : '80'}
         collapsed={collapsed}
       >
         <div className="logo"> Alt Campus </div>
@@ -63,36 +63,36 @@ function UserWrapper(props) {
       {/* Display container */}
       <Layout
         style={{
-          borderRadius: "10px"
+          borderRadius: '10px',
         }}
       >
         {/* Header  */}
         <Header
           style={{
-            background: "#fff",
-            padding: "0",
-            display: "flex",
-            justifyContent: "space-between"
+            background: '#fff',
+            padding: '0',
+            display: 'flex',
+            justifyContent: 'space-between',
           }}
         >
           <Icon
             className="trigger"
-            type={collapsed ? "menu-unfold" : "menu-fold"}
+            type={collapsed ? 'menu-unfold' : 'menu-fold'}
             onClick={toggle}
             style={{
-              padding: "16px"
+              padding: '16px',
             }}
           />
           <div
             style={{
-              marginRight: "20px"
+              marginRight: '20px',
             }}
           >
             <Avatar
               src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
               size={50}
               style={{
-                marginRight: "6px"
+                marginRight: '6px',
               }}
             />
             <Button title="Logout" type="danger" shape="circle" icon="logout" />
@@ -100,15 +100,15 @@ function UserWrapper(props) {
         </Header>
         <Content
           style={{
-            margin: "24px 16px 0",
-            overflow: "initial"
+            margin: '24px 16px 0',
+            overflow: 'initial',
           }}
         >
           <div
             style={{
               padding: 24,
-              background: "#fff",
-              textAlign: "left"
+              background: '#fff',
+              textAlign: 'left',
             }}
           >
             {props.children}
