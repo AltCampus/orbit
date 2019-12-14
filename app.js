@@ -11,6 +11,7 @@ const taskRouter = require("./routes/tasks");
 const reviewRouter = require("./routes/review");
 const questionsRouter = require("./routes/questions");
 const quizRouter = require("./routes/quiz");
+const interviewRouter = require("./routes/interview");
 
 require("dotenv").config();
 
@@ -64,6 +65,7 @@ app.use("/api/v1/tasks", taskRouter);
 app.use("/api/v1/task/review", reviewRouter);
 app.use("/api/v1/questions", questionsRouter);
 app.use("/api/v1/quiz", quizRouter);
+app.use("/api/v1/interviews", interviewRouter);
 app.use("/", indexRouter);
 
 // catch 404 and forward to error handler

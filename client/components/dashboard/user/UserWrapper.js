@@ -60,7 +60,7 @@ function UserWrapper(props) {
               <span> Q / A </span>
             </Link>
           </Menu.Item>
-          <Menu.Item key="4" disabled>
+          <Menu.Item key="4">
             <Link to="/task/4">
               <Icon type="video-camera" />
               <span> Interview </span>
