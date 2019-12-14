@@ -1,9 +1,12 @@
 import React from "react";
 import axios from "axios";
+import { connect } from "react-redux";
 import { Icon, Menu, Dropdown, message, Button } from "antd";
 
 import UserWrapper from "../../dashboard/user/UserWrapper";
 import TaskCompleted from "../taskCompleted/TaskCompleted";
+
+import { getCurrentUser } from "../../../actions/users";
 
 class ScheduleInterview extends React.Component {
   state = {
@@ -60,6 +63,7 @@ class ScheduleInterview extends React.Component {
         }
       }
     );
+    this.props.getCurrentUser();
     console.log(interview);
     message.success("Interview sheduled");
   };
@@ -89,34 +93,46 @@ class ScheduleInterview extends React.Component {
     );
     return (
       <UserWrapper>
-        {this.state.date && (
-          <Dropdown overlay={dateMenu}>
-            <a className="ant-dropdown-link" href="#">
-              {!this.state.selectedData.date
-                ? "Select Date"
-                : this.state.selectedData.date}{" "}
-              <Icon type="down" />
-            </a>
-          </Dropdown>
-        )}
-        {this.state.time && (
-          <Dropdown overlay={timeMenu}>
-            <a className="ant-dropdown-link" href="#">
-              {!this.state.selectedData.time
-                ? "Select Time"
-                : this.state.selectedData.time}{" "}
-              <Icon type="down" />
-            </a>
-          </Dropdown>
-        )}
-        {this.state.selectedData.time && this.state.selectedData.date ? (
-          <Button onClick={this.handleSubmit}>Schedule Interview</Button>
+        {this.props.user.canScheduleInterview ? (
+          <>
+            {this.state.date && (
+              <Dropdown overlay={dateMenu}>
+                <a className="ant-dropdown-link" href="#">
+                  {!this.state.selectedData.date
+                    ? "Select Date"
+                    : this.state.selectedData.date}{" "}
+                  <Icon type="down" />
+                </a>
+              </Dropdown>
+            )}
+            {this.state.time && (
+              <Dropdown overlay={timeMenu}>
+                <a className="ant-dropdown-link" href="#">
+                  {!this.state.selectedData.time
+                    ? "Select Time"
+                    : this.state.selectedData.time}{" "}
+                  <Icon type="down" />
+                </a>
+              </Dropdown>
+            )}
+            {this.state.selectedData.time && this.state.selectedData.date ? (
+              <Button onClick={this.handleSubmit}>Schedule Interview</Button>
+            ) : (
+              ""
+            )}
+          </>
         ) : (
-          ""
+          "You're not eligible to interview schedule"
         )}
       </UserWrapper>
     );
   }
 }
+const mapStateToProps = state => {
+  const { user } = state.currentUser;
+  return {
+    user
+  };
+};
 
-export default ScheduleInterview;
+export default connect(mapStateToProps, { getCurrentUser })(ScheduleInterview);
