@@ -41,7 +41,8 @@ const taskSchema = new Schema(
       score: {
         type: Number
       }
-    }
+    },
+    quiz: { type: mongoose.SchemaTypes.ObjectId, ref: "Quiz" }
   },
   {
     timestamps: true

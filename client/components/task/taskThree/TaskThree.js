@@ -12,12 +12,7 @@ class TaskThree extends Component {
   render() {
     return (
       <UserWrapper activeKey={"3"}>
-        {this.props.user.user.stage === 3 &&
-        this.props.user.user.canTakeQuiz ? (
-          <Quiz />
-        ) : (
-          <TaskCompleted />
-        )}
+        {this.props.user.user.stage === 3 ? <Quiz /> : <TaskCompleted />}
       </UserWrapper>
     );
   }

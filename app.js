@@ -9,6 +9,7 @@ const userRouter = require("./routes/user");
 const dashboardRouter = require("./routes/dashboard");
 const taskRouter = require("./routes/tasks");
 const questionsRouter = require("./routes/questions");
+const quizRouter = require("./routes/quiz");
 
 require("dotenv").config();
 
@@ -46,7 +47,9 @@ mongoose.connect(
       console.log(err);
     } else {
       console.log("connected to DB");
-      require("./utils/seed");
+      try {
+        require("./utils/seed");
+      } catch (error) {}
     }
   }
 );
@@ -58,6 +61,7 @@ app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/tasks", taskRouter);
 app.use("/api/v1/questions", questionsRouter);
+app.use("/api/v1/quiz", quizRouter);
 app.use("/", indexRouter);
 
 // catch 404 and forward to error handler
