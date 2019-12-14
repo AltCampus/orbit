@@ -66,6 +66,12 @@ function UserWrapper(props) {
               <span> Interview </span>
             </Link>
           </Menu.Item>
+          <Menu.Item key="5">
+            <Link to="/profile">
+              <Icon type="user" />
+              <span> Your Profile </span>
+            </Link>
+          </Menu.Item>
         </Menu>
       </Sider>
       {/* Display container */}
