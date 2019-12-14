@@ -26,13 +26,14 @@ class TaskOne extends Component {
         },
         {
           headers: {
-            authorization: JSON.parse(localStorage.authToken)
+            authorization: JSON.parse(localStorage.getItem("authToken"))
           }
         }
       );
       message.success(res.status && "Your Project has been submitted.");
       this.props.getCurrentUser();
     } catch (error) {
+      console.log(error);
       if (error.response) {
         /*
          * The request was made and the server responded with a

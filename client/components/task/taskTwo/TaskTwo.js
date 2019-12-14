@@ -25,7 +25,7 @@ class TaskTwo extends Component {
         },
         {
           headers: {
-            authorization: JSON.parse(localStorage.authToken)
+            authorization: JSON.parse(localStorage.getItem("authToken"))
           }
         }
       );
