@@ -7,7 +7,6 @@ import { userLogOut } from "../../../actions/users";
 const { Header, Sider, Content } = Layout;
 
 function UserWrapper(props) {
-
   const [broken, setBroken] = React.useState(false);
   const [collapsed, setCollapsed] = React.useState(false);
 
@@ -16,8 +15,8 @@ function UserWrapper(props) {
   };
 
   const handleClick = () => {
-    props.userLogOut(() => props.history.push("/"))
-  }
+    props.userLogOut(() => props.history.push("/"));
+  };
 
   return (
     <Layout className="wrapper">
@@ -61,7 +60,7 @@ function UserWrapper(props) {
               <span> Q / A </span>
             </Link>
           </Menu.Item>
-          <Menu.Item key="4" disabled>
+          <Menu.Item key="4">
             <Link to="/task/4">
               <Icon type="video-camera" />
               <span> Interview </span>
@@ -104,7 +103,13 @@ function UserWrapper(props) {
                 marginRight: "6px"
               }}
             />
-            <Button onClick={handleClick} title="Logout" type="danger" shape="circle" icon="logout" />
+            <Button
+              onClick={handleClick}
+              title="Logout"
+              type="danger"
+              shape="circle"
+              icon="logout"
+            />
           </div>
         </Header>
         <Content

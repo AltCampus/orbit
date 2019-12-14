@@ -9,6 +9,7 @@ const userRouter = require("./routes/user");
 const dashboardRouter = require("./routes/dashboard");
 const taskRouter = require("./routes/tasks");
 const questionsRouter = require("./routes/questions");
+const interviewRouter = require("./routes/interview");
 
 require("dotenv").config();
 
@@ -58,6 +59,7 @@ app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/tasks", taskRouter);
 app.use("/api/v1/questions", questionsRouter);
+app.use("/api/v1/interviews", interviewRouter);
 app.use("/", indexRouter);
 
 // catch 404 and forward to error handler

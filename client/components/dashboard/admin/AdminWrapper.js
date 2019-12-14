@@ -7,7 +7,6 @@ import { userLogOut } from "../../../actions/users";
 const { Header, Sider, Content } = Layout;
 
 function AdminWrapper(props) {
-  
   const [broken, setBroken] = React.useState(false);
   const [collapsed, setCollapsed] = React.useState(false);
 
@@ -16,8 +15,8 @@ function AdminWrapper(props) {
   };
 
   const handleClick = () => {
-    props.userLogOut(() => props.history.push("/"))
-  }
+    props.userLogOut(() => props.history.push("/"));
+  };
 
   return (
     <Layout className="wrapper">
@@ -49,24 +48,12 @@ function AdminWrapper(props) {
               <span> Question </span>
             </Link>
           </Menu.Item>
-          {/* <Menu.Item key="2">
-            <Link to="/task/2">
+          <Menu.Item key="2">
+            <Link to="/interviews">
               <Icon type="code" />
-              <span> CodeWars </span>
-            </Link>
-          </Menu.Item> */}
-          {/* <Menu.Item key="3" disabled>
-            <Link to="/task/3">
-              <Icon type="question" />
-              <span> Q / A </span>
+              <span> Schedule interview </span>
             </Link>
           </Menu.Item>
-          <Menu.Item key="4" disabled>
-            <Link to="/task/4">
-              <Icon type="video-camera" />
-              <span> Interview </span>
-            </Link>
-          </Menu.Item> */}
         </Menu>
       </Sider>
       {/* Display container */}
@@ -104,7 +91,13 @@ function AdminWrapper(props) {
                 marginRight: "6px"
               }}
             />
-            <Button onClick={handleClick} title="Logout" type="danger" shape="circle" icon="logout" />
+            <Button
+              onClick={handleClick}
+              title="Logout"
+              type="danger"
+              shape="circle"
+              icon="logout"
+            />
           </div>
         </Header>
         <Content

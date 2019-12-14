@@ -15,7 +15,9 @@ import "./css-reset.scss";
 import "./App.scss";
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
+import ScheduleInterview from "./components/task/interview/ScheduleInterview";
 import Question from "./components/questionnaire/Question";
+import Interview from "./components/interview/Interview";
 import QuestionList from "./components/questionnaire/QuestionList";
 import Dashboard from "./components/dashboard/user/Dashboard";
 import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
@@ -28,6 +30,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={DisplayApplicants} />
           <Route path="/questions" component={Question} />
+          <Route path="/interviews" component={Interview} />
           <Route path="/user/:id" component={UserProfile} />
           <Route path="/login">
             <Redirect to="/" />
@@ -40,6 +43,7 @@ class App extends Component {
           <Route exact path="/" component={UserDashboard} />
           <Route exact path="/task/1" component={TaskOne} />
           <Route exact path="/task/2" component={TaskTwo} />
+          <Route exact path="/task/4" component={ScheduleInterview} />
           <Route path="/task/:taskId" component={UserDashboard} />
           {/* Redirects the user to login if user attempts to login */}
           <Route path="/login">
