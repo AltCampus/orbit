@@ -5,10 +5,12 @@ const logger = require("morgan");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
-const userRouter = require("./routes/user");
 const dashboardRouter = require("./routes/dashboard");
 const taskRouter = require("./routes/tasks");
+const reviewRouter = require("./routes/review");
 const questionsRouter = require("./routes/questions");
+const quizRouter = require("./routes/quiz");
+const interviewRouter = require("./routes/interview");
 
 require("dotenv").config();
 
@@ -46,7 +48,9 @@ mongoose.connect(
       console.log(err);
     } else {
       console.log("connected to DB");
-      require("./utils/seed");
+      try {
+        require("./utils/seed");
+      } catch (error) {}
     }
   }
 );
@@ -55,9 +59,11 @@ mongoose.set("useCreateIndex", true);
 
 app.use("/api/v1/dashboard", dashboardRouter);
 app.use("/api/v1/users", usersRouter);
-app.use("/api/v1/user", userRouter);
 app.use("/api/v1/tasks", taskRouter);
+app.use("/api/v1/task/review", reviewRouter);
 app.use("/api/v1/questions", questionsRouter);
+app.use("/api/v1/quiz", quizRouter);
+app.use("/api/v1/interviews", interviewRouter);
 app.use("/", indexRouter);
 
 // catch 404 and forward to error handler

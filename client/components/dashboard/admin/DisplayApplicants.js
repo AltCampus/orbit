@@ -26,10 +26,6 @@ class DisplayApplicants extends React.Component {
           mode="horizontal"
           style={{ display: "flex", justifyContent: "space-between" }}
         >
-          <Menu.Item key="stageZero">
-            <Icon type="close-circle" />
-            Stage Zero
-          </Menu.Item>
           <Menu.Item key="all">
             <Icon type="appstore" />
             All Applicants

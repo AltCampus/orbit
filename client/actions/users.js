@@ -12,10 +12,10 @@ import { message } from "antd";
 
 const rootUrl = "http://localhost:3000/api/v1/users";
 
-const setTokenToAxios = token => {
-  const newToken = token || "";
-  axios.defaults.headers.Authorization = newToken;
-};
+// const setTokenToAxios = token => {
+//   const newToken = token || "";
+//   axios.defaults.headers.Authorization = newToken;
+// };
 
 export const getCurrentUser = () => {
   if (!localStorage.authToken) {
@@ -48,7 +48,7 @@ export const userLogin = data => {
       const res = await axios.post(`${rootUrl}/login`, data);
       localStorage.setItem("authToken", JSON.stringify(res.data.authToken));
       // Set token
-      setTokenToAxios(res.data.authToken);
+      // setTokenToAxios(res.data.authToken);
       await dispatch({
         type: USER_LOGIN_SUCCESS,
         data: res.data.authToken
@@ -63,12 +63,12 @@ export const userLogin = data => {
   };
 };
 
-export const userLogOut = (callback) => {
-    // Clear the localStorage
-    localStorage.clear();
-    // Invoke the callback function
-    callback();
-    return {
-      type: LOG_OUT
-    }
+export const userLogOut = callback => {
+  // Clear the localStorage
+  localStorage.clear();
+  // Invoke the callback function
+  callback();
+  return {
+    type: LOG_OUT
+  };
 };

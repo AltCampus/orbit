@@ -78,10 +78,7 @@ class ToggleStage extends Component {
     switch (props) {
       case "all":
         break;
-      case "stageZero":
-        dataSource = dataSource.filter(user => user.stage === 0);
-        break;
-      case "ToggleStage":
+      case "stageOne":
         dataSource = dataSource.filter(user => user.stage === 1);
         break;
       case "stageTwo":

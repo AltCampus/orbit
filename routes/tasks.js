@@ -45,6 +45,42 @@ router.post("/one/save", auth.verifyToken, async (req, res) => {
   }
 });
 
+// Check status of codewars task
+router.get("/two/status", auth.verifyToken, async (req, res) => {
+  let { id } = req.user;
+  // send request to codewars api to validate username
+  if (req.user.stage > 2) {
+    // Check if user is not on stage 2
+    return res
+      .status(200)
+      .json({ onGoing: false, completed: true, timeLeft: null });
+  }
+  const task = await Task.findById(req.user.task);
+
+  console.log(req.user, task);
+  if (req.user.stage === 2 && task.codewars.endTime > Date.now()) {
+    return res.status(200).json({
+      onGoing: true,
+      completed: false,
+      timeLeft: task.codewars.endTime - Date.now()
+    });
+  }
+
+  if (req.user.stage === 2 && task.codewars.endTime < Date.now()) {
+    // Update user stage to 3
+    await User.findByIdAndUpdate(req.user.id, { stage: 3 });
+    return res
+      .status(200)
+      .json({
+        stageUpdated: true,
+        onGoing: false,
+        timeLeft: null,
+        completed: true
+      });
+  }
+  res.json({error: "Some error occured."})
+});
+
 // Save CodeWars username
 
 router.post("/two/save", auth.verifyToken, (req, res) => {
@@ -65,9 +101,13 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
         console.log(apiResponse.statusCode);
         if (apiResponse.statusCode === 200) {
           // Username is valid
+          // const endTime = new Date(Date.now() + 259200 * 1000)
+          const endTime = new Date(Date.now() + 30000)
+          console.log(endTime)
           const codewarsTask = {
             codewarsUsername: username,
             startTime: Date.now(),
+            endTime,
             timeLimit: 259200
           };
 
@@ -79,8 +119,6 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
             };
             await newTask.save();
 
-            // Update user stage to 3
-            await User.findByIdAndUpdate(req.user.id, { stage: 3 });
             return res.status(201).json({ status: true, success: true });
           } catch (error) {
             console.log(error);
