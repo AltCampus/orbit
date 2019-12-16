@@ -9,13 +9,13 @@ const columns = [
     title: "Email",
     dataIndex: "email",
     key: "_id",
-    render: (id, data) => <Link to={`/user/${data._id}`}> {id}</Link>
   },
   {
     title: "Name",
     dataIndex: "name",
     sorter: (objA, objB) => objA.name.localeCompare(objB.name),
     sortDirections: ['ascend'],
+    render: (id, data) => <Link to={`/user/${data._id}`}> {id}</Link>
   },
   {
     title: "PhoneNumber",
