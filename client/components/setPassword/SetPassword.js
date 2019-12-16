@@ -1,9 +1,9 @@
 import React from "react";
 import axios from "axios";
+import { withRouter } from "react-router-dom";
 import { message } from "antd";
 
-import "../login/Login";
-export default class ResetForm extends React.Component {
+class SetPassword extends React.Component {
   state = {
     password: ""
   };
@@ -32,10 +32,14 @@ export default class ResetForm extends React.Component {
         `http://localhost:3000/api/v1/users/${hashmail}`,
         password
       );
-      message.success("PassWord Reset Now you Can Login!");
+      message.success("Password Reset Now you Can Login!");
+      setTimeout(() => {
+        this.props.history.push("/login");
+      }, 3000);
     } catch (error) {
-      message.error(error.data.message);
-      console.log(error);
+      error.response.data.message
+        ? message.error(error.response.data.message)
+        : console.error(error);
     }
   };
 
@@ -53,10 +57,12 @@ export default class ResetForm extends React.Component {
               placeholder="Password"
               onChange={this.handleChange}
             />
-            <button type="submit">Set</button>
+            <button type="submit">Set password</button>
           </form>
         </div>
       </div>
     );
   }
 }
+
+export default withRouter(SetPassword);
