@@ -9,7 +9,7 @@ import ResetPasswordForm from "./components/resetPasswordForm/ResetPasswordForm"
 import LandingPage from "./components/static/LandingPage";
 import UserDashboard from "./components/dashboard/user/Dashboard";
 import AdminDashboard from "./components/dashboard/admin/Dashboard";
-import UserProfile from "./components/dashboard/admin/UserProfile";
+import UserProfile from "./components/dashboard/admin/userprofile/UserProfileWrapper";
 
 import "./css-reset.scss";
 import "./App.scss";

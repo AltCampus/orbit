@@ -1,5 +1,5 @@
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import React, { Component } from 'react';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -13,14 +13,15 @@ import {
   Modal,
   InputNumber
 } from 'antd';
-import AdminWrapper from './AdminWrapper';
-import './index.css';
-import UserProfileWrapper from './userprogress/UserProfileWrapper';
+import '../index.css';
 
 class RenderModal extends Component {
-  state = {
+  constructor(props) {
+    super(props)
+  this.state = {
     visible: false
   };
+}
 
   showModal = () => {
     this.setState({
@@ -29,7 +30,7 @@ class RenderModal extends Component {
   };
 
   handleOk = (e, values) => {
-    console.log(values);
+    console.log(values, this.props.user);
     this.setState({
       visible: false
     });
@@ -45,13 +46,14 @@ class RenderModal extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(this.state)
     const data = {
       score: this.state.score,
-      review: this.state.review
+      review: this.state.review,
+      taskId: this.props.user.task._id
     }
+    console.log(data)
     await axios.post(
-      `http://localhost:3000/api/v1/task/review/`,
+      `http://localhost:3000/api/v1/task/review/html`,
       { data},
       {
         headers: {
@@ -114,24 +116,22 @@ class RenderModal extends Component {
   }
 }
 
-class UserProfile extends Component {
+class UserProgress extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      user: null,
-      isFetching: false
+      user: null
     };
   }
-
   RenderTaskOneProgress = props => {
-    console.log(props);
-    if (props.html) {
-      const html = props.html;
+    console.log(props, "FROM RENDER PROGRESS");
+    if (props.task.html) {
+      const html = props.task.html;
       return (
         <div>
           <p>
-            {this.state.user.name} submitted his{' '}
+            {props.name} submitted his{' '}
             <a target="_blank" href={html.taskUrl}>
               assignment
             </a>{' '}
@@ -147,7 +147,7 @@ class UserProfile extends Component {
             </div>
           ) : (
             <div>
-              <RenderModal taskId={props.id} />
+              <RenderModal user={props} />
             </div>
           )}
         </div>
@@ -156,12 +156,12 @@ class UserProfile extends Component {
   };
 
   RenderTaskTwoProgress = props => {
-    if (props.codewars) {
-      const codewars = props.codewars;
+    if (props.task.codewars) {
+      const codewars = props.task.codewars;
       return (
         <div>
           <p>
-            {this.state.user.name} submitted his codewars{' '}
+            {this.props.name} submitted his codewars{' '}
             <a
               target="_blank"
               href={`https://www.codewars.com/users/${codewars.codewarsUsername}`}
@@ -172,10 +172,10 @@ class UserProfile extends Component {
           </p>
           {codewars.timeLimit ? (
             <div>
-              {this.state.user.name} has {codewars.timeLimit} left.
+              {this.props.name} has {codewars.timeLimit} left.
             </div>
           ) : (
-            <div>{this.state.user.name} has solved n questions.</div>
+            <div>{this.props.name} has solved n questions.</div>
           )}
         </div>
       );
@@ -191,81 +191,25 @@ class UserProfile extends Component {
       return <div></div>;
     }
   };
-
   render() {
+    console.log(this.props.user.task, 'UserProgress');
     return (
-      <AdminWrapper>
-        {!this.state.user ? (
-          <Icon
-            type="loading"
-            style={{ fontSize: 100, width: '100%', paddingTop: '7rem' }}
-            spin
-          />
-        ) : (
-          <div className="user-container">
-            <div className="user-info">
-              <Card
-                headStyle={{ fontSize: '1.5rem' }}
-                title={this.state.user.name}
-                style={{ width: 550, height: '75vh', borderRadius: '5px' }}
-              >
-                <p className="card-child">{this.state.user.email}</p>
-                <p className="card-child">
-                  Phone Number:{this.state.user.phoneNo}
-                </p>
-                <a
-                  className="card-child"
-                  target="_blank"
-                  href={this.state.user.socialProfile}
-                >
-                  {this.state.user.socialProfile}
-                </a>
-                <p className="card-child">
-                  Motivation:{this.state.user.motivation}
-                </p>
-                <p className="card-child">Stage:{this.state.user.stage}</p>
-                <p className="card-child">
-                  SignUp Time:
-                  {new Date(this.state.user.createdAt).toLocaleString()}
-                </p>
-              </Card>
-            </div>
-            <div className="user-task-info">
-              <Card
-                title="User Progress"
-                headStyle={{ fontSize: '1.5rem' }}
-                style={{ width: 1150, height: '75vh', borderRadius: '5px' }}
-              >
-                <div>
-                  {this.state.user.task &&
-                    this.RenderTaskOneProgress(this.state.user.task)}
-                  {this.state.user.task &&
-                    this.RenderTaskTwoProgress(this.state.user.task)}
-                  {/* {this.RenderTaskThreeProgress(this.state.user.task)}
-                  {this.RenderTaskFourProgress(this.state.user.task)} */}
-                </div>
-              </Card>
-            </div>
+      <div className="user-task-info">
+        <Card
+          title="User Progress"
+          headStyle={{ fontSize: '1.5rem' }}
+          style={{ width: 1150, height: '75vh', borderRadius: '5px' }}
+        >
+          <div>
+            {this.RenderTaskOneProgress(this.props.user)}
+            {this.RenderTaskTwoProgress(this.props.user)}
+            {/* {this.RenderTaskThreeProgress(this.state.user.task)}
+        {this.RenderTaskFourProgress(this.state.user.task)} */}
           </div>
-        )}
-        <UserProfileWrapper/>
-      </AdminWrapper>
+        </Card>
+      </div>
     );
-  }
-
-  async componentDidMount() {
-    this.setState({ isFetching: true });
-    const response = await axios.get(
-      `http://localhost:3000/api/v1/user/${this.props.match.params.id}`,
-      {
-        headers: {
-          authorization: JSON.parse(localStorage.authToken)
-        }
-      }
-    );
-    console.log('CDM', response.data.user);
-    this.setState({ user: response.data.user, isFetching: false });
   }
 }
 
-export default withRouter(UserProfile);
+export default UserProgress;
