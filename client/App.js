@@ -1,26 +1,27 @@
-import React, { Component } from "react";
-import { Route, Switch, withRouter, Redirect } from "react-router-dom";
-import { message } from "antd";
-import { connect } from "react-redux";
-import { updateToken, getCurrentUser } from "./actions/users";
-import Login from "./components/login/Login";
-import ResetPasswordForm from "./components/resetPasswordForm/ResetPasswordForm";
+import React, { Component } from 'react';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
+import { message } from 'antd';
+import { connect } from 'react-redux';
+import { updateToken, getCurrentUser } from './actions/users';
+import Login from './components/login/Login';
+import ResetPasswordForm from './components/resetPasswordForm/ResetPasswordForm';
 // TODO: Remove register components after test done.
-import LandingPage from "./components/static/LandingPage";
-import UserDashboard from "./components/dashboard/user/Dashboard";
-import AdminDashboard from "./components/dashboard/admin/Dashboard";
-import UserProfile from "./components/dashboard/admin/UserProfile";
+import LandingPage from './components/static/LandingPage';
+import UserDashboard from './components/dashboard/user/Dashboard';
+import AdminDashboard from './components/dashboard/admin/Dashboard';
+import UserProfile from './components/dashboard/admin/UserProfile';
 
-import "./css-reset.scss";
-import "./App.scss";
-import TaskOne from "./components/task/taskOne/TaskOne";
-import TaskTwo from "./components/task/taskTwo/TaskTwo";
-import ScheduleInterview from "./components/task/interview/ScheduleInterview";
-import Question from "./components/questionnaire/Question";
-import Interview from "./components/interview/Interview";
-import QuestionList from "./components/questionnaire/QuestionList";
-import Dashboard from "./components/dashboard/user/Dashboard";
-import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
+import './css-reset.scss';
+import './App.scss';
+import TaskOne from './components/task/taskOne/TaskOne';
+import TaskTwo from './components/task/taskTwo/TaskTwo';
+import ScheduleInterview from './components/task/interview/ScheduleInterview';
+import Question from './components/questionnaire/Question';
+import Interview from './components/interview/Interview';
+import QuestionList from './components/questionnaire/QuestionList';
+import Dashboard from './components/dashboard/user/Dashboard';
+import DisplayApplicants from './components/dashboard/admin/DisplayApplicants';
+import Instructions from './components/instructions/Instructions';
 
 class App extends Component {
   protectedRoutes = () => {
@@ -40,7 +41,7 @@ class App extends Component {
     } else {
       return (
         <Switch>
-          <Route exact path="/" component={UserDashboard} />
+          <Route exact path="/" component={Instructions} />
           <Route exact path="/task/1" component={TaskOne} />
           <Route exact path="/task/2" component={TaskTwo} />
           <Route exact path="/task/4" component={ScheduleInterview} />
@@ -68,7 +69,7 @@ class App extends Component {
   };
 
   componentDidMount = () => {
-    if (localStorage.getItem("authToken")) {
+    if (localStorage.getItem('authToken')) {
       this.props.getCurrentUser();
     }
   };
@@ -92,7 +93,7 @@ const mapStateToProps = state => {
   const { user, isAuthInProgress } = state.currentUser;
   return {
     user,
-    isAuthInProgress
+    isAuthInProgress,
   };
 };
 
