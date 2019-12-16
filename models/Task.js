@@ -35,13 +35,17 @@ const taskSchema = new Schema(
       timeLimit: {
         type: Number
       },
+      endTime: {
+        type: Date
+      },
       katasSolved: {
         type: Number
       },
       score: {
         type: Number
       }
-    }
+    },
+    quiz: { type: mongoose.SchemaTypes.ObjectId, ref: "Quiz" }
   },
   {
     timestamps: true
