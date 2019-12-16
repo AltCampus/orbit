@@ -51,12 +51,14 @@ router.post("/", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     let { email, password } = req.body;
+
     // validations for required profile
     if (!email || !password) {
       return res
         .status(400)
         .json({ status: false, message: "Please Fill Both Fields" });
     }
+
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
@@ -72,7 +74,7 @@ router.post("/login", async (req, res) => {
     }
 
     const authToken = await auth.generateToken(user.id);
-    console.log("done");
+
     return res.status(200).json({ status: "success", authToken });
   } catch (error) {
     return res.status(400).json({ status: "failed", error });
@@ -82,56 +84,67 @@ router.post("/login", async (req, res) => {
 // on first login reset Password
 router.post("/:hashMail", async (req, res) => {
   let { password } = req.body;
-  let { hashMail } = req.params;
-  try {
-    const user = await User.findOne({ hashMail });
-    if (!user.isProfileClaimed) {
-      user.password = password;
+  if (password.length < 6) {
+    return res
+      .status(400)
+      .json({ status: true, message: "Password must contain 6 letter!" });
+  } else {
+    try {
+      let { hashMail } = req.params;
+      const user = await User.findOne({ hashMail });
+      if (!user.isProfileClaimed) {
+        user.password = password;
 
-      // Start the timer for HTML task and link it to user model.
-      const task = await Task.create({
-        user: user.id,
-        html: {
-          startTime: Date.now()
-        }
-      });
-      user.task = task.id;
+        // Start the timer for HTML task and link it to user model.
+        const task = await Task.create({
+          user: user.id,
+          html: {
+            startTime: Date.now()
+          }
+        });
+        user.task = task.id;
 
-      // Set User stage to 1
-      user.stage = 1;
+        // Set User stage to 1
+        user.stage = 1;
 
-      // Set user profile to be claimed.
-      user.isProfileClaimed = true;
-      const updatedUser = await user.save();
-      return res.status(201).json({ status: true, user: updatedUser });
-    } else {
-      return res.status(301).json({
-        success: false,
-        message: "User already Claimed there account"
-      });
+        // Set user profile to be claimed.
+        user.isProfileClaimed = true;
+        const updatedUser = await user.save();
+        return res.status(201).json({ status: true, user: updatedUser });
+      } else {
+        return res.status(401).json({
+          success: false,
+          message: "User already Claimed there account"
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(400)
+        .json({ success: false, message: "Some error from server!" });
     }
-  } catch (error) {
-    return res.status(301).json({ success: false, error });
   }
 });
 
 // Get Users
-router.get("/get", async (req,res)=> {
+router.get("/get", async (req, res) => {
   try {
     const users = await User.find({});
-    if (!users) res.status(200).json({message: "No users yet", status: true})
-    res.status(200).json({users, status: true});
-  } catch(error) {
-    res.status(400).json({message: "Something went wrong", status:false})
+    if (!users) res.status(200).json({ message: "No users yet", status: true });
+    res.status(200).json({ users, status: true });
+  } catch (error) {
+    res.status(400).json({ message: "Something went wrong", status: false });
   }
-})
+});
 
 /* GET User Progress */
 router.get("/:id", auth.verifyAdminToken, async (req, res) => {
   const userId = req.params.id;
   console.log(userId);
   try {
-    const user = await User.findById(userId).populate('task').select("-password, -hashMail");
+    const user = await User.findById(userId)
+      .populate("task")
+      .select("-password, -hashMail");
     console.log(user);
     // const task = await Task.findById(user.task)
     res.status(200).json({ user, status: true });
