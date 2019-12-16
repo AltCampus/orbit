@@ -162,7 +162,7 @@ class UserProgress extends Component {
       return (
         <div>
           <p>
-            {this.props.name} submitted his codewars{' '}
+            {props.name} submitted his codewars{' '}
             <a
               target="_blank"
               href={`https://www.codewars.com/users/${codewars.codewarsUsername}`}
@@ -173,10 +173,10 @@ class UserProgress extends Component {
           </p>
           {codewars.timeLimit ? (
             <div>
-              {this.props.name} has {codewars.timeLimit} left.
+              {props.name} has {codewars.timeLimit} left.
             </div>
           ) : (
-            <div>{this.props.name} has solved n questions.</div>
+            <div>{props.name} has solved n questions.</div>
           )}
         </div>
       );
