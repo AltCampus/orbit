@@ -60,6 +60,9 @@ class RenderModal extends Component {
         }
       }
     );
+    this.setState({
+      visible: false
+    });
   };
 
   handleCancel = () => {
@@ -123,7 +126,7 @@ class UserProgress extends Component {
     };
   }
   RenderTaskOneProgress = props => {
-    console.log(props, 'FROM RENDER PROGRESS');
+    console.log(props.name, 'FROM RENDER PROGRESS');
     if (props.task.html) {
       const html = props.task.html;
       return (
@@ -199,10 +202,10 @@ class UserProgress extends Component {
           style={{ width: 1150, height: '75vh', borderRadius: '5px' }}
         >
           <div>
-            {this.props.user.task &&
-              this.RenderTaskOneProgress(this.state.user.task)}
-            {this.props.user.task &&
-              this.RenderTaskTwoProgress(this.state.user.task)}
+            {this.props.user.task.html.taskUrl &&
+              this.RenderTaskOneProgress(this.props.user)}
+            {this.props.user.task.codewars &&
+              this.RenderTaskTwoProgress(this.props.user)}
             {/* {this.RenderTaskThreeProgress(this.state.user.task)}
         {this.RenderTaskFourProgress(this.state.user.task)} */}
           </div>
