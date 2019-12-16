@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+
 // const Mailer = require("../utils/Mailer");
 const User = require("../models/User");
 const Task = require("../models/Task");
@@ -110,6 +111,7 @@ router.post("/:hashMail", async (req, res) => {
         // Set user profile to be claimed.
         user.isProfileClaimed = true;
         const updatedUser = await user.save();
+        updatedUser.password = "";
         return res.status(201).json({ status: true, user: updatedUser });
       } else {
         return res.status(401).json({
@@ -129,7 +131,7 @@ router.post("/:hashMail", async (req, res) => {
 // Get Users
 router.get("/get", async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({}).select("-password");
     if (!users) res.status(200).json({ message: "No users yet", status: true });
     res.status(200).json({ users, status: true });
   } catch (error) {
