@@ -1,9 +1,10 @@
 import React from 'react';
 import { Timeline } from 'antd';
+import UserWrapper from '../dashboard/user/UserWrapper';
 
 export default function Instructions() {
   return (
-    <>
+    <UserWrapper activeKey={'0'}>
       <div>
         <p>
           The tasks consists of questions carefully designed to help you
@@ -86,6 +87,6 @@ export default function Instructions() {
           </Timeline.Item>
         </Timeline>
       </div>
-    </>
+    </UserWrapper>
   );
 }

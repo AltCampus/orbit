@@ -1,13 +1,14 @@
-import React from "react";
-import { withRouter, Route, Switch } from "react-router-dom";
-import { Layout, Menu, Icon, Avatar, Button } from "antd";
-import { connect } from "react-redux";
-import { updateToken, getCurrentUser } from "../../../actions/users";
+import React from 'react';
+import { withRouter, Route, Switch } from 'react-router-dom';
+import { Layout, Menu, Icon, Avatar, Button } from 'antd';
+import { connect } from 'react-redux';
+import { updateToken, getCurrentUser } from '../../../actions/users';
 
-import TaskOne from "../../task/taskOne/TaskOne";
-import TaskTwo from "../../task/taskTwo/TaskTwo";
-import TaskCompleted from "../../task/taskCompleted/TaskCompleted";
-import UserWrapper from "./UserWrapper";
+import TaskOne from '../../task/taskOne/TaskOne';
+import TaskTwo from '../../task/taskTwo/TaskTwo';
+import TaskCompleted from '../../task/taskCompleted/TaskCompleted';
+import UserWrapper from './UserWrapper';
+import Instructions from '../../instructions/Instructions';
 
 const { Header, Sider, Content } = Layout;
 
@@ -53,8 +54,9 @@ class UserDashboard extends React.Component {
 
   render() {
     return (
-      <UserWrapper activeKey={"0"}>
+      <UserWrapper activeKey={'0'}>
         <Switch>
+          <Route path="/instructions" component={Instructions}></Route>
           <Route path="/task/1" component={TaskOne}></Route>
           <Route path="/task/2" component={TaskOne}></Route>
         </Switch>
@@ -67,7 +69,7 @@ class UserDashboard extends React.Component {
 const mapStateToProps = state => {
   const { user } = state.currentUser;
   return {
-    user
+    user,
   };
 };
 
