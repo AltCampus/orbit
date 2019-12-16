@@ -131,7 +131,7 @@ router.post("/:hashMail", async (req, res) => {
 // Get Users
 router.get("/get", async (req, res) => {
   try {
-    const users = await User.find({}).select("-password");
+    const users = await User.find({isAdmin:false}).select("-password");
     if (!users) res.status(200).json({ message: "No users yet", status: true });
     res.status(200).json({ users, status: true });
   } catch (error) {
