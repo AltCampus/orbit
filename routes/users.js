@@ -38,8 +38,8 @@ router.post("/", async (req, res) => {
       motivation,
       hashMail
     });
-    //TODO: UnComment to sending mail once user Register
-    // const mail = await Mailer.mail(user.email, user.name, user.hashMail);
+    // TODO: UnComment to sending mail once user Register
+    // const mail = await Mailer.mail('apply',user.email, user.name, user.hashMail);
     // console.log("mailer");
     return res.status(201).json({ status: true, user });
   } catch (error) {
