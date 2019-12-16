@@ -202,9 +202,9 @@ class UserProgress extends Component {
           style={{ width: 1150, height: '75vh', borderRadius: '5px' }}
         >
           <div>
-            {this.props.user.task.html.taskUrl &&
+            {this.props.user.task && this.props.user.task.html.taskUrl &&
               this.RenderTaskOneProgress(this.props.user)}
-            {this.props.user.task.codewars &&
+            {this.props.user.task && this.props.user.task.codewars &&
               this.RenderTaskTwoProgress(this.props.user)}
             {/* {this.RenderTaskThreeProgress(this.state.user.task)}
         {this.RenderTaskFourProgress(this.state.user.task)} */}

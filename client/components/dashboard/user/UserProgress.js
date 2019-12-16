@@ -56,7 +56,7 @@ class UserProgress extends Component {
   };
 
   RenderStageOneCard = () => {
-    if (this.state.task.html) {
+    if (this.state.task && this.state.task.html) {
       const html = this.state.task.html
       return (
         <div>
@@ -88,7 +88,7 @@ class UserProgress extends Component {
   };
   RenderStageTwoCard = () => {
     console.log(this.state)
-    if (this.state.task.codewars) {
+    if (this.state.task && this.state.task.codewars) {
       const codewars = this.state.task.codewars
       return (
         <div>

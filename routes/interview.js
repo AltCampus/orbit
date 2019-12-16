@@ -2,7 +2,7 @@ const express = require("express");
 const Router = express.Router();
 
 const auth = require("./../utils/auth");
-const User = require("./../models/User");
+// const User = require("./../models/User");
 const Interview = require("../models/Interview");
 const User = require("../models/User");
 
