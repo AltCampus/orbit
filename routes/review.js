@@ -7,7 +7,8 @@ const auth = require("../utils/auth");
 // Save Score & Review
 
 router.post("/html", auth.verifyAdminToken, async (req, res) => {
-  let { score = 0, review = "", taskId } = req.body;
+  console.log("SAVE REVIEW")
+  let { score = 0, review = "", taskId = "" } = req.body.data;
   const updatedTask = {
     score: score,
     review: review
@@ -21,6 +22,8 @@ router.post("/html", auth.verifyAdminToken, async (req, res) => {
 //   }
   try {
     // Update task with score and review
+    console.log(taskId, "TaskID is Here")
+    console.log(req.body, "body is Here")
     const newTask = await Task.findById(taskId);
     newTask.html = {
       ...newTask.html,

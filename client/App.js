@@ -7,7 +7,9 @@ import Login from "./components/login/Login";
 import ResetPasswordForm from "./components/resetPasswordForm/ResetPasswordForm";
 import LandingPage from "./components/static/LandingPage";
 import UserDashboard from "./components/dashboard/user/Dashboard";
-import UserProfile from "./components/dashboard/admin/UserProfile";
+import AdminDashboard from "./components/dashboard/admin/Dashboard";
+import UserProfile from "./components/dashboard/admin/userprofile/UserProfileWrapper";
+
 import "./css-reset.scss";
 import "./App.scss";
 import TaskOne from "./components/task/taskOne/TaskOne";

@@ -15,22 +15,7 @@ import {
 } from 'antd';
 import AdminWrapper from './AdminWrapper';
 import './index.css';
-
-function hasErrors(fieldsError) {
-  return Object.keys(fieldsError).some(field => fieldsError[field]);
-}
-
-async function handleSubmit() {
-  await axios.post(
-    `http://localhost:3000/api/v1/task/review/`,
-    { value },
-    {
-      headers: {
-        authorization: JSON.parse(localStorage.authToken)
-      }
-    }
-  );
-}
+import UserProfileWrapper from './userprogress/UserProfileWrapper';
 
 class RenderModal extends Component {
   state = {
@@ -51,31 +36,23 @@ class RenderModal extends Component {
   };
 
   handleChange = e => {
-    console.log(e)
+    console.log(e.target)
     const { name, value } = e.target;
+    console.log(name,value)
     this.setState({ [name]: value });
   };
 
-  // handleSubmit = e => {
-  //   e.preventDefault();
-  //   this.props.form.validateFields((err, values) => {
-  //     if (!err) {
-  //       console.log('Received values of form: ', values);
-  //       console.log('props', this.props);
-  //       const data = {
-  //         score: values.score,
-  //         review: values.review,
-  //         taskId: ''
-  //       };
-  //       handleSubmission(data);
-  //     }
-  //   });
-  // };
 
-  handleSubmit = async () => {
+  handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(this.state)
+    const data = {
+      score: this.state.score,
+      review: this.state.review
+    }
     await axios.post(
       `http://localhost:3000/api/v1/task/review/`,
-      { score: this.state.score},
+      { data},
       {
         headers: {
           authorization: JSON.parse(localStorage.authToken)
@@ -120,6 +97,9 @@ class RenderModal extends Component {
             <input
               style={{ display: 'block', margin: '6px' }}
               placeholder="review"
+              name="review"
+              value={this.state.review}
+              onChange={this.handleChange}
             />
             <Button
               type="primary"
@@ -268,6 +248,7 @@ class UserProfile extends Component {
             </div>
           </div>
         )}
+        <UserProfileWrapper/>
       </AdminWrapper>
     );
   }
