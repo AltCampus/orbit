@@ -17,11 +17,11 @@ import '../index.css';
 
 class RenderModal extends Component {
   constructor(props) {
-    super(props)
-  this.state = {
-    visible: false
-  };
-}
+    super(props);
+    this.state = {
+      visible: false
+    };
+  }
 
   showModal = () => {
     this.setState({
@@ -37,24 +37,23 @@ class RenderModal extends Component {
   };
 
   handleChange = e => {
-    console.log(e.target)
+    console.log(e.target);
     const { name, value } = e.target;
-    console.log(name,value)
+    console.log(name, value);
     this.setState({ [name]: value });
   };
 
-
-  handleSubmit = async (e) => {
+  handleSubmit = async e => {
     e.preventDefault();
     const data = {
       score: this.state.score,
       review: this.state.review,
       taskId: this.props.user.task._id
-    }
-    console.log(data)
+    };
+    console.log(data);
     await axios.post(
       `http://localhost:3000/api/v1/task/review/html`,
-      { data},
+      { data },
       {
         headers: {
           authorization: JSON.parse(localStorage.authToken)
@@ -92,10 +91,12 @@ class RenderModal extends Component {
               onChange={this.handleChange}
               placeholder="score"
             /> */}
-           <input name="score"
+            <input
+              name="score"
               value={this.state.score}
               onChange={this.handleChange}
-              placeholder="score" />
+              placeholder="score"
+            />
             <input
               style={{ display: 'block', margin: '6px' }}
               placeholder="review"
@@ -103,10 +104,7 @@ class RenderModal extends Component {
               value={this.state.review}
               onChange={this.handleChange}
             />
-            <Button
-              type="primary"
-              htmlType="submit"
-            >
+            <Button type="primary" htmlType="submit">
               Submit
             </Button>
           </Form>
@@ -125,7 +123,7 @@ class UserProgress extends Component {
     };
   }
   RenderTaskOneProgress = props => {
-    console.log(props, "FROM RENDER PROGRESS");
+    console.log(props, 'FROM RENDER PROGRESS');
     if (props.task.html) {
       const html = props.task.html;
       return (
@@ -201,8 +199,10 @@ class UserProgress extends Component {
           style={{ width: 1150, height: '75vh', borderRadius: '5px' }}
         >
           <div>
-            {this.RenderTaskOneProgress(this.props.user)}
-            {this.RenderTaskTwoProgress(this.props.user)}
+            {this.props.user.task &&
+              this.RenderTaskOneProgress(this.state.user.task)}
+            {this.props.user.task &&
+              this.RenderTaskTwoProgress(this.state.user.task)}
             {/* {this.RenderTaskThreeProgress(this.state.user.task)}
         {this.RenderTaskFourProgress(this.state.user.task)} */}
           </div>
