@@ -20,7 +20,7 @@ class TaskTwo extends Component {
       return;
     }
     this.intervalId = window.setInterval(() => {
-      if (this.state.time === 0) {
+      if (this.state.timeLeft === 0) {
         window.clearInterval(this.intervalId);
         return this.getStageData();
       }
@@ -109,7 +109,7 @@ class TaskTwo extends Component {
         {this.props.user.stage > 2 ? (
           <TaskCompleted />
         ) : this.state.onGoing ? (
-          <CodeWarsTimer />
+          <CodeWarsTimer timeLeft={this.state.timeLeft} />
         ) : (
           <>
             <div className="task-container">
