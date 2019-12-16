@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { Route, Switch, withRouter, Redirect } from "react-router-dom";
-import { message } from "antd";
 import { connect } from "react-redux";
 import { getCurrentUser } from "./actions/users";
 import Login from "./components/login/Login";
-import ResetPasswordForm from "./components/resetPasswordForm/ResetPasswordForm";
+import SetPassword from "./components/setPassword/SetPassword";
 import LandingPage from "./components/static/LandingPage";
 import UserDashboard from "./components/dashboard/user/Dashboard";
-import AdminDashboard from "./components/dashboard/admin/Dashboard";
+// import AdminDashboard from "./components/dashboard/admin/Dashboard";
 import UserProfile from "./components/dashboard/admin/userprofile/UserProfileWrapper";
 
 import "./css-reset.scss";
@@ -22,7 +21,7 @@ import QuestionList from "./components/questionnaire/QuestionList";
 import Dashboard from "./components/dashboard/user/Dashboard";
 import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
 import TaskThree from "./components/task/taskThree/TaskThree";
-import Instructions from './components/instructions/Instructions';
+import Instructions from "./components/instructions/Instructions";
 
 class App extends Component {
   protectedRoutes = () => {
@@ -65,14 +64,14 @@ class App extends Component {
           <Redirect to="/login" />
         </Route>
         <Route exact path="/" component={LandingPage} />
-        <Route path="/reset/:hashmail" component={ResetPasswordForm} />
+        <Route path="/account/claim/:hashmail" component={SetPassword} />
         <Route path="/login" component={Login} />
       </Switch>
     );
   };
 
   componentDidMount = () => {
-    if (localStorage.getItem('authToken')) {
+    if (localStorage.getItem("authToken")) {
       this.props.getCurrentUser();
     }
   };
@@ -96,7 +95,7 @@ const mapStateToProps = state => {
   const { user, isAuthInProgress } = state.currentUser;
   return {
     user,
-    isAuthInProgress,
+    isAuthInProgress
   };
 };
 
