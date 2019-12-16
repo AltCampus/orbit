@@ -22,6 +22,7 @@ import QuestionList from "./components/questionnaire/QuestionList";
 import Dashboard from "./components/dashboard/user/Dashboard";
 import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
 import TaskThree from "./components/task/taskThree/TaskThree";
+import Instructions from './components/instructions/Instructions';
 
 class App extends Component {
   protectedRoutes = () => {
@@ -41,7 +42,7 @@ class App extends Component {
     } else {
       return (
         <Switch>
-          <Route exact path="/" component={UserDashboard} />
+          <Route exact path="/" component={Instructions} />
           <Route exact path="/task/1" component={TaskOne} />
           <Route exact path="/task/2" component={TaskTwo} />
           <Route exact path="/task/3" component={TaskThree} />
@@ -71,7 +72,7 @@ class App extends Component {
   };
 
   componentDidMount = () => {
-    if (localStorage.getItem("authToken")) {
+    if (localStorage.getItem('authToken')) {
       this.props.getCurrentUser();
     }
   };
@@ -95,7 +96,7 @@ const mapStateToProps = state => {
   const { user, isAuthInProgress } = state.currentUser;
   return {
     user,
-    isAuthInProgress
+    isAuthInProgress,
   };
 };
 
