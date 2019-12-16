@@ -13,7 +13,9 @@ const columns = [
   },
   {
     title: "Name",
-    dataIndex: "name"
+    dataIndex: "name",
+    sorter: (objA, objB) => objA.name.localeCompare(objB.name),
+    sortDirections: ['ascend'],
   },
   {
     title: "PhoneNumber",
@@ -22,7 +24,12 @@ const columns = [
   },
   {
     title: "Stage",
-    dataIndex: "stage"
+    dataIndex: "stage",
+    filters: [{ text: "stage 1", value: 1 }, { text: "stage 2", value: 2 }, { text: "stage 3", value: 3 }, { text: "stage 4", value: 4 } ],
+
+    onFilter: (value, record) => record.stage === value,
+    sorter: (objA, objB) => objA.stage - objB.stage,
+    sortDirections: ['ascend'],
   },
   {
     title: "Social Profile",
@@ -38,6 +45,9 @@ const columns = [
     title: "SignUp Time",
     dataIndex: "createdAt",
     key: "createdAt",
+
+    sorter: (objA, objB) => Number(new Date(objB.createdAt)) - Number(new Date(objA.createdAt)),
+    sortDirections: ['ascend'],
     render: time => new Date(time).toLocaleString()
   }
 ];
