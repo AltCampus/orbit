@@ -43,6 +43,24 @@ class UserInfo extends Component {
     }
   }
 
+  handleUserReject = async (id) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("authToken"));
+      const res = await axios.delete(`http://localhost:3000/api/v1/users/status/${id}`, {
+        headers: {
+          authorization: token
+        }
+      });
+      if (res.data.status) {
+        message.success(res.data.message);
+      } else {
+        message.error("There's an error");
+      }
+    } catch (error) {
+      message.error("Something went wrong");
+      console.error(error);
+    }
+  }
 
   render() {
       // console.log(this.props)
@@ -57,7 +75,7 @@ class UserInfo extends Component {
               {this.props.user.status === "pending" ?
                 <div className="user-info-btn-container">
                   <button onClick={() => this.handleUserAccept(this.props.user._id)} className="user-info-btn btn-accept">Accept</button>
-                  <button className="user-info-btn btn-reject">Reject</button>
+                  <button onClick={() => this.handleUserReject(this.props.user._id)} className="user-info-btn btn-reject">Reject</button>
                 </div>
                 :
                 this.props.user.status === "accept" ?
