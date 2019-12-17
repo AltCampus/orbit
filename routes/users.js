@@ -160,11 +160,12 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findOne({ _id: id });
+    console.log("Got the request");
     user.status = "accept";
     await user.save();
     // TODO: UnComment to sending mail once user accept
     // const mail = await Mailer.mail('accept',user.email, user.name);
-    res.status(200).status({
+    res.status(200).json({
       status: true,
       message: `${user.name}, now eligible for joining AltCampus`
     });
@@ -201,7 +202,7 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
     await user.save();
     // TODO: UnComment to sending mail once user accept
     // const mail = await Mailer.mail('reject',user.email, user.name);
-    res.status(200).status({
+    res.status(200).json({
       status: true,
       message: `${user.name}, not eligible for joining AltCampus!`
     });
