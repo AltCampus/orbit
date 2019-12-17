@@ -131,7 +131,7 @@ router.post("/:hashMail", async (req, res) => {
 // Get Users
 router.get("/get", async (req, res) => {
   try {
-    const users = await User.find({isAdmin:false}).select("-password");
+    const users = await User.find({ isAdmin: false }).select("-password");
     if (!users) res.status(200).json({ message: "No users yet", status: true });
     res.status(200).json({ users, status: true });
   } catch (error) {
@@ -152,6 +152,64 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
     res.status(200).json({ user, status: true });
   } catch (error) {
     res.status(400).json({ message: "Something went wrong", status: false });
+  }
+});
+
+// Admin can accept user route
+router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findOne({ _id: id });
+    user.status = "accept";
+    await user.save();
+    // TODO: UnComment to sending mail once user accept
+    // const mail = await Mailer.mail('accept',user.email, user.name);
+    res.status(200).status({
+      status: true,
+      message: `${user.name}, now eligible for joining AltCampus`
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .json({ status: false, message: "some error occurs from Server" });
+  }
+});
+
+/* GET User Progress */
+router.get("/:id", auth.verifyAdminToken, async (req, res) => {
+  const userId = req.params.id;
+  console.log(userId);
+  try {
+    const user = await User.findById(userId)
+      .populate("task")
+      .select("-password, -hashMail");
+    console.log(user);
+    // const task = await Task.findById(user.task)
+    res.status(200).json({ user, status: true });
+  } catch (error) {
+    res.status(400).json({ message: "Something went wrong", status: false });
+  }
+});
+
+// Admin can Reject user route
+router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findOne({ _id: id });
+    user.status = "reject";
+    await user.save();
+    // TODO: UnComment to sending mail once user accept
+    // const mail = await Mailer.mail('reject',user.email, user.name);
+    res.status(200).status({
+      status: true,
+      message: `${user.name}, not eligible for joining AltCampus!`
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .json({ status: false, message: "some error occurs from Server" });
   }
 });
 
