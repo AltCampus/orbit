@@ -16,7 +16,8 @@ class Quiz extends Component {
       loading: true,
       questions: null,
       currentQuestionIndex: 0,
-      timeLeft: null
+      timeLeft: null,
+      requestOnGoing: false
     };
     this.intervalId = React.createRef();
   }
@@ -53,6 +54,9 @@ class Quiz extends Component {
         return this.submitQuiz();
       }
       this.setState({ timeLeft: this.state.timeLeft - 1 });
+      if (this.state.timeLeft % 60 === 0 && !this.state.requestOnGoing) {
+        this.autosaveQuiz();
+      }
     }, 1000);
   };
   changeActive(index) {
@@ -98,6 +102,7 @@ class Quiz extends Component {
       });
       message.success(res.status && "Your answers has been submitted.");
     } catch (error) {
+      this.setState({loading: false})
       if (error.response) {
         /*
          * The request was made and the server responded with a
@@ -110,13 +115,39 @@ class Quiz extends Component {
     }
   };
 
+  autosaveQuiz = async event => {
+    const formData = {
+      questions: this.state.questions.map(question => {
+        return { question: question._id, answer: question.answer };
+      })
+    };
+    console.log(formData);
+    try {
+      const res = await axios.put(
+        "http://localhost:3000/api/v1/quiz/current",
+        {
+          answers: formData.questions
+        },
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.authToken)
+          }
+        }
+      );
+      this.setState({ requestOnGoing: false });
+    } catch (error) {
+      this.setState({ requestOnGoing: false });
+      console.log(error);
+    }
+  };
+
   quizStatus = () => {
     const total_questions = this.state.questions.length;
     const questionSolved = this.state.questions.reduce(
       (acc, question) => (question.answer ? acc + 1 : acc),
       0
     );
-    const msg = `You have solved ${questionSolved} out of ${total_questions}`;  
+    const msg = `You have solved ${questionSolved} out of ${total_questions}`;
     return msg;
   };
 
@@ -150,6 +181,7 @@ class Quiz extends Component {
       this.setState({ loading: false });
     }
   };
+
   resumeQuiz = async () => {
     this.setState({ loading: true });
     try {
