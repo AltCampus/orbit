@@ -45,7 +45,12 @@ const userSchema = new Schema(
     canTakeQuiz: { type: Boolean, default: true },
     canScheduleInterview: { type: Boolean, default: true },
     isAdmin: { type: Boolean, default: false },
-    stage: { type: Number, default: 0 }
+    stage: { type: Number, default: 0 },
+    status: {
+      type: String,
+      enum: ["pending", "reject", "accept"],
+      default: "pending"
+    }
   },
   { timestamps: true }
 );
