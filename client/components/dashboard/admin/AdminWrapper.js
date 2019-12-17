@@ -21,6 +21,10 @@ function AdminWrapper(props) {
   return (
     <Layout className="wrapper">
       <Sider
+        style={{
+          overflow: "auto",
+          height: "100vh"
+        }}
         breakpoint="sm"
         onBreakpoint={broken => {
           setBroken(broken);
