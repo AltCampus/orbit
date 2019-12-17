@@ -1,24 +1,35 @@
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .middle {
-    width: 100%;
+  width: 100%;
 }
 
 .btn-container-left {
-    margin-left: 2px;
-    margin-right: 20px;
+  margin-left: 2px;
+  margin-right: 20px;
 }
 
 .btn-container-right {
-    margin-left: 20px;
-    margin-right: 2px;
+  margin-left: 20px;
+  margin-right: 2px;
 }
 
 p.question {
-    font-size: 1rem;
-    color: #333;
+  font-size: 1rem;
+  color: #333;
+}
+.next-prev-container {
+  padding: 1rem 0;
+}
+
+button + button {
+  margin-left: 1rem;
+}
+
+.question-answered {
+  background: rgb(94, 255, 94);
 }

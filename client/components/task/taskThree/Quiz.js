@@ -5,6 +5,7 @@ import "./quiz.scss";
 import QuizTimer from "./QuizTimer";
 import TextArea from "antd/lib/input/TextArea";
 import TaskCompleted from "../taskCompleted/TaskCompleted";
+import QuizPagination from "./QuizPagination";
 
 class Quiz extends Component {
   constructor(props) {
@@ -47,7 +48,7 @@ class Quiz extends Component {
   }
   startTimer = () => {
     this.intervalId = window.setInterval(() => {
-      if (this.state.time === 0) {
+      if (this.state.timeLeft === 0) {
         window.clearInterval(this.intervalId);
         return this.submitQuiz();
       }
@@ -55,8 +56,8 @@ class Quiz extends Component {
     }, 1000);
   };
   changeActive(index) {
-    if (index >= 0 && index <= this.state.questions.length) {
-      this.setState({ currentQuestionIndex: index - 1 });
+    if (index >= 0 && index < this.state.questions.length) {
+      this.setState({ currentQuestionIndex: index });
     }
   }
   onValueChange = e => {
@@ -115,7 +116,8 @@ class Quiz extends Component {
       (acc, question) => (question.answer ? acc + 1 : acc),
       0
     );
-    return `You have solved ${questionSolved} out of ${total_questions}`;
+    const msg = `You have solved ${questionSolved} out of ${total_questions}`;  
+    return msg;
   };
 
   startQuiz = async () => {
@@ -200,11 +202,12 @@ class Quiz extends Component {
     ) : this.state.questions ? (
       <>
         <section style={{ textAlign: "center" }}>
-          <Pagination
-            pageSize={1}
-            defaultCurrent={this.state.currentQuestionIndex + 1}
-            total={this.state.questions.length}
-            onChange={index => this.changeActive(index)}
+          <QuizPagination
+            active={this.state.currentQuestionIndex}
+            questions={this.state.questions.map(question =>
+              Boolean(question.answer)
+            )}
+            changeActive={index => this.changeActive(index)}
           />
           <QuizTimer time={this.state.timeLeft} />
         </section>
@@ -234,10 +237,58 @@ class Quiz extends Component {
             ) : (
               <TextArea
                 placeholder="Enter your answer here..."
+                value={currentQuestion.answer}
                 onChange={this.onValueChange}
               />
             )}
           </div>
+        </div>
+        <div className="next-prev-container container">
+          {this.state.currentQuestionIndex === 0 ? (
+            <Button
+              disabled="true"
+              aria-disabled="true"
+              onClick={() =>
+                this.changeActive(this.state.currentQuestionIndex - 1)
+              }
+            >
+              <Icon type="left" />
+              Previous
+            </Button>
+          ) : (
+            <Button
+              aria-disabled="false"
+              onClick={() =>
+                this.changeActive(this.state.currentQuestionIndex - 1)
+              }
+            >
+              <Icon type="left" />
+              Previous
+            </Button>
+          )}
+          {this.state.currentQuestionIndex ===
+          this.state.questions.length - 1 ? (
+            <Button
+              disabled
+              aria-disabled="true"
+              onClick={() =>
+                this.changeActive(this.state.currentQuestionIndex + 1)
+              }
+            >
+              Next
+              <Icon type="right" />
+            </Button>
+          ) : (
+            <Button
+              aria-disabled="false"
+              onClick={() =>
+                this.changeActive(this.state.currentQuestionIndex + 1)
+              }
+            >
+              Next
+              <Icon type="right" />
+            </Button>
+          )}
         </div>
         <div className="container">
           <Button onClick={() => this.showConfirm()}>Confirm</Button>
