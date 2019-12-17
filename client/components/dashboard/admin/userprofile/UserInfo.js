@@ -11,6 +11,7 @@ import {
   InputNumber
 } from 'antd';
 import '../index.css';
+import "./userinfo.scss";
 
 class UserInfo extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class UserInfo extends Component {
     };
   }
   render() {
-      console.log(this.props)
+      // console.log(this.props)
     return (
       <div>
         <div className="user-info">
@@ -29,7 +30,11 @@ class UserInfo extends Component {
             headStyle={{ fontSize: '1.5rem' }}
             title={this.props.user.name}
             style={{ width: 550, height: '75vh', borderRadius: '5px' }}
-          >
+            >
+            <div className="user-info-btn-container">
+              <button className="user-info-btn btn-accept">Accept</button>
+              <button className="user-info-btn btn-reject">Reject</button>
+            </div>
             <p className="card-child">{this.props.user.email}</p>
             <p className="card-child">Phone Number:{this.props.user.phoneNo}</p>
             <a
