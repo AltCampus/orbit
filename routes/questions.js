@@ -102,6 +102,18 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
       .json({ status: "failed", error: "Some Error Occured" });
   }
 });
+router.get("/:id", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const question = await Question.findById(req.params.id);
+    if (!question)
+      return res
+        .status(400)
+        .json({ status: false, error: "Question not found" });
+    return res.status(200).json({ status: true, question });
+  } catch (error) {
+    res.status(400).json({ status: false, error: "Some Error Occured" });
+  }
+});
 router.put("/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const updates = {};
