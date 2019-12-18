@@ -24,7 +24,6 @@ export class UserProgress extends Component {
       <>
         <div className="progress-container">
           <Card
-            style={{ width: 300 }}
             cover={
               <img
                 alt="example"
@@ -46,7 +45,6 @@ export class UserProgress extends Component {
             </Descriptions>
           </Card>
           <Card
-            style={{ width: 300 }}
             cover={
               <img
                 alt="example"
@@ -69,7 +67,6 @@ export class UserProgress extends Component {
           </Card>
 
           <Card
-            style={{ width: 300 }}
             cover={
               <img
                 alt="example"
@@ -91,7 +88,6 @@ export class UserProgress extends Component {
             </Descriptions>
           </Card>
           <Card
-            style={{ width: 300 }}
             cover={
               <img
                 alt="example"
