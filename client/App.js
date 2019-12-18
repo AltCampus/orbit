@@ -16,7 +16,6 @@ import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
 import TaskThree from "./components/task/taskThree/TaskThree";
 import UserProgress from "./components/dashboard/user/UserProgress";
-import ScheduleInterview from "./components/task/interview/ScheduleInterview";
 import Question from "./components/questionnaire/Question";
 import Interview from "./components/interview/Interview";
 import QuestionList from "./components/questionnaire/QuestionList";

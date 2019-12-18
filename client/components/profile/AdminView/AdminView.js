@@ -1,15 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import UserProfile from './UserProfile';
-import UserProgress from './UserProgress';
+import UserProfile from "./UserProfile";
+import UserProgress from "./UserProgress";
 
 export class AdminView extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      user: null,
-    };
   }
   render() {
     return (
