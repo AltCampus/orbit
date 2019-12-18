@@ -14,14 +14,14 @@ import "./App.scss";
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
 import UserProgress from "./components/dashboard/user/UserProgress";
-import ScheduleInterview from "./components/task/interview/ScheduleInterview";
 import Question from "./components/questionnaire/Question";
-import Interview from "./components/interview/Interview";
+import Interview from "./components/task/interview/Interview";
 import QuestionList from "./components/questionnaire/QuestionList";
 import Dashboard from "./components/dashboard/user/Dashboard";
 import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
 import TaskThree from "./components/task/taskThree/TaskThree";
 import Instructions from "./components/instructions/Instructions";
+import { message } from "antd";
 
 class App extends Component {
   protectedRoutes = () => {
@@ -31,7 +31,6 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={DisplayApplicants} />
           <Route path="/questions" component={Question} />
-          <Route path="/interviews" component={Interview} />
           <Route path="/user/:id" component={UserProfile} />
           <Route path="/login">
             <Redirect to="/" />
@@ -45,7 +44,7 @@ class App extends Component {
           <Route exact path="/task/1" component={TaskOne} />
           <Route exact path="/task/2" component={TaskTwo} />
           <Route exact path="/task/3" component={TaskThree} />
-          <Route exact path="/task/4" component={ScheduleInterview} />
+          <Route exact path="/task/4" component={Interview} />
           <Route path="/task/:taskId" component={UserDashboard} />
           <Route exact path="/profile" component={UserProgress} />
           {/* Redirects the user to login if user attempts to login */}
@@ -72,7 +71,12 @@ class App extends Component {
 
   componentDidMount = () => {
     if (localStorage.getItem("authToken")) {
-      this.props.getCurrentUser();
+      const invalidToken = async msg => {
+        message.error(`${msg}, Redirect to Login please wait!`);
+        await localStorage.clear();
+        setTimeout(() => this.props.history.push("/login"), 1000);
+      };
+      this.props.getCurrentUser(invalidToken);
     }
   };
 
