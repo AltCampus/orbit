@@ -7,9 +7,10 @@ function TaskCompleted({ title, next }) {
     <Result
       status="success"
       title={title}
+      key={next}
       subTitle="You've already submitted this task"
       extra={[
-        <Link to={`/task/${next}`}>
+        <Link key={next} to={`/task/${next}`}>
           <Button type="primary" key="console">
             Go to next task
           </Button>
