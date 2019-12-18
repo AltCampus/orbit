@@ -313,14 +313,14 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
     let quiz = await Quiz.findById(quizId);
     if (quiz.answers) {
       quiz = await Quiz.findById(quizId).populate("answers.question");
-    }else{
+    } else {
       return res.status(200).json({
         status: {
           onGoing: false,
           timeOut: false,
           submitted: false
         }
-      })
+      });
     }
     if (!quiz) {
       return res.status(404).json({ error: "Quiz not found." });
@@ -349,16 +349,49 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
           startTime: quiz.startTime,
           answers: quiz.answers
         });
-      }else {
+      } else {
         return res.status(200).json({
           status: {
             onGoing: true,
             timeOut: false,
             submitted: false
           }
-        })
+        });
       }
     }
+  } catch (error) {
+    console.log(error);
+    return res.status(403).json({ error: "Some Error occured" });
+  }
+});
+
+router.post("/:id", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const quizId = req.params.id;
+    let quiz = await Quiz.findById(quizId).populate("questions");
+    if (!quiz) {
+      return res.status(404).json({ error: "Quiz not found." });
+    }
+    if (!quiz.answers) {
+      return res.status(403).json({
+        error: "Quiz has no answers to rate."
+      });
+    }
+    if (!quiz.submittedTime) {
+      return res
+        .status(403)
+        .json({ error: "Quiz was never submitted by user." });
+    }
+    for (let i = 0; i < quiz.answers.length; i++) {
+      quiz.answers[i].score = req.body[quiz.answers[i].question];
+    }
+    quiz.totalScore = Object.values(req.body).reduce(
+      (acc, val) => acc + val,
+      0
+    );
+    quiz.maximumScore = quiz.questions.reduce((acc, val) => acc + val.point, 0);
+    quiz.save();
+    res.status(200).json({ success: true });
   } catch (error) {
     console.log(error);
     return res.status(403).json({ error: "Some Error occured" });

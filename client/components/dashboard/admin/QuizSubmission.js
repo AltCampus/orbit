@@ -44,15 +44,18 @@ class QuizSubmission extends React.Component {
               questionTitle: val.question.questionTitle,
               answer: val.answerSubmitted,
               correctAnswer:
-                val.question.options && val.question.options[val.question.answer],
+                val.question.options &&
+                val.question.options[val.question.answer],
               type: val.question.type,
               maximumPoint: val.question.point,
               point:
-                val.question.type === "subjective"
+                val.score ||
+                (val.question.type === "subjective"
                   ? 0
-                  : val.answerSubmitted === val.question.options[val.question.answer]
+                  : val.answerSubmitted ===
+                    val.question.options[val.question.answer]
                   ? val.question.point
-                  : 0
+                  : 0)
             }
           }),
           {}
@@ -93,16 +96,9 @@ class QuizSubmission extends React.Component {
       if (err) {
         return;
       }
-      if (values) console.log("Received values of form: ", values);
-      const requestBody = {
-        questionTitle: values.questionTitle,
-        type: values.questionType,
-        point: values.point,
-        isActive: values.isActive,
-        isRandom: values.isRandom
-      };
+      const requestBody = values;
       try {
-        const response = await axios.put(
+        const response = await axios.post(
           `http://localhost:3000/api/v1/quiz/${this.state.quizId}`,
           requestBody,
           {
@@ -124,6 +120,7 @@ class QuizSubmission extends React.Component {
           return message.error("You are not connected to internet!");
         }
         message.error("Some error occured");
+        this.setState({ visible: false });
       }
     });
   };
@@ -145,20 +142,20 @@ class QuizSubmission extends React.Component {
             )}
             {this.state.status.submitted && (
               <>
-                {this.state.quizData.totalScore &&
-                this.state.quizData.maximumScore ? (
+                {this.state.quizData.totalScore == undefined &&
+                this.state.quizData.maximumScore == undefined ? (
+                  <>
+                    <Text type="warning">You still have to rate this user</Text>
+                    <Button onClick={this.openModal}>Rate</Button>
+                  </>
+                ) : (
                   <>
                     <Text type="success">
-                      You have rated this quiz QuizSubmission{" "}
+                      You have rated this quiz Submission{" "}
                       {this.state.quizData.totalScore} points out of{" "}
                       {this.state.quizData.maximumScore}
                     </Text>
                     <Button onClick={this.openModal}>Edit</Button>
-                  </>
-                ) : (
-                  <>
-                    <Text type="warning">You still have to rate this user</Text>
-                    <Button onClick={this.openModal}>Rate</Button>
                   </>
                 )}
                 {this.state.quizId && (

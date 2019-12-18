@@ -12,7 +12,6 @@ const ReviewQuizModal = Form.create({ name: "form_in_modal" })(
     }
 
     render() {
-      console.log(this.props);
       const radioStyle = {
         display: "block",
         height: "30px",
@@ -28,6 +27,7 @@ const ReviewQuizModal = Form.create({ name: "form_in_modal" })(
           okText="Create"
           onCancel={onCancel}
           onOk={onCreate}
+          okText="Save"
         >
           <Form layout="vertical">
             {Object.keys(answers).map(questionId => (
