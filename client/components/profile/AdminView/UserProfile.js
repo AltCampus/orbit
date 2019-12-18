@@ -1,19 +1,6 @@
 import React, { Component } from 'react';
-import { PageHeader, Statistic, Descriptions } from 'antd';
-
-const renderContent = (column = 2) => (
-  <Descriptions size="small" column={column}>
-    <Descriptions.Item label="Name">Lili Qu</Descriptions.Item>
-    <Descriptions.Item label="Social Profile">
-      <a>421421</a>
-    </Descriptions.Item>
-    <Descriptions.Item label="Phone number">852741963</Descriptions.Item>
-    <Descriptions.Item label="Effective Time">2017-10-10</Descriptions.Item>
-    <Descriptions.Item label="Motivation">
-      Gonghu Road, Xihu District, Hangzhou, Zhejiang, China
-    </Descriptions.Item>
-  </Descriptions>
-);
+import axios from 'axios';
+import { PageHeader, Statistic, Descriptions, Button } from 'antd';
 
 const extraContent = (
   <div
@@ -30,7 +17,21 @@ const extraContent = (
         marginRight: 32,
       }}
     />
-    <Statistic title="Score" value={10} />
+    <Statistic
+      title="Score"
+      value={10}
+      style={{
+        marginRight: 32,
+      }}
+    />
+    <div
+      style={{
+        marginRight: 32,
+      }}
+    >
+      <Button type="primary">Accept</Button>
+      <Button type="danger">Reject</Button>
+    </div>
   </div>
 );
 
@@ -44,6 +45,59 @@ const Content = ({ children, extra }) => {
 };
 
 export class UserProfile extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      user: null,
+    };
+  }
+
+  handleUserAccept = async id => {
+    try {
+      const token = JSON.parse(localStorage.getItem('authToken'));
+      const res = await axios.patch(
+        `http://localhost:3000/api/v1/users/status/${id}`,
+        null,
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      if (res.data.status) {
+        message.success(res.data.message);
+      } else {
+        message.error("There's an error");
+      }
+    } catch (error) {
+      message.error('Something went wrong');
+      console.error(error);
+    }
+  };
+
+  handleUserReject = async id => {
+    try {
+      const token = JSON.parse(localStorage.getItem('authToken'));
+      const res = await axios.delete(
+        `http://localhost:3000/api/v1/users/status/${id}`,
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      );
+      if (res.data.status) {
+        message.success(res.data.message);
+      } else {
+        message.error("There's an error");
+      }
+    } catch (error) {
+      message.error('Something went wrong');
+      console.error(error);
+    }
+  };
+
   render() {
     return (
       <>
@@ -56,9 +110,29 @@ export class UserProfile extends Component {
             avatar={{
               src: 'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4',
             }}
-            title="Title"
+            title={this.props.user.name}
           >
-            <Content extra={extraContent}>{renderContent()}</Content>
+            <Content extra={extraContent}>
+              <Descriptions size="small" column={2}>
+                <Descriptions.Item label="Name">
+                  {this.props.user.name}
+                </Descriptions.Item>
+                <Descriptions.Item label="Social Profile">
+                  <a href={this.props.user.socialProfile} target="_blank">
+                    {this.props.user.socialProfile}
+                  </a>
+                </Descriptions.Item>
+                <Descriptions.Item label="Phone number">
+                  {this.props.user.phoneNo}
+                </Descriptions.Item>
+                <Descriptions.Item label="Email">
+                  {this.props.user.email}
+                </Descriptions.Item>
+                <Descriptions.Item label="Motivation">
+                  {this.props.user.motivation}
+                </Descriptions.Item>
+              </Descriptions>
+            </Content>
           </PageHeader>
         </section>
       </>
