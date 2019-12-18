@@ -58,7 +58,7 @@ const columns = [
     key: "createdAt",
 
     sorter: (objA, objB) => Number(new Date(objB.createdAt)) - Number(new Date(objA.createdAt)),
-    sortDirections: ['ascend'],
+    sortDirections: ['descend'],
     render: time => new Date(time).toLocaleString()
   }
 ];
