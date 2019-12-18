@@ -302,5 +302,66 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
       .json({ error: "Some Error occured. Please try again." });
   }
 });
+router.get("/all", auth.verifyAdminToken, async (req, res) => {
+  const allQuiz = await Quiz.find({});
+  res.json({ allQuiz });
+});
 
+router.get("/:id", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const quizId = req.params.id;
+    let quiz = await Quiz.findById(quizId);
+    if (quiz.answers) {
+      quiz = await Quiz.findById(quizId).populate("answers.question");
+    }else{
+      return res.status(200).json({
+        status: {
+          onGoing: false,
+          timeOut: false,
+          submitted: false
+        }
+      })
+    }
+    if (!quiz) {
+      return res.status(404).json({ error: "Quiz not found." });
+    }
+    if (quiz.submittedTime) {
+      return res.status(200).json({
+        status: {
+          onGoing: false,
+          timeOut: false,
+          submitted: true
+        },
+        totalScore: quiz.totalScore,
+        maximumScore: quiz.maximumScore,
+        submittedTime: quiz.submittedTime,
+        startTime: quiz.startTime,
+        answers: quiz.answers
+      });
+    } else {
+      if (quiz.endTime < Date.now()) {
+        return res.status(200).json({
+          status: {
+            onGoing: false,
+            timeOut: true,
+            submitted: false
+          },
+          startTime: quiz.startTime,
+          answers: quiz.answers
+        });
+      }else {
+        return res.status(200).json({
+          status: {
+            onGoing: true,
+            timeOut: false,
+            submitted: false
+          }
+        })
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(403).json({ error: "Some Error occured" });
+  }
+});
 module.exports = router;

@@ -18,6 +18,12 @@ const quizSchema = new Schema({
   submittedTime: {
     type: Date
   },
+  totalScore: {
+    type: Number
+  },
+  maximumScore: {
+    type: Number
+  },
   answers: [
     {
       question: {

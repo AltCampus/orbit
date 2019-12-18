@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import React, { Component } from "react";
+import { Route, Switch, withRouter, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import QuizSubmission from "../QuizSubmission";
 import {
   Spin,
   Icon,
@@ -12,8 +13,8 @@ import {
   Input,
   Modal,
   InputNumber
-} from 'antd';
-import '../index.css';
+} from "antd";
+import "../index.css";
 
 class RenderModal extends Component {
   constructor(props) {
@@ -101,7 +102,7 @@ class RenderModal extends Component {
               placeholder="score"
             />
             <input
-              style={{ display: 'block', margin: '6px' }}
+              style={{ display: "block", margin: "6px" }}
               placeholder="review"
               name="review"
               value={this.state.review}
@@ -126,16 +127,16 @@ class UserProgress extends Component {
     };
   }
   RenderTaskOneProgress = props => {
-    console.log(props.name, 'FROM RENDER PROGRESS');
+    console.log(props.name, "FROM RENDER PROGRESS");
     if (props.task.html) {
       const html = props.task.html;
       return (
         <div>
           <p>
-            {props.name} submitted his{' '}
+            {props.name} submitted his{" "}
             <a target="_blank" href={html.taskUrl}>
               assignment
-            </a>{' '}
+            </a>{" "}
             at {new Date(html.submitTime).toLocaleString()}
           </p>
           {html.score && html.review ? (
@@ -162,14 +163,14 @@ class UserProgress extends Component {
       return (
         <div>
           <p>
-            {props.name} submitted his codewars{' '}
+            {props.name} submitted his codewars{" "}
             <a
               target="_blank"
               href={`https://www.codewars.com/users/${codewars.codewarsUsername}`}
             >
               username
-            </a>{' '}
-            at{' '}
+            </a>{" "}
+            at{" "}
           </p>
           {codewars.timeLimit ? (
             <div>
@@ -193,19 +194,24 @@ class UserProgress extends Component {
     }
   };
   render() {
-    console.log(this.props.user.task, 'UserProgress');
+    console.log(this.props.user.task, "UserProgress");
     return (
       <div className="user-task-info">
         <Card
           title="User Progress"
-          headStyle={{ fontSize: '1.5rem' }}
-          style={{ width: 1150, height: '75vh', borderRadius: '5px' }}
+          headStyle={{ fontSize: "1.5rem" }}
+          style={{ width: 1150, height: "75vh", borderRadius: "5px" }}
         >
           <div>
-            {this.props.user.task && this.props.user.task.html.taskUrl &&
+            {this.props.user.task &&
+              this.props.user.task.html.taskUrl &&
               this.RenderTaskOneProgress(this.props.user)}
-            {this.props.user.task && this.props.user.task.codewars &&
+            {this.props.user.task &&
+              this.props.user.task.codewars &&
               this.RenderTaskTwoProgress(this.props.user)}
+            {this.props.user.quiz && (
+              <QuizSubmission quizId={this.props.user.quiz} />
+            )}
             {/* {this.RenderTaskThreeProgress(this.state.user.task)}
         {this.RenderTaskFourProgress(this.state.user.task)} */}
           </div>
