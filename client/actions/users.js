@@ -17,7 +17,7 @@ const rootUrl = "http://localhost:3000/api/v1/users";
 //   axios.defaults.headers.Authorization = newToken;
 // };
 
-export const getCurrentUser = () => {
+export const getCurrentUser = invalidToken => {
   if (!localStorage.authToken) {
     return;
   }
@@ -36,7 +36,10 @@ export const getCurrentUser = () => {
         data: res.data.user
       });
     } catch (error) {
-      dispatch({ type: SET_ERROR });
+      if (error.response) {
+        await invalidToken(error.response.data.message);
+      }
+      dispatch({ type: NO_TOKEN });
       console.error(error);
     }
   };
@@ -55,10 +58,9 @@ export const userLogin = data => {
       });
     } catch (error) {
       if (error.response) {
-        dispatch({ type: SET_ERROR, data: error.response.data.message });
-        // message.error(error.response.data.message);
-      }
-      console.error(error);
+        dispatch({ type: SET_ERROR });
+        message.error(error.response.data.message);
+      } else console.error(error);
     }
   };
 };

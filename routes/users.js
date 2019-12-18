@@ -131,7 +131,9 @@ router.post("/:hashMail", async (req, res) => {
 // Get Users
 router.get("/get", async (req, res) => {
   try {
-    const users = await User.find({ isAdmin: false }).select("-password");
+    const users = await User.find({ isAdmin: false })
+    .sort({ createdAt: -1 })
+    .select("-password");
     if (!users) res.status(200).json({ message: "No users yet", status: true });
     res.status(200).json({ users, status: true });
   } catch (error) {
@@ -160,7 +162,6 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findOne({ _id: id });
-    console.log("Got the request");
     user.status = "accept";
     await user.save();
     // TODO: UnComment to sending mail once user accept

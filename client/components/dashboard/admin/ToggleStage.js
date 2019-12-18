@@ -18,6 +18,17 @@ const columns = [
     render: (id, data) => <Link to={`/user/${data._id}`}> {id}</Link>
   },
   {
+    title: "Status",
+    dataIndex: "status",
+    filters: [
+      { text: "accept", value: "accept" },
+      { text: "pending", value: "pending" }, 
+      { text: "reject", value: "reject" },
+    ],
+
+    onFilter: (value, record) => record.status === value,
+  },
+  {
     title: "PhoneNumber",
     dataIndex: "phoneNo",
     key: "phoneNo"
@@ -47,7 +58,7 @@ const columns = [
     key: "createdAt",
 
     sorter: (objA, objB) => Number(new Date(objB.createdAt)) - Number(new Date(objA.createdAt)),
-    sortDirections: ['ascend'],
+    sortDirections: ['descend'],
     render: time => new Date(time).toLocaleString()
   }
 ];
@@ -64,7 +75,7 @@ class ToggleStage extends Component {
     const response = await axios.get("http://localhost:3000/api/v1/users/get");
     this.setState({
       users: response.data.users
-    });
+    })
   }
 
   getItemId = props => {
