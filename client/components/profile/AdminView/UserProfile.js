@@ -1,32 +1,32 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { PageHeader, Statistic, Descriptions, Button } from 'antd';
+import React, { Component } from "react";
+import axios from "axios";
+import { PageHeader, Statistic, Descriptions, Button } from "antd";
 
 const extraContent = (
   <div
     style={{
-      display: 'flex',
-      width: 'max-content',
-      justifyContent: 'flex-end',
+      display: "flex",
+      width: "max-content",
+      justifyContent: "flex-end"
     }}
   >
     <Statistic
       title="Stage"
       value="0"
       style={{
-        marginRight: 32,
+        marginRight: 32
       }}
     />
     <Statistic
       title="Score"
       value={10}
       style={{
-        marginRight: 32,
+        marginRight: 32
       }}
     />
     <div
       style={{
-        marginRight: 32,
+        marginRight: 32
       }}
     >
       <Button type="primary">Accept</Button>
@@ -49,20 +49,20 @@ export class UserProfile extends Component {
     super(props);
 
     this.state = {
-      user: null,
+      user: null
     };
   }
 
   handleUserAccept = async id => {
     try {
-      const token = JSON.parse(localStorage.getItem('authToken'));
+      const token = JSON.parse(localStorage.getItem("authToken"));
       const res = await axios.patch(
         `http://localhost:3000/api/v1/users/status/${id}`,
         null,
         {
           headers: {
-            authorization: token,
-          },
+            authorization: token
+          }
         }
       );
       if (res.data.status) {
@@ -71,20 +71,20 @@ export class UserProfile extends Component {
         message.error("There's an error");
       }
     } catch (error) {
-      message.error('Something went wrong');
+      message.error("Something went wrong");
       console.error(error);
     }
   };
 
   handleUserReject = async id => {
     try {
-      const token = JSON.parse(localStorage.getItem('authToken'));
+      const token = JSON.parse(localStorage.getItem("authToken"));
       const res = await axios.delete(
         `http://localhost:3000/api/v1/users/status/${id}`,
         {
           headers: {
-            authorization: token,
-          },
+            authorization: token
+          }
         }
       );
       if (res.data.status) {
@@ -93,7 +93,7 @@ export class UserProfile extends Component {
         message.error("There's an error");
       }
     } catch (error) {
-      message.error('Something went wrong');
+      message.error("Something went wrong");
       console.error(error);
     }
   };
@@ -104,11 +104,11 @@ export class UserProfile extends Component {
         <section>
           <PageHeader
             style={{
-              border: '1px solid rgb(235, 237, 240)',
+              border: "1px solid rgb(235, 237, 240)"
             }}
             onBack={() => window.history.back()}
             avatar={{
-              src: 'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4',
+              src: "https://avatars1.githubusercontent.com/u/8186664?s=460&v=4"
             }}
             title={this.props.user.name}
           >
@@ -123,10 +123,14 @@ export class UserProfile extends Component {
                   </a>
                 </Descriptions.Item>
                 <Descriptions.Item label="Phone number">
-                  {this.props.user.phoneNo}
+                  <a href={`mailto:${this.props.user.phoneNo}`}>
+                    {this.props.user.phoneNo}
+                  </a>
                 </Descriptions.Item>
                 <Descriptions.Item label="Email">
-                  {this.props.user.email}
+                  <a href={`mailto:${this.props.user.email}`}>
+                    {this.props.user.email}
+                  </a>
                 </Descriptions.Item>
                 <Descriptions.Item label="Motivation">
                   {this.props.user.motivation}

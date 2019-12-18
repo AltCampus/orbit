@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { Button, Icon } from 'antd';
+import React, { Component } from "react";
 
-import UserProfile from './UserProfile';
-import UserProgress from './UserProgress';
+import UserWrapper from "./../../dashboard/user/UserWrapper";
+import UserProfile from "./UserProfile";
+import UserProgress from "./UserProgress";
 
 export class UserView extends Component {
   render() {
     return (
-      <>
+      <UserWrapper activeKey={"5"}>
         <section>
           <div className="userprofile-container">
             <UserProfile />
@@ -16,7 +16,7 @@ export class UserView extends Component {
             <UserProgress />
           </div>
         </section>
-      </>
+      </UserWrapper>
     );
   }
 }
