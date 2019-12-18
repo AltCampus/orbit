@@ -15,103 +15,137 @@ import {
 } from 'antd';
 import '../index.css';
 
-class RenderModal extends Component {
+
+const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
+  // eslint-disable-next-line
+  class extends React.Component {
+    render() {
+      const { visible, onCancel, onCreate, form } = this.props;
+      const { getFieldDecorator } = form;
+      return (
+        <Modal
+          visible={visible}
+          title="Review"
+          okText="Submit"
+          onCancel={onCancel}
+          onOk={onCreate}
+        >
+          <Form layout="vertical">
+            <Form.Item label="Score">
+              {getFieldDecorator('score', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please enter a score'
+                  }
+                ]
+              })(<InputNumber min={0} max={10} />)}
+            </Form.Item>
+            <Form.Item label="Review">
+              {getFieldDecorator('review', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please write a review'
+                  }
+                ]
+              })(<Input type="textarea" />)}
+            </Form.Item>
+          </Form>
+        </Modal>
+      );
+    }
+  }
+);
+
+class ReviewPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false
+      isFetching: false,
+      visible: false,
     };
   }
 
   showModal = () => {
-    this.setState({
-      visible: true
-    });
-  };
-
-  handleOk = (e, values) => {
-    console.log(values, this.props.user);
-    this.setState({
-      visible: false
-    });
-  };
-
-  handleChange = e => {
-    console.log(e.target);
-    const { name, value } = e.target;
-    console.log(name, value);
-    this.setState({ [name]: value });
-  };
-
-  handleSubmit = async e => {
-    e.preventDefault();
-    const data = {
-      score: this.state.score,
-      review: this.state.review,
-      taskId: this.props.user.task._id
-    };
-    console.log(data);
-    await axios.post(
-      `http://localhost:3000/api/v1/task/review/html`,
-      { data },
-      {
-        headers: {
-          authorization: JSON.parse(localStorage.authToken)
-        }
-      }
-    );
-    this.setState({
-      visible: false
-    });
+    console.log(this.props.user.task._id);
+    console.log(this.props.fetchUsers);
+    this.setState({ visible: true });
   };
 
   handleCancel = () => {
-    this.setState({
-      visible: false
+    this.setState({ visible: false });
+  };
+
+  handleCreate = () => {
+    const { form } = this.formRef.props;
+    form.validateFields(async (err, values) => {
+      if (err) {
+        return;
+      }
+      const data = {
+        score: values.score,
+        review: values.review,
+        taskId: this.props.user.task._id
+      };
+      console.log(data);
+      await axios.post(
+        `http://localhost:3000/api/v1/task/review/html`,
+        { data },
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.authToken)
+          }
+        }
+      );
+
+      console.log('Received values of form: ', values);
+      console.log(this.state);
+      this.props.fetchUsers();
+      this.setState({ visible: false });
     });
   };
 
+  saveFormRef = formRef => {
+    this.formRef = formRef;
+  };
+
   render() {
-    const visible = this.state.visible;
     return (
       <div>
-        <Button type="primary" onClick={this.showModal}>
-          Rate/Review Assignment
-        </Button>
-        <Modal
-          title="Title"
-          visible={visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-        >
-          <Form onSubmit={this.handleSubmit}>
-            {/* <InputNumber
-              style={{ display: 'block', margin: '6px' }}
-              min={0}
-              max={10}
-              name="score"
-              value={this.state.score}
-              onChange={this.handleChange}
-              placeholder="score"
-            /> */}
-            <input
-              name="score"
-              value={this.state.score}
-              onChange={this.handleChange}
-              placeholder="score"
-            />
-            <input
-              style={{ display: 'block', margin: '6px' }}
-              placeholder="review"
-              name="review"
-              value={this.state.review}
-              onChange={this.handleChange}
-            />
-            <Button type="primary" htmlType="submit">
-              Submit
+        <p>
+          {this.props.user.name} submitted his{' '}
+          <a target="_blank" href={this.props.user.task.html.taskUrl}>
+            assignment
+          </a>{' '}
+          at {new Date(this.props.user.task.html.submitTime).toLocaleString()}
+        </p>
+        {!this.props.user.task.html.review ? (
+          <div>
+            <Button type="primary" onClick={this.showModal}>
+              Rate/Review Assignment
             </Button>
-          </Form>
-        </Modal>
+          </div>
+        ) : (
+          <div>
+            {this.updateReviewState}
+            <p>You have rated this assignment {this.props.user.task.html.score}/10</p>
+            <p>
+              Review:
+              {this.props.user.task.html.review}
+            </p>
+            <Button type="primary" onClick={this.showModal}>
+              Edit Review
+            </Button>
+          </div>
+        )}
+
+        <CollectionCreateForm
+          wrappedComponentRef={this.saveFormRef}
+          visible={this.state.visible}
+          onCancel={this.handleCancel}
+          onCreate={this.handleCreate}
+        />
       </div>
     );
   }
@@ -126,31 +160,11 @@ class UserProgress extends Component {
     };
   }
   RenderTaskOneProgress = props => {
-    console.log(props.name, 'FROM RENDER PROGRESS');
+    console.log(this.props.fetchUsers, 'FROM RENDER PROGRESS');
     if (props.task.html) {
-      const html = props.task.html;
       return (
         <div>
-          <p>
-            {props.name} submitted his{' '}
-            <a target="_blank" href={html.taskUrl}>
-              assignment
-            </a>{' '}
-            at {new Date(html.submitTime).toLocaleString()}
-          </p>
-          {html.score && html.review ? (
-            <div>
-              <p>You have rated this assignment {html.score}/10</p>
-              <p>
-                Review:
-                {html.review}
-              </p>
-            </div>
-          ) : (
-            <div>
-              <RenderModal user={props} />
-            </div>
-          )}
+          <ReviewPage user={props} fetchUsers={this.props.fetchUsers} />
         </div>
       );
     }
@@ -202,9 +216,11 @@ class UserProgress extends Component {
           style={{ width: 1150, height: '75vh', borderRadius: '5px' }}
         >
           <div>
-            {this.props.user.task && this.props.user.task.html.taskUrl &&
+            {this.props.user.task &&
+              this.props.user.task.html.taskUrl &&
               this.RenderTaskOneProgress(this.props.user)}
-            {this.props.user.task && this.props.user.task.codewars &&
+            {this.props.user.task &&
+              this.props.user.task.codewars &&
               this.RenderTaskTwoProgress(this.props.user)}
             {/* {this.RenderTaskThreeProgress(this.state.user.task)}
         {this.RenderTaskFourProgress(this.state.user.task)} */}

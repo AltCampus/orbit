@@ -28,6 +28,21 @@ class UserProfileWrapper extends Component {
       isFetching: false
     };
   }
+
+  fetchUsers = async () => {
+    this.setState({ isFetching: true });
+    const response = await axios.get(
+      `http://localhost:3000/api/v1/users/${this.props.match.params.id}`,
+      {
+        headers: {
+          authorization: JSON.parse(localStorage.authToken)
+        }
+      }
+    );
+    console.log('CDM', response.data.user);
+    this.setState({ user: response.data.user, isFetching: false });
+  };
+
   render() {
     console.log(this.state);
     return (
@@ -42,7 +57,7 @@ class UserProfileWrapper extends Component {
           ) : (
             <div className="user-container">
               <UserInfo user={this.state.user} />
-              <UserProgress user={this.state.user} />
+              <UserProgress user={this.state.user} fetchUsers={this.fetchUsers} />
             </div>
           )}
         </AdminWrapper>
@@ -50,17 +65,7 @@ class UserProfileWrapper extends Component {
     );
   }
   async componentDidMount() {
-    this.setState({ isFetching: true });
-    const response = await axios.get(
-      `http://localhost:3000/api/v1/users/${this.props.match.params.id}`,
-      {
-        headers: {
-          authorization: JSON.parse(localStorage.authToken)
-        }
-      }
-    );
-    console.log('CDM', response.data.user);
-    this.setState({ user: response.data.user, isFetching: false });
+    this.fetchUsers()
   }
 }
 
