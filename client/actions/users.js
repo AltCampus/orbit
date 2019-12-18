@@ -6,6 +6,7 @@ import {
   LOG_OUT,
   GET_USER_PENDING,
   GET_USER_SUCCESS,
+  USER_STAGE_UPGRADE,
   SET_ERROR
 } from "./types";
 import { message } from "antd";
@@ -64,6 +65,13 @@ export const userLogin = data => {
     }
   };
 };
+
+export const userStageUpgrade = () => {
+  return {
+    type: USER_STAGE_UPGRADE
+  };
+};
+
 
 export const userLogOut = callback => {
   // Clear the localStorage

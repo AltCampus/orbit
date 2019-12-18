@@ -2,8 +2,49 @@ import React, { Component } from "react";
 import axios from "axios";
 import { PageHeader, Statistic, Descriptions, Button } from "antd";
 
+const extraContent = (
+  <div
+    style={{
+      display: "flex",
+      width: "max-content",
+      justifyContent: "flex-end"
+    }}
+  >
+    <Statistic
+      title="Stage"
+      value="0"
+      style={{
+        marginRight: 32
+      }}
+    />
+    <Statistic
+      title="Score"
+      value={10}
+      style={{
+        marginRight: 32
+      }}
+    />
+    <div
+      style={{
+        marginRight: 32
+      }}
+    >
+      <Button type="primary">Accept</Button>
+      <Button type="danger">Reject</Button>
+    </div>
+  </div>
+);
 
-export class UserProfile extends Component {
+const Content = ({ children, extra }) => {
+  return (
+    <div className="content">
+      <div className="main">{children}</div>
+      <div className="extra">{extra}</div>
+    </div>
+  );
+};
+
+class UserProfile extends Component {
   constructor(props) {
     super(props);
 
@@ -11,48 +52,6 @@ export class UserProfile extends Component {
       user: null
     };
   }
-  const extraContent = (
-    <div
-      style={{
-        display: "flex",
-        width: "max-content",
-        justifyContent: "flex-end"
-      }}
-    >
-      <Statistic
-        title="Stage"
-        value="0"
-        style={{
-          marginRight: 32
-        }}
-      />
-      <Statistic
-        title="Score"
-        value={10}
-        style={{
-          marginRight: 32
-        }}
-      />
-      <div
-        style={{
-          marginRight: 32
-        }}
-      >
-        <Button type="primary">Accept</Button>
-        <Button type="danger">Reject</Button>
-      </div>
-    </div>
-  );
-  
-  const Content = ({ children, extra }) => {
-    return (
-      <div className="content">
-        <div className="main">{children}</div>
-        <div className="extra">{extra}</div>
-      </div>
-    );
-  };
-  
 
   handleUserAccept = async id => {
     try {

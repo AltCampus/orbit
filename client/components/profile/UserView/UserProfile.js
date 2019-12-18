@@ -1,26 +1,8 @@
-import React, { Component } from 'react';
-import { PageHeader, Statistic, Descriptions } from 'antd';
+import React, { Component } from "react";
+import { PageHeader, Statistic, Descriptions } from "antd";
+import { connect } from "react-redux";
 
-export class UserProfile extends Component {
-  extraContent = (
-    <div
-      style={{
-        display: 'flex',
-        width: 'max-content',
-        justifyContent: 'flex-end',
-      }}
-    >
-      <Statistic
-        title="Stage"
-        value="0"
-        style={{
-          marginRight: 32,
-        }}
-      />
-      <Statistic title="Score" value={10} />
-    </div>
-  );
-
+class UserProfile extends Component {
   Content = ({ children, extra }) => {
     return (
       <div className="content">
@@ -35,34 +17,46 @@ export class UserProfile extends Component {
         <section>
           <PageHeader
             style={{
-              border: '1px solid rgb(235, 237, 240)',
+              border: "1px solid rgb(235, 237, 240)"
             }}
             onBack={() => window.history.back()}
             avatar={{
-              src: 'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4',
+              src: "https://avatars1.githubusercontent.com/u/8186664?s=460&v=4"
             }}
-            title="Title"
+            title="Profile"
           >
-            <this.Content extra={this.extraContent}>
-              <Descriptions size="small" column={2}>
-                <Descriptions.Item label="Name">Lili Qu</Descriptions.Item>
-                <Descriptions.Item label="Social Profile">
-                  <a>421421</a>
-                </Descriptions.Item>
-                <Descriptions.Item label="Phone number">
-                  852741963
-                </Descriptions.Item>
-                <Descriptions.Item label="Stage">0</Descriptions.Item>
-                <Descriptions.Item label="Motivation">
-                  Gonghu Road, Xihu District, Hangzhou, Zhejiang, China
-                </Descriptions.Item>
-              </Descriptions>
-            </this.Content>
+            <div className="content">
+              <div className="main">
+                <Descriptions size="small" column={2}>
+                  <Descriptions.Item label="Name">
+                    {this.props.user.name}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Social Profile">
+                    <a href={this.props.user.socialProfile} target="_blank">
+                      Link
+                    </a>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Phone number">
+                    {this.props.user.phoneNo}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Stage">
+                    {this.props.user.stage}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Motivation">
+                    {this.props.user.motivation}
+                  </Descriptions.Item>
+                </Descriptions>
+              </div>
+            </div>
           </PageHeader>
         </section>
       </>
     );
   }
 }
+const mapStateToProps = state => {
+  const { user } = state.currentUser;
+  return { user };
+};
 
-export default UserProfile;
+export default connect(mapStateToProps)(UserProfile);

@@ -1,12 +1,22 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Divider, Button, Icon, Pagination, Radio, Modal, message } from "antd";
+import {
+  Divider,
+  Button,
+  Icon,
+  Pagination,
+  Radio,
+  Modal,
+  message,
+  Typography,
+  Spin
+} from "antd";
 import "./quiz.scss";
 import QuizTimer from "./QuizTimer";
 import TextArea from "antd/lib/input/TextArea";
 import TaskCompleted from "../taskCompleted/TaskCompleted";
 import QuizPagination from "./QuizPagination";
-
+const { Text, Title } = Typography;
 class Quiz extends Component {
   constructor(props) {
     super();
@@ -116,7 +126,7 @@ class Quiz extends Component {
       (acc, question) => (question.answer ? acc + 1 : acc),
       0
     );
-    const msg = `You have solved ${questionSolved} out of ${total_questions}`;  
+    const msg = `You have solved ${questionSolved} out of ${total_questions}`;
     return msg;
   };
 
@@ -198,7 +208,7 @@ class Quiz extends Component {
       lineHeight: "30px"
     };
     return this.state.loading ? (
-      "Loading....."
+      <Spin size="large" />
     ) : this.state.questions ? (
       <>
         <section style={{ textAlign: "center" }}>
@@ -295,9 +305,19 @@ class Quiz extends Component {
         </div>
       </>
     ) : this.state.canTakeQuiz ? (
-      <Button onClick={() => this.startQuiz()}>Start Quiz</Button>
+      <div class="quiz-info">
+        <Title>Round 3: Quiz</Title>
+        <Text strong>Time Limit: 30 min</Text>
+        <Text type="danger">*All questions are compulsory to answer.</Text>
+        <Button onClick={() => this.startQuiz()}>Start Quiz</Button>
+      </div>
     ) : this.state.onGoing ? (
-      <Button onClick={() => this.resumeQuiz()}>Resume Quiz</Button>
+      <div class="quiz-info">
+        <Title>Round 3: Quiz</Title>
+        <Text strong>You still have time to resume quiz.</Text>
+        <Text type="danger">Timer is running.</Text>
+        <Button onClick={() => this.resumeQuiz()}>Resume Quiz</Button>
+      </div>
     ) : this.state.submitted ? (
       <TaskCompleted />
     ) : (

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Button,
   Avatar,
@@ -7,8 +7,8 @@ import {
   Progress,
   Descriptions,
   Modal,
-  Input,
-} from 'antd';
+  Input
+} from "antd";
 
 const { Meta } = Card;
 
@@ -16,36 +16,10 @@ const { TextArea } = Input;
 
 export class UserProgress extends Component {
   state = {
-    loading: false,
-    visible: false,
-  };
-
-  showScoreModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-
-  showReviewModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-
-  handleOk = () => {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false, visible: false });
-    }, 3000);
-  };
-
-  handleCancel = () => {
-    this.setState({ visible: false });
+    loading: false
   };
 
   render() {
-    const { visible, loading } = this.state;
-
     return (
       <>
         <div className="progress-container">
@@ -58,9 +32,9 @@ export class UserProgress extends Component {
               />
             }
           >
-            <div style={{ marginBottom: '20px' }}>
+            <div style={{ marginBottom: "20px" }}>
               <Meta title="Progress" />
-              <Progress percent={100} size="small" />
+              <Progress percent={0} size="small" />
             </div>
             <Descriptions>
               <Descriptions.Item label="Score">10</Descriptions.Item>
@@ -80,7 +54,7 @@ export class UserProgress extends Component {
               />
             }
           >
-            <div style={{ marginBottom: '20px' }}>
+            <div style={{ marginBottom: "20px" }}>
               <Meta title="Progress" />
               <Progress percent={100} size="small" />
             </div>
@@ -103,7 +77,7 @@ export class UserProgress extends Component {
               />
             }
           >
-            <div style={{ marginBottom: '20px' }}>
+            <div style={{ marginBottom: "20px" }}>
               <Meta title="Progress" />
               <Progress percent={100} size="small" />
             </div>
@@ -125,7 +99,7 @@ export class UserProgress extends Component {
               />
             }
           >
-            <div style={{ marginBottom: '20px' }}>
+            <div style={{ marginBottom: "20px" }}>
               <Meta title="Progress" />
               <Progress percent={100} size="small" />
             </div>

@@ -4,7 +4,8 @@ import {
   GET_USER_PENDING,
   LOG_OUT,
   NO_TOKEN,
-  SET_ERROR
+  SET_ERROR,
+  USER_STAGE_UPGRADE
 } from "./../actions/types";
 
 const initialState = {
@@ -43,6 +44,15 @@ const currentUser = (state = initialState, action) => {
         user: action.data,
         isAuthenticated: true,
         isAuthInProgress: false
+      };
+    }
+    case USER_STAGE_UPGRADE: {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          stage: state.user.stage + 1
+        }
       };
     }
     case LOG_OUT:

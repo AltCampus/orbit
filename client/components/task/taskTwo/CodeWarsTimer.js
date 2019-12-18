@@ -2,7 +2,6 @@ import React from "react";
 import {Icon, Row, Col, Statistic} from "antd";
 
 const CodeWarsTimer = ({ timeLeft }) => {
-  console.log(timeLeft)
   return (
     <div>
         <Icon type="clock-circle" />
