@@ -113,7 +113,7 @@ export class UserProgress extends Component {
             <Checkbox onChange={this.onChange}>Evaluated</Checkbox>
           </Card>
           <Card
-            style={{ width: 350 }}
+            style={{ width: 300 }}
             cover={
               <img
                 alt="example"
@@ -172,7 +172,7 @@ export class UserProgress extends Component {
           </Card>
 
           <Card
-            style={{ width: 350 }}
+            style={{ width: 300 }}
             cover={
               <img
                 alt="example"
@@ -230,7 +230,7 @@ export class UserProgress extends Component {
             <Checkbox onChange={this.onChange}>Evaluated</Checkbox>
           </Card>
           <Card
-            style={{ width: 350 }}
+            style={{ width: 300 }}
             cover={
               <img
                 alt="example"
