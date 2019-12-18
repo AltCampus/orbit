@@ -8,11 +8,6 @@ export class UserView extends Component {
   render() {
     return (
       <>
-        <div className="btn-back">
-          <Button shape="circle">
-            <Icon type="left" />
-          </Button>
-        </div>
         <section>
           <div className="userprofile-container">
             <UserProfile />
