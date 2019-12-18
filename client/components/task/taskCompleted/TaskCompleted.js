@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Result, Button } from "antd";
+import { connect } from "react-redux";
 
-function TaskCompleted({ title, next }) {
+function TaskCompleted({ title, stage }) {
   return (
     <Result
       status="success"
@@ -10,15 +11,18 @@ function TaskCompleted({ title, next }) {
       key={next}
       subTitle="You've already submitted this task"
       extra={[
-        <Link key={next} to={`/task/${next}`}>
-          <Button type="primary" key="console">
-            Go to next task
-          </Button>
+        <Link to={`/task/${stage}`}>
+          <Button type="primary">Go to next task</Button>
+        </Link>,
+        <Link to={`/profile`}>
+          <Button key="profile">My Profile</Button>
         </Link>
-        // <Button key="buy">Buy Again</Button>
       ]}
     />
   );
 }
 
-export default TaskCompleted;
+const mapStateToProps = state => {
+  return { stage: state.currentUser.user.stage };
+};
+export default connect(mapStateToProps)(TaskCompleted);
