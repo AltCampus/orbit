@@ -17,7 +17,7 @@ import TaskTwo from "./components/task/taskTwo/TaskTwo";
 import TaskThree from "./components/task/taskThree/TaskThree";
 import UserProgress from "./components/dashboard/user/UserProgress";
 import Question from "./components/questionnaire/Question";
-import Interview from "./components/interview/Interview";
+import Interview from "./components/task/interview/Interview";
 import QuestionList from "./components/questionnaire/QuestionList";
 import Dashboard from "./components/dashboard/user/Dashboard";
 import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";

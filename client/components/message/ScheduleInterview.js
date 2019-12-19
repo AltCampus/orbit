@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Result, Button } from "antd";
+import { Result, Button, Icon } from "antd";
 
 export class ScheduleInterview extends Component {
   render() {
