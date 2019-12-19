@@ -7,10 +7,10 @@ const User = require("../models/User");
 const Quiz = require("../models/Quiz");
 const auth = require("../utils/auth");
 
-// Save Task One URL
-router.post("/all/status", auth.verifyToken, async (req, res) => {
+router.get("/all/status", auth.verifyToken, async (req, res) => {
   try {
     const task = await Task.findById(req.user.task);
+    const stageUpdated = false;
     if (req.user.stage === 1) {
       // user has not submitted any task yet
       return res.status(200).json({
@@ -46,6 +46,7 @@ router.post("/all/status", auth.verifyToken, async (req, res) => {
           // Timer is complete. User is now on stage 3
           await User.findByIdAndUpdate(req.user.id, { stage: 3 });
           req.user.stage = 3;
+          stageUpdated = true;
         } else {
           // Timer is currently running
           return res.status(200).json({
@@ -103,7 +104,7 @@ router.post("/all/status", auth.verifyToken, async (req, res) => {
       endTime: task.codewars.endTime
     };
     if (req.user.stage === 3) {
-      if (!user.quiz && user.canTakeQuiz) {
+      if (!req.user.quiz && req.user.canTakeQuiz) {
         // if user can take the quiz but has not taken yet
         return res.status(200).send({
           html: htmlTaskStatus,
@@ -116,15 +117,17 @@ router.post("/all/status", auth.verifyToken, async (req, res) => {
             message: "You've not taken the quiz yet."
           },
           interview: {
-            reachedStage: true,
+            reachedStage: false,
             approvedForInterview: false,
             onGoing: false
-          }
+          },
+          stageUpdated
         });
       } else {
         // If user has started the quiz
-        const quiz = await Quiz.findById(user.quiz);
-        if (!user.canTakeQuiz && quiz.submittedTime) {
+        const quiz = await Quiz.findById(req.user.quiz);
+        if (!req.user.canTakeQuiz && quiz.submittedTime) {
+          // User has submitted the quiz
           return res.status(200).json({
             html: htmlTaskStatus,
             codewars: codewarsTaskStatus,
@@ -132,7 +135,62 @@ router.post("/all/status", auth.verifyToken, async (req, res) => {
               reachedStage: true,
               canTakeQuiz: false,
               onGoing: false,
-              submitted: true            }
+              submitted: true,
+              startTime: quiz.startTime,
+              submittedTime: quiz.submittedTime
+            },
+            interview: {
+              reachedStage: false,
+              approvedForInterview: false,
+              onGoing: false
+            },
+            stageUpdated
+          });
+        }
+        if (quiz.endTime.valueOf() < Date.now()) {
+          // User has not submitted the quiz on time
+          return res.status(200).json({
+            html: htmlTaskStatus,
+            codewars: codewarsTaskStatus,
+            quiz: {
+              reachedStage: true,
+              canTakeQuiz: false,
+              onGoing: false,
+              submitted: false,
+              failedToSubmit: true,
+              startTime: quiz.startTime
+            },
+            interview: {
+              reachedStage: false,
+              approvedForInterview: false,
+              onGoing: false
+            },
+            stageUpdated
+          });
+        }
+        if (
+          !req.user.canTakeQuiz &&
+          !quiz.submittedTime &&
+          quiz.endTime.valueOf() > Date.now()
+        ) {
+          // User quiz is currently ongoing
+          return res.status(200).json({
+            html: htmlTaskStatus,
+            codewars: codewarsTaskStatus,
+            quiz: {
+              reachedStage: true,
+              canTakeQuiz: false,
+              onGoing: true,
+              submitted: false,
+              startTime: quiz.startTime,
+              timeLeft: quiz.endTime.valueOf() - Date.now()
+            },
+            interview: {
+              reachedStage: false,
+              approvedForInterview: false,
+              onGoing: false
+            },
+            stageUpdated
           });
         }
       }
@@ -238,8 +296,8 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
         console.log(apiResponse.statusCode);
         if (apiResponse.statusCode === 200) {
           // Username is valid
-          const endTime = new Date(Date.now() + 259200 * 1000);
-          // const endTime = new Date(Date.now() + 30000);
+          // const endTime = new Date(Date.now() + 259200 * 1000);
+          const endTime = new Date(Date.now() + 300000);
           console.log(endTime);
           const codewarsTask = {
             codewarsUsername: username,

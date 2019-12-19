@@ -1,8 +1,10 @@
 import React from "react";
-import { Card, Progress, Descriptions } from "antd";
+import { Link } from "react-router-dom";
+import { Card, Progress, Descriptions, Icon, Typography, Button } from "antd";
 const { Meta } = Card;
+const { Text } = Typography;
 
-const TaskOneProgress = () => {
+const TaskOneProgress = ({ htmlTask, loading }) => {
   return (
     <Card
       cover={
@@ -11,17 +13,44 @@ const TaskOneProgress = () => {
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ_KK8u4YJawDr4MLwxsrB71MHU7XT3J31mJWU_CxuSYBS4tt_K"
         />
       }
+      actions={
+        htmlTask.completed
+          ? undefined
+          : [
+              <Link to={`/task/1`}>
+                <Button type="primary">Click here to submit link</Button>
+              </Link>
+            ]
+      }
     >
-      <div style={{ marginBottom: "20px" }}>
-        <Meta title="Progress" />
-        <Progress percent={0} size="small" />
-      </div>
-      <Descriptions>
-        <Descriptions.Item label="Score">10</Descriptions.Item>
-      </Descriptions>
-      <Descriptions>
-        <Descriptions.Item label="Remark">abcdefghijklmnop</Descriptions.Item>
-      </Descriptions>
+      {loading ? (
+        <Icon type="loading" spin />
+      ) : (
+        <>
+          <div style={{ marginBottom: "20px" }}>
+            <Meta title="Progress" />
+            <Progress percent={htmlTask.completed ? 100 : 0} size="small" />
+          </div>
+          {htmlTask.completed ? (
+            <>
+              <Descriptions>
+                <Descriptions.Item label="Submision Link">
+                  <a href={htmlTask.submissionLink} target="_blank">
+                    CodeSandbox Link
+                  </a>
+                </Descriptions.Item>
+              </Descriptions>
+              <Descriptions>
+                <Descriptions.Item label="Submission Time">
+                  {new Date(htmlTask.submissionTime).toLocaleString()}
+                </Descriptions.Item>
+              </Descriptions>
+            </>
+          ) : (
+            <Text>You've not submitted the CodeSandbox Link.</Text>
+          )}
+        </>
+      )}
     </Card>
   );
 };
