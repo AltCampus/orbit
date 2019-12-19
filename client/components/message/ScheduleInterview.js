@@ -10,7 +10,9 @@ export class ScheduleInterview extends Component {
           title="Great, you have been doing well !"
           extra={
             <Button type="primary" key="schedule">
-              Schedule Interview
+              <a href="https://calendly.com/" target="_blank">
+                Schedule Interview
+              </a>
             </Button>
           }
         />
