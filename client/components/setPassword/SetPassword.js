@@ -32,15 +32,13 @@ class SetPassword extends React.Component {
 
       let password = { password: this.state.password };
       // Post the user password
-      const res = await axios.post(
+      await axios.post(
         `http://localhost:3000/api/v1/users/${hashmail}`,
         password
       );
       this.setState({isLoading: false});
       message.success("Password Reset Now you Can Login!");
-      setTimeout(() => {
-        this.props.history.push("/login");
-      }, 3000);
+      this.props.history.push("/login");
     } catch (error) {
       this.setState({isLoading: false});
       error.response.data.message
