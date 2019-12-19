@@ -5,7 +5,8 @@ import {
   LOG_OUT,
   NO_TOKEN,
   SET_ERROR,
-  USER_STAGE_UPGRADE
+  USER_STAGE_UPGRADE,
+  USER_LOGIN_PENDING
 } from "./../actions/types";
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
   token: null,
   isAuthenticated: false,
   isAuthInProgress: false,
+  isLoginInProgress: false,
   isError: false
 };
 
@@ -24,12 +26,19 @@ const currentUser = (state = initialState, action) => {
         isError: true
       };
     }
+    case USER_LOGIN_PENDING: {
+      return {
+        ...state,
+        isLoginInProgress: true
+      };
+    }
     case USER_LOGIN_SUCCESS: {
       return {
         ...state,
         token: action.data,
         isAuthenticated: true,
-        isAuthInProgress: false
+        isAuthInProgress: false,
+        isLoginInProgress: false
       };
     }
     case GET_USER_PENDING: {
