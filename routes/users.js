@@ -132,8 +132,8 @@ router.post("/:hashMail", async (req, res) => {
 router.get("/get", async (req, res) => {
   try {
     const users = await User.find({ isAdmin: false })
-    .sort({ createdAt: -1 })
-    .select("-password");
+      .sort({ createdAt: -1 })
+      .select("-password");
     if (!users) res.status(200).json({ message: "No users yet", status: true });
     res.status(200).json({ users, status: true });
   } catch (error) {
@@ -157,6 +157,41 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
   }
 });
 
+/* GET User Progress */
+router.get("/:id", auth.verifyAdminToken, async (req, res) => {
+  const userId = req.params.id;
+  console.log(userId);
+  try {
+    const user = await User.findById(userId)
+      .populate("task")
+      .select("-password, -hashMail");
+    console.log(user);
+    // const task = await Task.findById(user.task)
+    res.status(200).json({ user, status: true });
+  } catch (error) {
+    res.status(400).json({ message: "Something went wrong", status: false });
+  }
+});
+
+// Admin can accept for interview user route
+router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findOne({ _id: id });
+    user.canScheduleInterview = true;
+    await user.save();
+    res.status(200).json({
+      status: true,
+      message: `${user.name}, can schedule interview!`
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .json({ status: false, message: "some error occurs from Server" });
+  }
+});
+
 // Admin can accept user route
 router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
   try {
@@ -175,22 +210,6 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
     res
       .status(400)
       .json({ status: false, message: "some error occurs from Server" });
-  }
-});
-
-/* GET User Progress */
-router.get("/:id", auth.verifyAdminToken, async (req, res) => {
-  const userId = req.params.id;
-  console.log(userId);
-  try {
-    const user = await User.findById(userId)
-      .populate("task")
-      .select("-password, -hashMail");
-    console.log(user);
-    // const task = await Task.findById(user.task)
-    res.status(200).json({ user, status: true });
-  } catch (error) {
-    res.status(400).json({ message: "Something went wrong", status: false });
   }
 });
 
