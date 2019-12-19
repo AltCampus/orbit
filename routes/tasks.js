@@ -238,8 +238,8 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
         console.log(apiResponse.statusCode);
         if (apiResponse.statusCode === 200) {
           // Username is valid
-          const endTime = new Date(Date.now() + 259200 * 1000);
-          // const endTime = new Date(Date.now() + 30000);
+          // const endTime = new Date(Date.now() + 259200 * 1000);
+          const endTime = new Date(Date.now() + 30000);
           console.log(endTime);
           const codewarsTask = {
             codewarsUsername: username,
