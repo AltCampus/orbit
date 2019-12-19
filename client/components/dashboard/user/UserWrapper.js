@@ -23,7 +23,7 @@ function UserWrapper(props) {
       <Sider
         style={{
           overflow: "auto",
-          height: "100vh",
+          height: "100vh"
         }}
         breakpoint="sm"
         onBreakpoint={broken => {
@@ -143,4 +143,13 @@ function UserWrapper(props) {
   );
 }
 
-export default withRouter(connect(null, { userLogOut })(UserWrapper));
+const mapStateToProps = state => {
+  const { user } = state.currentUser;
+  return {
+    user
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, { userLogOut })(UserWrapper)
+);
