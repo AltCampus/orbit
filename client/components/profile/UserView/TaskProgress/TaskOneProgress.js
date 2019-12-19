@@ -1,5 +1,6 @@
 import React from "react";
-import { Card, Meta, Progress, Descriptions } from "antd";
+import { Card, Progress, Descriptions } from "antd";
+const { Meta } = Card;
 
 const TaskOneProgress = () => {
   return (
