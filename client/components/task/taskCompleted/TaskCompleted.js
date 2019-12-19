@@ -8,7 +8,6 @@ function TaskCompleted({ title, stage }) {
     <Result
       status="success"
       title={title}
-      key={next}
       subTitle="You've already submitted this task"
       extra={[
         <Link to={`/task/${stage}`}>

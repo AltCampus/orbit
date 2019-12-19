@@ -33,3 +33,12 @@ button + button {
 .question-answered {
   background: rgb(94, 255, 94);
 }
+.quiz-info {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  button {
+    margin: 1rem 0;
+  }
+}

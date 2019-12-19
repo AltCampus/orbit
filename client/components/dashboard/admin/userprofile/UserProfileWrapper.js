@@ -11,13 +11,14 @@ import {
   Form,
   Input,
   Modal,
-  InputNumber
+  InputNumber,
 } from 'antd';
 
 import AdminWrapper from '../AdminWrapper';
-import UserInfo from './UserInfo';
-import UserProgress from './UserProgress';
-import '../index.css';
+import AdminView from '../../../profile/AdminView/AdminView';
+// import UserInfo from './UserInfo';
+// import UserProgress from './UserProgress';
+// import '../index.css';
 
 class UserProfileWrapper extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class UserProfileWrapper extends Component {
 
     this.state = {
       user: null,
-      isFetching: false
+      isFetching: false,
     };
   }
   render() {
@@ -41,8 +42,9 @@ class UserProfileWrapper extends Component {
             />
           ) : (
             <div className="user-container">
-              <UserInfo user={this.state.user} />
-              <UserProgress user={this.state.user} />
+              {/* <UserInfo user={this.state.user} />
+              <UserProgress user={this.state.user} /> */}
+              <AdminView user={this.state.user} />
             </div>
           )}
         </AdminWrapper>
@@ -55,8 +57,8 @@ class UserProfileWrapper extends Component {
       `http://localhost:3000/api/v1/users/${this.props.match.params.id}`,
       {
         headers: {
-          authorization: JSON.parse(localStorage.authToken)
-        }
+          authorization: JSON.parse(localStorage.authToken),
+        },
       }
     );
     console.log('CDM', response.data.user);

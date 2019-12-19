@@ -1,26 +1,28 @@
 import React, { Component } from "react";
 import { Route, Switch, withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+
+import "./css-reset.scss";
+import "./App.scss";
+
 import { getCurrentUser } from "./actions/users";
+
 import Login from "./components/login/Login";
 import SetPassword from "./components/setPassword/SetPassword";
 import LandingPage from "./components/static/LandingPage";
 import UserDashboard from "./components/dashboard/user/Dashboard";
-// import AdminDashboard from "./components/dashboard/admin/Dashboard";
 import UserProfile from "./components/dashboard/admin/userprofile/UserProfileWrapper";
-
-import "./css-reset.scss";
-import "./App.scss";
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
+import TaskThree from "./components/task/taskThree/TaskThree";
 import UserProgress from "./components/dashboard/user/UserProgress";
 import Question from "./components/questionnaire/Question";
-import Interview from "./components/task/interview/Interview";
+import Interview from "./components/interview/Interview";
 import QuestionList from "./components/questionnaire/QuestionList";
 import Dashboard from "./components/dashboard/user/Dashboard";
 import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
-import TaskThree from "./components/task/taskThree/TaskThree";
 import Instructions from "./components/instructions/Instructions";
+import UserView from "./components/profile/UserView/UserView";
 import { message } from "antd";
 
 class App extends Component {
@@ -46,7 +48,7 @@ class App extends Component {
           <Route exact path="/task/3" component={TaskThree} />
           <Route exact path="/task/4" component={Interview} />
           <Route path="/task/:taskId" component={UserDashboard} />
-          <Route exact path="/profile" component={UserProgress} />
+          <Route exact path="/profile" component={UserView} />
           {/* Redirects the user to login if user attempts to login */}
           <Route path="/login">
             <Redirect to="/" />

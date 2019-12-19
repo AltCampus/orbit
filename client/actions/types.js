@@ -4,3 +4,4 @@ export const GET_USER_PENDING = "GET_USER_PENDING";
 export const GET_USER_SUCCESS = "GET_USER_SUCCESS";
 export const NO_TOKEN = "NO_TOKEN";
 export const LOG_OUT = "LOG_OUT";
+export const USER_STAGE_UPGRADE = "USER_STAGE_UPGRADE";

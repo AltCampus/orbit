@@ -4,10 +4,150 @@ const router = express.Router();
 
 const Task = require("../models/Task");
 const User = require("../models/User");
+const Quiz = require("../models/Quiz");
 const auth = require("../utils/auth");
 
 // Save Task One URL
+router.post("/all/status", auth.verifyToken, async (req, res) => {
+  try {
+    const task = await Task.findById(req.user.task);
+    if (req.user.stage === 1) {
+      // user has not submitted any task yet
+      return res.status(200).json({
+        html: {
+          onGoing: true,
+          completed: false
+        },
+        codewars: {
+          reachedStage: false,
+          onGoing: false
+        },
+        quiz: {
+          reachedStage: false,
+          onGoing: false
+        },
+        interview: {
+          reachedStage: false,
+          approvedForInterview: false,
+          onGoing: false
+        }
+      });
+    }
+    const htmlTaskStatus = {
+      onGoing: false,
+      completed: true,
+      submissionLink: task.html.taskUrl,
+      submissionTime: task.html.submitTime
+    };
+    if (req.user.stage === 2) {
+      if (task.codewars.endTime && task.codewars.startTime) {
+        // User has submitted his username
+        if (task.codewars.endTime < Date.now()) {
+          // Timer is complete. User is now on stage 3
+          await User.findByIdAndUpdate(req.user.id, { stage: 3 });
+          req.user.stage = 3;
+        } else {
+          // Timer is currently running
+          return res.status(200).json({
+            html: htmlTaskStatus,
+            codewars: {
+              reachedStage: true,
+              onGoing: true,
+              usernameSubmitted: true,
+              completed: false,
+              username: task.codewars.codewarsUsername,
+              timeLeft: task.codewars.endTime - Date.now(),
+              startTime: task.codewars.startTime,
+              endTime: task.codewars.endTime
+            },
+            quiz: {
+              reachedStage: false,
+              onGoing: false
+            },
+            interview: {
+              reachedStage: false,
+              approvedForInterview: false,
+              onGoing: false
+            }
+          });
+        }
+      } else {
+        // User has not submitted his username
+        return res.status(200).json({
+          html: htmlTaskStatus,
+          codewars: {
+            reachedStage: true,
+            onGoing: false,
+            usernameSubmitted: false,
+            completed: false
+          },
+          quiz: {
+            reachedStage: false,
+            onGoing: false
+          },
+          interview: {
+            reachedStage: false,
+            approvedForInterview: false,
+            onGoing: false
+          }
+        });
+      }
+    }
+    const codewarsTaskStatus = {
+      reachedStage: true,
+      onGoing: false,
+      usernameSubmitted: true,
+      completed: true,
+      username: task.codewars.codewarsUsername,
+      startTime: task.codewars.startTime,
+      endTime: task.codewars.endTime
+    };
+    if (req.user.stage === 3) {
+      if (!user.quiz && user.canTakeQuiz) {
+        // if user can take the quiz but has not taken yet
+        return res.status(200).send({
+          html: htmlTaskStatus,
+          codewars: codewarsTaskStatus,
+          quiz: {
+            reachedStage: true,
+            canTakeQuiz: true,
+            onGoing: false,
+            submitted: false,
+            message: "You've not taken the quiz yet."
+          },
+          interview: {
+            reachedStage: true,
+            approvedForInterview: false,
+            onGoing: false
+          }
+        });
+      } else {
+        // If user has started the quiz
+        const quiz = await Quiz.findById(user.quiz);
+        if (!user.canTakeQuiz && quiz.submittedTime) {
+          return res.status(200).json({
+            html: htmlTaskStatus,
+            codewars: codewarsTaskStatus,
+            quiz: {
+              reachedStage: true,
+              canTakeQuiz: false,
+              onGoing: false,
+              submitted: true            }
+          });
+        }
+      }
+    }
 
+    // Response was not send
+    return res
+      .status(403)
+      .json({ error: "Some Error occured. Please try again." });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ status: false, error: "Some Error Occurred" });
+  }
+});
 router.post("/one/save", auth.verifyToken, async (req, res) => {
   let { url = "" } = req.body;
   let { id } = req.user;
@@ -57,7 +197,6 @@ router.get("/two/status", auth.verifyToken, async (req, res) => {
   }
   const task = await Task.findById(req.user.task);
 
-  console.log(req.user, task);
   if (req.user.stage === 2 && task.codewars.endTime > Date.now()) {
     return res.status(200).json({
       onGoing: true,
@@ -69,16 +208,14 @@ router.get("/two/status", auth.verifyToken, async (req, res) => {
   if (req.user.stage === 2 && task.codewars.endTime < Date.now()) {
     // Update user stage to 3
     await User.findByIdAndUpdate(req.user.id, { stage: 3 });
-    return res
-      .status(200)
-      .json({
-        stageUpdated: true,
-        onGoing: false,
-        timeLeft: null,
-        completed: true
-      });
+    return res.status(200).json({
+      stageUpdated: true,
+      onGoing: false,
+      timeLeft: null,
+      completed: true
+    });
   }
-  res.json({error: "Some error occured."})
+  res.json({ error: "Some error occured." });
 });
 
 // Save CodeWars username
@@ -101,9 +238,9 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
         console.log(apiResponse.statusCode);
         if (apiResponse.statusCode === 200) {
           // Username is valid
-          // const endTime = new Date(Date.now() + 259200 * 1000)
-          const endTime = new Date(Date.now() + 30000)
-          console.log(endTime)
+          const endTime = new Date(Date.now() + 259200 * 1000);
+          // const endTime = new Date(Date.now() + 30000);
+          console.log(endTime);
           const codewarsTask = {
             codewarsUsername: username,
             startTime: Date.now(),
@@ -119,7 +256,13 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
             };
             await newTask.save();
 
-            return res.status(201).json({ status: true, success: true });
+            return res.status(201).json({
+              status: true,
+              success: true,
+              onGoing: true,
+              completed: false,
+              timeLeft: endTime - Date.now()
+            });
           } catch (error) {
             console.log(error);
             return res
@@ -139,7 +282,7 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
       console.error(e);
       return res
         .status(400)
-        .json({ status: false, error: "Some Error Occured" });
+        .json({ status: false, error: "Some Error Occurred" });
     });
 });
 
