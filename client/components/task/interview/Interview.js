@@ -6,16 +6,20 @@ import { Icon, Menu, Dropdown, message, Button } from "antd";
 import UserWrapper from "../../dashboard/user/UserWrapper";
 import ScheduleInterview from "./../../message/ScheduleInterview";
 import ScheduleSuccess from "./../../message/ScheduleSuccess";
+import UnderReview from "./../../message/UnderReview";
 import { getCurrentUser } from "../../../actions/users";
 
 class Interview extends React.Component {
   render() {
+    const { user } = this.props;
     return (
       <UserWrapper activeKey={"4"}>
-        {this.props.user.canScheduleInterview ? (
-          <ScheduleSuccess />
-        ) : (
+        {!user.canScheduleInterview ? (
+          <UnderReview />
+        ) : !user.interview ? (
           <ScheduleInterview />
+        ) : (
+          <ScheduleSuccess />
         )}
       </UserWrapper>
     );

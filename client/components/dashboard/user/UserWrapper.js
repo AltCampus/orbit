@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { Layout, Menu, Icon, Avatar, Button, Anchor } from "antd";
+import { Layout, Menu, Icon, Avatar, Button } from "antd";
 import { userLogOut } from "../../../actions/users";
 
 const { Header, Sider, Content } = Layout;
@@ -18,12 +18,13 @@ function UserWrapper(props) {
     props.userLogOut(() => props.history.push("/"));
   };
 
+  const { user } = props;
   return (
     <Layout className="wrapper">
       <Sider
         style={{
           overflow: "auto",
-          height: "100vh",
+          height: "100vh"
         }}
         breakpoint="sm"
         onBreakpoint={broken => {
@@ -49,25 +50,63 @@ function UserWrapper(props) {
           <Menu.Item key="1">
             <Link to="/task/1">
               <Icon type="html5" />
-              <span> HTML / CSS </span>
+              <span>
+                <span>HTML / CSS</span>{" "}
+                {user.stage > 1 ? (
+                  <Icon
+                    type="check-circle"
+                    theme="filled"
+                    className="menu-icon"
+                  />
+                ) : (
+                  ""
+                )}
+              </span>
             </Link>
           </Menu.Item>
-          <Menu.Item key="2">
+          <Menu.Item key="2" disabled={user.stage < 2 ? true : false}>
             <Link to="/task/2">
               <Icon type="code" />
               <span> CodeWars </span>
+              {user.stage > 2 ? (
+                <Icon
+                  type="check-circle"
+                  theme="filled"
+                  className="menu-icon"
+                />
+              ) : (
+                ""
+              )}
             </Link>
           </Menu.Item>
-          <Menu.Item key="3">
+          <Menu.Item key="3" disabled={user.stage < 3 ? true : false}>
             <Link to="/task/3">
               <Icon type="question" />
               <span> Q / A </span>
+              {user.stage > 3 ? (
+                <Icon
+                  type="check-circle"
+                  theme="filled"
+                  className="menu-icon"
+                />
+              ) : (
+                ""
+              )}
             </Link>
           </Menu.Item>
-          <Menu.Item key="4">
+          <Menu.Item key="4" disabled={user.stage < 4 ? true : false}>
             <Link to="/task/4">
               <Icon type="video-camera" />
               <span> Interview </span>
+              {user.stage > 4 ? (
+                <Icon
+                  type="check-circle"
+                  theme="filled"
+                  className="menu-icon"
+                />
+              ) : (
+                ""
+              )}
             </Link>
           </Menu.Item>
           <Menu.Item key="5">
@@ -143,4 +182,13 @@ function UserWrapper(props) {
   );
 }
 
-export default withRouter(connect(null, { userLogOut })(UserWrapper));
+const mapStateToProps = state => {
+  const { user } = state.currentUser;
+  return {
+    user
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, { userLogOut })(UserWrapper)
+);
