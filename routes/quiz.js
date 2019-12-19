@@ -161,20 +161,35 @@ router.get("/current", auth.verifyToken, async (req, res, next) => {
     if (quiz.endTime.valueOf() < Date.now()) {
       return res.status(403).json({ error: "You've ran out of time." });
     }
-    res
-      .status(200)
-      .json({ quiz, timeLeft: quiz.endTime.valueOf() - Date.now() });
+    let questionsToSend = quiz.questions;
+    if (quiz.answers && quiz.answers.length > 0) {
+      questionsToSend = quiz.questions.map(question => {
+        const answerLinked = quiz.answers.filter(answer => {
+          return String(answer.question) === String(question._id);
+        })[0];
+        const { _id, questionTitle, type, options } = question;
+        return {
+          _id,
+          questionTitle,
+          type,
+          options,
+          answer: answerLinked && answerLinked.answerSubmitted
+        };
+      });
+    }
+    res.status(200).json({
+      quiz: { questions: questionsToSend },
+      timeLeft: quiz.endTime.valueOf() - Date.now()
+    });
     // console.log(user);
   } catch (error) {
-    return (
-      res -
-      Date.now()
-        .status(403)
-        .json({ error: "Some Error occured. Please try again." })
-    );
+    console.log(error);
+    return res
+      .status(403)
+      .json({ error: "Some Error occured. Please try again." });
   }
 });
-router.post("/current", auth.verifyToken, async (req, res, next) => {
+router.put("/current", auth.verifyToken, async (req, res, next) => {
   // Route for submitting current quiz
   try {
     const user = await User.findById(req.user.id);
@@ -202,7 +217,6 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
     const answers = req.body.answers.map(question => {
       return { question: question.question, answerSubmitted: question.answer };
     });
-    console.log(answers);
     for (let i = 0; i < answers.length; i++) {}
     if (answers.length !== quiz.questions.length) {
       return res
@@ -210,7 +224,6 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
         .json({ error: "Some Error occured. Please try again." });
     }
     await Quiz.findByIdAndUpdate(quiz._id, {
-      submittedTime: Date.now(),
       answers: answers
     });
     res
@@ -223,5 +236,165 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
       .json({ error: "Some Error occured. Please try again." });
   }
 });
+router.post("/current", auth.verifyToken, async (req, res, next) => {
+  // Route for submitting current quiz
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user.quiz) {
+      // User have not taken quiz yet.
+      return res.status(403).send({
+        error: "You've not taken the quiz yet."
+      });
+    }
 
+    const quiz = await Quiz.findById(user.quiz);
+    if (quiz.submittedTime) {
+      // User has already submitted quiz
+      return res
+        .status(403)
+        .json({ error: "You've already submitted the quiz." });
+    }
+    if (quiz.endTime.valueOf() + 60000 < Date.now()) {
+      // User failed to submit quiz on time
+      return res.status(403).json({ error: "You've ran out of time." });
+    }
+    const questionIds = quiz.questions.map(question => String(question));
+    const answers = req.body.answers
+      .map(question => {
+        return {
+          question: question.question,
+          answerSubmitted: question.answer
+        };
+      })
+      .filter(question => question.answerSubmitted);
+    for (let i = 0; i < answers.length; i++) {
+      if (questionIds.indexOf(answers[i].question) === -1) {
+        return res
+          .status(403)
+          .json({ error: "Don't try to manipulate with data" });
+      }
+    }
+    const answerIds = answers.map(question => question.question);
+    for (let i = 0; i < quiz.questions.length; i++) {
+      if (answerIds.indexOf(String(quiz.questions[i])) === -1) {
+        return res
+          .status(403)
+          .json({ error: "Don't try to manipulate with data" });
+      }
+    }
+    if (answers.length !== quiz.questions.length) {
+      return res
+        .status(403)
+        .json({ error: "Please answer all the questions." });
+    }
+    await Quiz.findByIdAndUpdate(quiz._id, {
+      submittedTime: Date.now(),
+      answers: answers
+    });
+    res
+      .status(200)
+      .json({ success: true, message: "Your answers has been submitted" });
+    // console.log(user);
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(403)
+      .json({ error: "Some Error occured. Please try again." });
+  }
+});
+router.get("/all", auth.verifyAdminToken, async (req, res) => {
+  const allQuiz = await Quiz.find({});
+  res.json({ allQuiz });
+});
+
+router.get("/:id", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const quizId = req.params.id;
+    let quiz = await Quiz.findById(quizId);
+    if (quiz.answers) {
+      quiz = await Quiz.findById(quizId).populate("answers.question");
+    } else {
+      return res.status(200).json({
+        status: {
+          onGoing: false,
+          timeOut: false,
+          submitted: false
+        }
+      });
+    }
+    if (!quiz) {
+      return res.status(404).json({ error: "Quiz not found." });
+    }
+    if (quiz.submittedTime) {
+      return res.status(200).json({
+        status: {
+          onGoing: false,
+          timeOut: false,
+          submitted: true
+        },
+        totalScore: quiz.totalScore,
+        maximumScore: quiz.maximumScore,
+        submittedTime: quiz.submittedTime,
+        startTime: quiz.startTime,
+        answers: quiz.answers
+      });
+    } else {
+      if (quiz.endTime < Date.now()) {
+        return res.status(200).json({
+          status: {
+            onGoing: false,
+            timeOut: true,
+            submitted: false
+          },
+          startTime: quiz.startTime,
+          answers: quiz.answers
+        });
+      } else {
+        return res.status(200).json({
+          status: {
+            onGoing: true,
+            timeOut: false,
+            submitted: false
+          }
+        });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(403).json({ error: "Some Error occured" });
+  }
+});
+
+router.post("/:id", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const quizId = req.params.id;
+    let quiz = await Quiz.findById(quizId).populate("questions");
+    if (!quiz) {
+      return res.status(404).json({ error: "Quiz not found." });
+    }
+    if (!quiz.answers) {
+      return res.status(403).json({
+        error: "Quiz has no answers to rate."
+      });
+    }
+    if (!quiz.submittedTime) {
+      return res
+        .status(403)
+        .json({ error: "Quiz was never submitted by user." });
+    }
+    for (let i = 0; i < quiz.answers.length; i++) {
+      quiz.answers[i].score = req.body[quiz.answers[i].question];
+    }
+    quiz.totalScore = Object.values(req.body).reduce(
+      (acc, val) => acc + val,
+      0
+    );
+    quiz.maximumScore = quiz.questions.reduce((acc, val) => acc + val.point, 0);
+    quiz.save();
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(403).json({ error: "Some Error occured" });
+  }
+});
 module.exports = router;
