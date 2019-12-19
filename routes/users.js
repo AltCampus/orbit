@@ -178,12 +178,19 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findOne({ _id: id });
-    user.canScheduleInterview = true;
-    await user.save();
-    res.status(200).json({
-      status: true,
-      message: `${user.name}, can schedule interview!`
-    });
+    if (user.stage > 3) {
+      user.canScheduleInterview = true;
+      await user.save();
+      return res.status(200).json({
+        status: true,
+        message: `${user.name} now can schedule their interview.`
+      });
+    } else {
+      return res.status(400).json({
+        status: false,
+        message: `Previous stages are not completed by ${user.name}`
+      });
+    }
   } catch (error) {
     console.log(error);
     res
@@ -197,17 +204,24 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findOne({ _id: id });
-    user.status = "accept";
-    await user.save();
-    // TODO: UnComment to sending mail once user accept
-    // const mail = await Mailer.mail('accept',user.email, user.name);
-    res.status(200).json({
-      status: true,
-      message: `${user.name}, now eligible for joining AltCampus`
-    });
+    if (user.interview) {
+      user.status = "accept";
+      await user.save();
+      // TODO: UnComment to sending mail once user accept
+      // const mail = await Mailer.mail('accept',user.email, user.name);
+      return res.status(200).json({
+        status: true,
+        message: `${user.name} now eligible for joining AltCampus`
+      });
+    } else {
+      return res.status(400).json({
+        status: false,
+        message: `${user.name}, not been through the interview process.`
+      });
+    }
   } catch (error) {
     console.log(error);
-    res
+    return res
       .status(400)
       .json({ status: false, message: "some error occurs from Server" });
   }
@@ -218,17 +232,24 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findOne({ _id: id });
-    user.status = "reject";
-    await user.save();
-    // TODO: UnComment to sending mail once user accept
-    // const mail = await Mailer.mail('reject',user.email, user.name);
-    res.status(200).json({
-      status: true,
-      message: `${user.name}, not eligible for joining AltCampus!`
-    });
+    if (user.stage > 3) {
+      user.status = "reject";
+      await user.save();
+      // TODO: UnComment to sending mail once user accept
+      // const mail = await Mailer.mail('reject',user.email, user.name);
+      return res.status(200).json({
+        status: true,
+        message: `${user.name} not eligible for joining AltCampus!`
+      });
+    } else {
+      return res.status(400).json({
+        status: false,
+        message: `Previous stages are not completed by ${user.name}`
+      });
+    }
   } catch (error) {
     console.log(error);
-    res
+    return res
       .status(400)
       .json({ status: false, message: "some error occurs from Server" });
   }
