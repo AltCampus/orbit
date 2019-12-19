@@ -1,11 +1,12 @@
 import React from "react";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
-import { message } from "antd";
+import { message, Button } from "antd";
 
 class SetPassword extends React.Component {
   state = {
-    password: ""
+    password: "",
+    isLoading: false,
   };
 
   handleSubmit = e => {
@@ -26,17 +27,22 @@ class SetPassword extends React.Component {
 
   fetchResetPassword = async hashmail => {
     try {
+      // Set isLoading to true to enable loader
+      this.setState({isLoading: true});
+
       let password = { password: this.state.password };
       // Post the user password
       const res = await axios.post(
         `http://localhost:3000/api/v1/users/${hashmail}`,
         password
       );
+      this.setState({isLoading: false});
       message.success("Password Reset Now you Can Login!");
       setTimeout(() => {
         this.props.history.push("/login");
       }, 3000);
     } catch (error) {
+      this.setState({isLoading: false});
       error.response.data.message
         ? message.error(error.response.data.message)
         : console.error(error);
@@ -50,14 +56,20 @@ class SetPassword extends React.Component {
           <div className="login-header">
             <h1 className="login-title">Set password for your account</h1>
           </div>
-          <form className="login-form" onSubmit={this.handleSubmit}>
+          <form className="login-form">
             <input
               type="password"
               name="password"
               placeholder="Password"
               onChange={this.handleChange}
             />
-            <button type="submit">Set password</button>
+            {/* <button type="submit">Set password</button> */}
+            <Button
+              type="primary"
+              loading={this.state.isLoading}
+              onClick={this.handleSubmit}
+              >Set password
+            </Button>
           </form>
         </div>
       </div>
