@@ -18,7 +18,7 @@ const TaskThreeProgress = ({ quiz, loading }) => {
           ? undefined
           : quiz.submitted
           ? undefined
-          : codewarsTask.onGoing
+          : quiz.onGoing
           ? [
               <Link to={`/task/3`}>
                 <Button type="primary">Resume Quiz</Button>
