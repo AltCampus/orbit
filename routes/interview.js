@@ -11,9 +11,15 @@ Router.post("/", async (req, res) => {
     const scheduleEvent = { uuid, start_time, end_time };
     const { email } = req.body.invitee;
     const user = await User.findOne({ email });
-    const interview = await Interview.create({ user: user._id, scheduleEvent });
-    user.interview = interview.id;
-    res.status(201).json({ status: true, message: "Create Interview" });
+    if (user.canScheduleInterview) {
+      const interview = await Interview.create({
+        user: user._id,
+        scheduleEvent
+      });
+      user.interview = interview.id;
+      await user.save();
+    }
+    res.end();
   } catch (error) {
     res.status(400).json({
       status: false,
