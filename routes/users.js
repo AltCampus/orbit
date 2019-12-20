@@ -162,13 +162,16 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
 router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findOne({ _id: id });
+    let user = await User.findOne({ _id: id });
     if (user.stage > 3) {
       user.canScheduleInterview = true;
-      await user.save();
+      user = await user.save();
+      user.password = undefined;
+      user.hashMail = undefined;
       return res.status(200).json({
         status: true,
-        message: `${user.name} now can schedule their interview.`
+        message: `${user.name} now can schedule their interview.`,
+        user
       });
     } else {
       return res.status(400).json({
@@ -188,15 +191,18 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
 router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findOne({ _id: id });
+    let user = await User.findOne({ _id: id });
     if (user.interview) {
       user.status = "accept";
-      await user.save();
+      user = await user.save();
+      user.password = undefined;
+      user.hashMail = undefined;
       // TODO: UnComment to sending mail once user accept
       // const mail = await Mailer.mail('accept',user.email, user.name);
       return res.status(200).json({
         status: true,
-        message: `${user.name} now eligible for joining AltCampus`
+        message: `${user.name} now eligible for joining AltCampus`,
+        user
       });
     } else {
       return res.status(400).json({
@@ -216,15 +222,18 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
 router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findOne({ _id: id });
+    let user = await User.findOne({ _id: id });
     if (user.stage > 3) {
       user.status = "reject";
-      await user.save();
+      user = await user.save();
+      user.password = undefined;
+      user.hashMail = undefined;
       // TODO: UnComment to sending mail once user accept
       // const mail = await Mailer.mail('reject',user.email, user.name);
       return res.status(200).json({
         status: true,
-        message: `${user.name} not eligible for joining AltCampus!`
+        message: `${user.name} not eligible for joining AltCampus!`,
+        user
       });
     } else {
       return res.status(400).json({

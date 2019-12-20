@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 import {
   PageHeader,
   Statistic,
   Descriptions,
   Button,
   message,
-  Alert,
-} from 'antd';
+  Alert
+} from "antd";
 
 const Content = ({ children, extra }) => {
   return (
@@ -23,25 +23,31 @@ class UserProfile extends Component {
     super(props);
 
     this.state = {
-      user: '',
+      user: "",
+      acceptloading: false,
+      interviewloading: false,
+      loading: false
     };
   }
 
   acceptUserInterview = async id => {
     try {
-      const token = JSON.parse(localStorage.getItem('authToken'));
+      this.setState({ interviewloading: true });
+      const token = JSON.parse(localStorage.getItem("authToken"));
       const res = await axios.patch(
         `http://localhost:3000/api/v1/users/interview/${id}`,
         null,
         {
           headers: {
-            authorization: token,
-          },
+            authorization: token
+          }
         }
       );
+      this.setState({ user: res.data.user, interviewloading: false });
       message.success(res.data.message);
     } catch (error) {
       if (error.response) {
+        this.setState({ interviewloading: false });
         message.error(error.response.data.message);
       }
       console.error(error);
@@ -50,18 +56,21 @@ class UserProfile extends Component {
 
   handleUserAccept = async id => {
     try {
-      const token = JSON.parse(localStorage.getItem('authToken'));
+      this.setState({ acceptloading: true });
+      const token = JSON.parse(localStorage.getItem("authToken"));
       const res = await axios.patch(
         `http://localhost:3000/api/v1/users/status/${id}`,
         null,
         {
           headers: {
-            authorization: token,
-          },
+            authorization: token
+          }
         }
       );
+      this.setState({ user: res.data.user, acceptloading: false });
       message.success(res.data.message);
     } catch (error) {
+      this.setState({ acceptloading: false });
       if (error.response) {
         message.error(error.response.data.message);
       }
@@ -71,17 +80,20 @@ class UserProfile extends Component {
 
   handleUserReject = async id => {
     try {
-      const token = JSON.parse(localStorage.getItem('authToken'));
+      this.setState({ loading: true });
+      const token = JSON.parse(localStorage.getItem("authToken"));
       const res = await axios.delete(
         `http://localhost:3000/api/v1/users/status/${id}`,
         {
           headers: {
-            authorization: token,
-          },
+            authorization: token
+          }
         }
       );
+      this.setState({ user: res.data.user, loading: false });
       message.error(res.data.message);
     } catch (error) {
+      this.setState({ loading: false });
       if (error.response) {
         message.error(error.response.data.message);
       }
@@ -90,70 +102,73 @@ class UserProfile extends Component {
   };
 
   extraContent = ({ user }) => {
-    if (user.status === 'reject') return;
+    if (user.status === "reject") return;
     return (
       <div
         style={{
-          display: 'flex',
-          width: 'max-content',
-          justifyContent: 'flex-end',
+          display: "flex",
+          width: "max-content",
+          justifyContent: "flex-end"
         }}
       >
         <Statistic
           title="Stage"
           value={user.stage}
           style={{
-            marginRight: 32,
+            marginRight: 32
           }}
         />
         <Statistic
           title="Score"
           value={10}
           style={{
-            marginRight: 32,
+            marginRight: 32
           }}
         />
         <div
           style={{
-            marginRight: 32,
+            marginRight: 32
           }}
         >
           {user.stage > 3 && !user.canScheduleInterview ? (
             <Button
               type="primary"
+              loading={this.state.interviewloading}
               onClick={() => this.acceptUserInterview(user._id)}
             >
               Accept for Interview
             </Button>
           ) : (
-            ''
+            ""
           )}
           {user.interview ? (
             <Button
               type="primary"
+              loading={this.state.acceptloading}
               onClick={() => this.handleUserAccept(user._id)}
             >
               Accept
             </Button>
-          ) : this.canScheduleInterview ? (
+          ) : user.canScheduleInterview ? (
             <Alert
-              style={{ display: 'inline-block', marginRight: '10px' }}
+              style={{ display: "inline-block", marginRight: "10px" }}
               message="Interview is not scheduled yet "
               type="info"
               showIcon
             />
           ) : (
-            ''
+            ""
           )}
           {user.stage > 3 ? (
             <Button
               type="danger"
+              loading={this.state.loading}
               onClick={() => this.handleUserReject(user._id)}
             >
               Reject
             </Button>
           ) : (
-            ''
+            ""
           )}
         </div>
       </div>
@@ -171,12 +186,12 @@ class UserProfile extends Component {
           <section>
             <PageHeader
               style={{
-                border: '1px solid rgb(235, 237, 240)',
+                border: "1px solid rgb(235, 237, 240)"
               }}
               onBack={() => window.history.back()}
               avatar={{
                 src:
-                  'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4',
+                  "https://avatars1.githubusercontent.com/u/8186664?s=460&v=4"
               }}
               title={this.props.user.name}
             >
