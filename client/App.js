@@ -23,6 +23,7 @@ import Dashboard from "./components/dashboard/user/Dashboard";
 import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
 import Instructions from "./components/instructions/Instructions";
 import UserView from "./components/profile/UserView/UserView";
+import RateQuiz from "./components/questionnaire/RateQuiz";
 import { message } from "antd";
 
 class App extends Component {
@@ -34,6 +35,7 @@ class App extends Component {
           <Route exact path="/" component={DisplayApplicants} />
           <Route path="/questions" component={Question} />
           <Route path="/user/:id" component={UserProfile} />
+          <Route path="/quiz/rate/:id" component={RateQuiz} />
           <Route path="/login">
             <Redirect to="/" />
           </Route>

@@ -238,8 +238,8 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
         console.log(apiResponse.statusCode);
         if (apiResponse.statusCode === 200) {
           // Username is valid
-          const endTime = new Date(Date.now() + 259200 * 1000);
-          // const endTime = new Date(Date.now() + 30000);
+          // const endTime = new Date(Date.now() + 259200 * 1000);
+          const endTime = new Date(Date.now() + 30000);
           console.log(endTime);
           const codewarsTask = {
             codewarsUsername: username,
@@ -284,6 +284,59 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
         .status(400)
         .json({ status: false, error: "Some Error Occurred" });
     });
+});
+
+// Get Number Of Kata's Solved by User
+
+router.post('/two/katas', auth.verifyAdminToken, (req, res) => {
+  let task = req.body.props.task;
+  let codewars = req.body.props.task.codewars;
+  console.log(req.body.props)
+  console.log(codewars, 'body');
+  const getKatas = async () => {
+    try {
+      console.log('INSIDE TRY');
+      const response = await axios.get(
+        `https://www.codewars.com/api/v1/users/${codewars.codewarsUsername}/code-challenges/completed?page=0`
+      );
+      // console.log(response.data.data);
+      const currentDate = new Date().toISOString();
+      const filteredArray = response.data.data.filter(
+        kata => kata.completedAt < currentDate
+      );
+      console.log(filteredArray, 'FIL111');
+      const refilteredArray = filteredArray.filter(
+        kata => kata.completedAt > codewars.submitTime
+      );
+      console.log(refilteredArray, 'FIL222');
+      const katasSolved = filteredArray.length;
+      console.log(katasSolved);
+
+      // Save number of katas solved to backend
+      try {
+        updatedTask = {
+          katasSolved: katasSolved
+        };
+
+        const newTask = await Task.findById(task._id);
+        newTask.codewars = {
+          ...newTask.codewars,
+          ...updatedTask
+        };
+        await newTask.save();
+      } catch (err) {
+        console.log(err);
+      }
+
+      return res
+        .status(200)
+        .json({ data: { katasSolved }, status: true, message: 'success' });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ status: false });
+    }
+  };
+  getKatas();
 });
 
 module.exports = router;
