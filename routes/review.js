@@ -37,4 +37,27 @@ router.post("/html", auth.verifyAdminToken, async (req, res) => {
   }
 });
 
+router.post('/codewars', auth.verifyAdminToken, async (req, res) => {
+  let { score = 0, review = '', taskId = '' } = req.body.data;
+  const updatedTask = {
+    score: score,
+  };
+  try {
+    console.log(taskId, 'TaskID is Here');
+    console.log(req.body, 'body is Here');
+    const newTask = await Task.findById(taskId);
+    newTask.codewars = {
+      ...newTask.codewars,
+      ...updatedTask
+    };
+    await newTask.save();
+    res.status(200).json({ status: true });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(400)
+      .json({ status: false, error: 'Some Error Occurred' });
+  }
+});
+
 module.exports = router;
