@@ -14,7 +14,7 @@ const columns = [
     title: "Name",
     dataIndex: "name",
     sorter: (objA, objB) => objA.name.localeCompare(objB.name),
-    sortDirections: ["ascend"],
+    sortDirections: ['ascend', 'descend'],
     render: (id, data) => <Link to={`/user/${data._id}`}> {id}</Link>
   },
   {
@@ -45,7 +45,7 @@ const columns = [
 
     onFilter: (value, record) => record.stage === value,
     sorter: (objA, objB) => objA.stage - objB.stage,
-    sortDirections: ["ascend"]
+    sortDirections: ['ascend', 'descend'],
   },
   {
     title: "Social Profile",

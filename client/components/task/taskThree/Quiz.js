@@ -12,6 +12,8 @@ import {
   Spin
 } from "antd";
 import "./quiz.scss";
+import { connect } from "react-redux";
+import { userStageUpgrade } from "../../../actions/users";
 import QuizTimer from "./QuizTimer";
 import TextArea from "antd/lib/input/TextArea";
 import TaskCompleted from "../taskCompleted/TaskCompleted";
@@ -57,6 +59,9 @@ class Quiz extends Component {
       this.setState({ loading: false });
     }
   }
+  componentWillUnmount() {
+    window.clearInterval(this.intervalId);
+  }
   startTimer = () => {
     this.intervalId = window.setInterval(() => {
       if (this.state.timeLeft === 0) {
@@ -72,6 +77,7 @@ class Quiz extends Component {
   changeActive(index) {
     if (index >= 0 && index < this.state.questions.length) {
       this.setState({ currentQuestionIndex: index });
+      this.autosaveQuiz();
     }
   }
   onValueChange = e => {
@@ -110,9 +116,10 @@ class Quiz extends Component {
         onGoing: false,
         canTakeQuiz: false
       });
+      this.props.userStageUpgrade();
       message.success(res.status && "Your answers has been submitted.");
     } catch (error) {
-      this.setState({loading: false})
+      this.setState({ loading: false });
       if (error.response) {
         /*
          * The request was made and the server responded with a
@@ -149,16 +156,6 @@ class Quiz extends Component {
       this.setState({ requestOnGoing: false });
       console.log(error);
     }
-  };
-
-  quizStatus = () => {
-    const total_questions = this.state.questions.length;
-    const questionSolved = this.state.questions.reduce(
-      (acc, question) => (question.answer ? acc + 1 : acc),
-      0
-    );
-    const msg = `You have solved ${questionSolved} out of ${total_questions}`;
-    return msg;
   };
 
   startQuiz = async () => {
@@ -219,15 +216,6 @@ class Quiz extends Component {
       this.setState({ loading: false });
     }
   };
-  showConfirm = () => {
-    Modal.confirm({
-      title: "Do you Want to submit the quiz?",
-      content: this.quizStatus(),
-      onOk: () => {
-        this.submitQuiz();
-      }
-    });
-  };
 
   render() {
     const currentQuestion =
@@ -240,7 +228,16 @@ class Quiz extends Component {
       lineHeight: "30px"
     };
     return this.state.loading ? (
-      <Spin size="large" />
+      <div className="loading-div">
+        <Spin
+          indicator={
+            <Icon
+              type="loading"
+              style={{ fontSize: 100, margin: "3rem auto" }}
+            />
+          }
+        />
+      </div>
     ) : this.state.questions ? (
       <>
         <section style={{ textAlign: "center" }}>
@@ -333,7 +330,15 @@ class Quiz extends Component {
           )}
         </div>
         <div className="container">
-          <Button onClick={() => this.showConfirm()}>Confirm</Button>
+          {this.state.questions.filter(question => Boolean(question.answer))
+            .length === this.state.questions.length ? (
+            <Button onClick={() => this.submitQuiz()}>Submit</Button>
+          ) : (
+            <Text type="danger">
+              Submit button would be available here once you answer all the
+              questions.
+            </Text>
+          )}
         </div>
       </>
     ) : this.state.canTakeQuiz ? (
@@ -358,4 +363,11 @@ class Quiz extends Component {
   }
 }
 
-export default Quiz;
+const mapStateToProps = state => {
+  const { user } = state.currentUser;
+  return {
+    user
+  };
+};
+
+export default connect(mapStateToProps, { userStageUpgrade })(Quiz);

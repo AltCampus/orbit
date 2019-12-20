@@ -1,14 +1,12 @@
 import React, { Component } from "react";
-import {
-  message,
-  Card,
-  Input
-} from "antd";
+import { message, Card, Input } from "antd";
 import axios from "axios";
 import TaskOneProgress from "./TaskProgress/TaskOneProgress";
 import TaskTwoProgress from "./TaskProgress/TaskTwoProgress";
 import TaskThreeProgress from "./TaskProgress/TaskThreeProgress";
 import TaskFourProgress from "./TaskProgress/TaskFourProgress";
+import { connect } from "react-redux";
+import { userStageUpgrade } from "../../../actions/types";
 
 const { Meta } = Card;
 
@@ -16,40 +14,55 @@ const { TextArea } = Input;
 
 export class UserProgress extends Component {
   state = {
-    loading: false
+    loading: false,
+    progress: {}
   };
   componentDidMount() {
     this.getTaskData();
   }
   async getTaskData() {
-    try{
-
-      this.setState({loading: true});
-      const response = await axios.get("http://localhost:3000/api/v1/task/all/status", {
-        headers: {
-          authorization: JSON.parse(localStorage.authToken)
+    try {
+      this.setState({ loading: true });
+      const response = await axios.get(
+        "http://localhost:3000/api/v1/tasks/all/status",
+        {
+          headers: {
+            authorization: JSON.parse(localStorage.authToken)
+          }
         }
-      });
-      this.setState({response: response.data , loading:false})
+      );
+      console.log(response);
+      this.setState({ progress: response.data, loading: false });
+      if (response.data.stageUpdated) {
+        this.props.userStageUpgrade();
+      }
     } catch (error) {
-      console.log(error)
-      this.setState({loading: false})
-      if(error.response) {
-        message.error(error.response.errror)
-      }else {
-        message.error("Failed to fetch task status")
+      console.log(error);
+      this.setState({ loading: false });
+      if (error.response) {
+        message.error(error.response.errror);
+      } else {
+        message.error("Failed to fetch task status");
       }
     }
-    
   }
 
   render() {
     return (
       <>
         <div className="progress-container">
-          <TaskOneProgress />
-          <TaskTwoProgress />
-          <TaskThreeProgress />
+          <TaskOneProgress
+            loading={this.state.loading}
+            htmlTask={this.state.progress.html || {}}
+          />
+          <TaskTwoProgress
+            loading={this.state.loading}
+            codewarsTask={this.state.progress.codewars || {}}
+          />
+          <TaskThreeProgress
+            loading={this.state.loading}
+            quiz={this.state.progress.quiz || {}}
+          />
           <TaskFourProgress />
         </div>
       </>
@@ -57,4 +70,11 @@ export class UserProgress extends Component {
   }
 }
 
-export default UserProgress;
+const mapStateToProps = state => {
+  const { user } = state.currentUser;
+  return {
+    user
+  };
+};
+
+export default connect(mapStateToProps, { userStageUpgrade })(UserProgress);

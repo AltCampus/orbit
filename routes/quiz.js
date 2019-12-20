@@ -200,10 +200,7 @@ router.put("/current", auth.verifyToken, async (req, res, next) => {
       });
     }
 
-    const quiz = await Quiz.findById(user.quiz).populate(
-      "questions",
-      "questionTitle type options"
-    );
+    const quiz = await Quiz.findById(user.quiz);
     if (quiz.submittedTime) {
       // User has already submitted quiz
       return res
@@ -214,15 +211,31 @@ router.put("/current", auth.verifyToken, async (req, res, next) => {
       // User failed to submit quiz on time
       return res.status(403).json({ error: "You've ran out of time." });
     }
+    const questionIds = quiz.questions.map(question => String(question));
     const answers = req.body.answers.map(question => {
       return { question: question.question, answerSubmitted: question.answer };
     });
-    for (let i = 0; i < answers.length; i++) {}
     if (answers.length !== quiz.questions.length) {
       return res
         .status(403)
-        .json({ error: "Some Error occured. Please try again." });
+        .json({ error: "Please answer all the questions." });
     }
+    for (let i = 0; i < answers.length; i++) {
+      if (questionIds.indexOf(answers[i].question) === -1) {
+        return res
+          .status(403)
+          .json({ error: "Don't try to manipulate with data" });
+      }
+    }
+    const answerIds = answers.map(question => question.question);
+    for (let i = 0; i < quiz.questions.length; i++) {
+      if (answerIds.indexOf(String(quiz.questions[i])) === -1) {
+        return res
+          .status(403)
+          .json({ error: "Don't try to manipulate with data" });
+      }
+    }
+
     await Quiz.findByIdAndUpdate(quiz._id, {
       answers: answers
     });
@@ -267,6 +280,11 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
         };
       })
       .filter(question => question.answerSubmitted);
+    if (answers.length !== quiz.questions.length) {
+      return res
+        .status(403)
+        .json({ error: "Please answer all the questions." });
+    }
     for (let i = 0; i < answers.length; i++) {
       if (questionIds.indexOf(answers[i].question) === -1) {
         return res
@@ -282,15 +300,12 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
           .json({ error: "Don't try to manipulate with data" });
       }
     }
-    if (answers.length !== quiz.questions.length) {
-      return res
-        .status(403)
-        .json({ error: "Please answer all the questions." });
-    }
     await Quiz.findByIdAndUpdate(quiz._id, {
       submittedTime: Date.now(),
       answers: answers
     });
+    // Update user stage to 4
+    await User.findByIdAndUpdate(req.user.id, { stage: 4 });
     res
       .status(200)
       .json({ success: true, message: "Your answers has been submitted" });
