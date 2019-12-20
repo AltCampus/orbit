@@ -7,6 +7,7 @@ import {
   GET_USER_PENDING,
   GET_USER_SUCCESS,
   USER_STAGE_UPGRADE,
+  USER_LOGIN_PENDING,
   SET_ERROR
 } from "./types";
 import { message } from "antd";
@@ -49,11 +50,13 @@ export const getCurrentUser = invalidToken => {
 export const userLogin = data => {
   return async dispatch => {
     try {
+      await dispatch({type: USER_LOGIN_PENDING });
+      
       const res = await axios.post(`${rootUrl}/login`, data);
       localStorage.setItem("authToken", JSON.stringify(res.data.authToken));
       // Set token
       // setTokenToAxios(res.data.authToken);
-      await dispatch({
+      dispatch({
         type: USER_LOGIN_SUCCESS,
         data: res.data.authToken
       });

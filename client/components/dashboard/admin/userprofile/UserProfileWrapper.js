@@ -11,7 +11,7 @@ import {
   Form,
   Input,
   Modal,
-  InputNumber,
+  InputNumber
 } from 'antd';
 
 import AdminWrapper from '../AdminWrapper';
@@ -26,9 +26,23 @@ class UserProfileWrapper extends Component {
 
     this.state = {
       user: null,
-      isFetching: false,
+      isFetching: false
     };
   }
+
+  fetchUsers = async () => {
+    this.setState({ isFetching: true });
+    const response = await axios.get(
+      `http://localhost:3000/api/v1/users/${this.props.match.params.id}`,
+      {
+        headers: {
+          authorization: JSON.parse(localStorage.authToken)
+        }
+      }
+    );
+    console.log('CDM', response.data.user);
+    this.setState({ user: response.data.user, isFetching: false });
+  };
   render() {
     console.log(this.state);
     return (
@@ -44,7 +58,7 @@ class UserProfileWrapper extends Component {
             <div className="user-container">
               {/* <UserInfo user={this.state.user} />
               <UserProgress user={this.state.user} /> */}
-              <AdminView user={this.state.user} />
+              <AdminView user={this.state.user} fetchUsers={this.fetchUsers} />
             </div>
           )}
         </AdminWrapper>
@@ -52,17 +66,7 @@ class UserProfileWrapper extends Component {
     );
   }
   async componentDidMount() {
-    this.setState({ isFetching: true });
-    const response = await axios.get(
-      `http://localhost:3000/api/v1/users/${this.props.match.params.id}`,
-      {
-        headers: {
-          authorization: JSON.parse(localStorage.authToken),
-        },
-      }
-    );
-    console.log('CDM', response.data.user);
-    this.setState({ user: response.data.user, isFetching: false });
+    this.fetchUsers();
   }
 }
 
