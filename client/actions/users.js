@@ -8,6 +8,7 @@ import {
   GET_USER_SUCCESS,
   USER_STAGE_UPGRADE,
   USER_LOGIN_PENDING,
+  USER_LOGIN_FAILED,
   SET_ERROR
 } from "./types";
 import { message } from "antd";
@@ -62,6 +63,7 @@ export const userLogin = data => {
       });
     } catch (error) {
       if (error.response) {
+        dispatch({ type: USER_LOGIN_FAILED })
         dispatch({ type: SET_ERROR });
         message.error(error.response.data.message);
       } else console.error(error);
