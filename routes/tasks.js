@@ -1,6 +1,7 @@
 const express = require("express");
 const https = require("https");
 const router = express.Router();
+const axios = require('axios');
 
 const Task = require("../models/Task");
 const User = require("../models/User");
@@ -445,6 +446,7 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
 // Get Number Of Kata's Solved by User
 
 router.post('/two/katas', auth.verifyAdminToken, (req, res) => {
+  console.log('!!!',req.body)
   let task = req.body.props.task;
   let codewars = req.body.props.task.codewars;
   console.log(req.body.props)
@@ -456,16 +458,15 @@ router.post('/two/katas', auth.verifyAdminToken, (req, res) => {
         `https://www.codewars.com/api/v1/users/${codewars.codewarsUsername}/code-challenges/completed?page=0`
       );
       // console.log(response.data.data);
-      const currentDate = new Date().toISOString();
       const filteredArray = response.data.data.filter(
-        kata => kata.completedAt < currentDate
+        kata => kata.completedAt > codewars.startTime
       );
       console.log(filteredArray, 'FIL111');
       const refilteredArray = filteredArray.filter(
-        kata => kata.completedAt > codewars.submitTime
+        kata => kata.completedAt < codewars.endTime
       );
       console.log(refilteredArray, 'FIL222');
-      const katasSolved = filteredArray.length;
+      const katasSolved = refilteredArray.length;
       console.log(katasSolved);
 
       // Save number of katas solved to backend
