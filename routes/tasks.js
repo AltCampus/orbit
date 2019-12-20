@@ -1,6 +1,7 @@
 const express = require("express");
 const https = require("https");
 const router = express.Router();
+const axios = require('axios');
 
 const Task = require("../models/Task");
 const User = require("../models/User");
@@ -289,6 +290,7 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
 // Get Number Of Kata's Solved by User
 
 router.post('/two/katas', auth.verifyAdminToken, (req, res) => {
+  console.log('!!!',req.body)
   let task = req.body.props.task;
   let codewars = req.body.props.task.codewars;
   console.log(req.body.props)
@@ -309,7 +311,7 @@ router.post('/two/katas', auth.verifyAdminToken, (req, res) => {
         kata => kata.completedAt > codewars.submitTime
       );
       console.log(refilteredArray, 'FIL222');
-      const katasSolved = filteredArray.length;
+      const katasSolved = refilteredArray.length;
       console.log(katasSolved);
 
       // Save number of katas solved to backend

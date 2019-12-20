@@ -63,7 +63,7 @@ class RenderCodeWarsProgress extends Component {
       console.log(props);
       const response = await axios.post(
         `http://localhost:3000/api/v1/tasks/two/katas`,
-        { props },
+        { props: props.user },
         {
           headers: {
             authorization: JSON.parse(localStorage.authToken)
@@ -75,19 +75,19 @@ class RenderCodeWarsProgress extends Component {
     } catch (err) {
       console.log(err, 'P1');
     }
-    try {
-      await axios.post(
-        `http://localhost:3000/api/v1/task/review/codewars/katas`,
-        { katasSolved: this.state.katasSolved },
-        {
-          headers: {
-            authorization: JSON.parse(localStorage.authToken)
-          }
-        }
-      );
-    } catch (err) {
-      console.log(err, 'P2');
-    }
+    // try {
+    //   await axios.post(
+    //     `http://localhost:3000/api/v1/task/review/codewars/`,
+    //     { data: props},
+    //     {
+    //       headers: {
+    //         authorization: JSON.parse(localStorage.authToken)
+    //       }
+    //     }
+    //   );
+    // } catch (err) {
+    //   console.log(err, 'P2');
+    // }
   };
 
   componentDidMount() {
