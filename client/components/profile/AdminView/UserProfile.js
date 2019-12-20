@@ -43,7 +43,7 @@ class UserProfile extends Component {
           }
         }
       );
-      this.setState({ interviewloading: false });
+      this.setState({ user: res.data.user, interviewloading: false });
       message.success(res.data.message);
     } catch (error) {
       if (error.response) {
@@ -67,7 +67,7 @@ class UserProfile extends Component {
           }
         }
       );
-      this.setState({ acceptloading: false });
+      this.setState({ user: res.data.user, acceptloading: false });
       message.success(res.data.message);
     } catch (error) {
       this.setState({ acceptloading: false });
@@ -90,7 +90,7 @@ class UserProfile extends Component {
           }
         }
       );
-      this.setState({ loading: false });
+      this.setState({ user: res.data.user, loading: false });
       message.error(res.data.message);
     } catch (error) {
       this.setState({ loading: false });
@@ -149,7 +149,7 @@ class UserProfile extends Component {
             >
               Accept
             </Button>
-          ) : this.canScheduleInterview ? (
+          ) : user.canScheduleInterview ? (
             <Alert
               style={{ display: "inline-block", marginRight: "10px" }}
               message="Interview is not scheduled yet "
