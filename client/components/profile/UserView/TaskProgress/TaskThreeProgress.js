@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Progress, Descriptions } from "antd";
 const { Meta } = Card;
 
-const TaskTwoProgress = () => {
+const TaskThreeProgress = ({ quiz, loading }) => {
   return (
     <Card
       cover={
@@ -12,18 +12,56 @@ const TaskTwoProgress = () => {
         />
       }
     >
-      <div style={{ marginBottom: "20px" }}>
-        <Meta title="Progress" />
-        <Progress percent={100} size="small" />
-      </div>
-      <Descriptions>
-        <Descriptions.Item label="Score">10</Descriptions.Item>
-      </Descriptions>
-      <Descriptions>
-        <Descriptions.Item label="Remark">abcdefghijklmnop</Descriptions.Item>
-      </Descriptions>
+      {loading ? (
+        <Icon type="loading" spin />
+      ) : (
+        <>
+          <div style={{ marginBottom: "20px" }}>
+            <Meta title="Progress" />
+            <Progress percent={quiz.submitted ? 100 : 0} size="small" />
+          </div>
+          {!quiz.reachedStage && (
+            <Text>You've not reached this stage yet.</Text>
+          )}
+          {quiz.submitted && (
+            <>
+              <Descriptions></Descriptions>
+              <Descriptions>
+                <Descriptions.Item label="Start Time">
+                  {new Date(quiz.startTime).toLocaleString()}
+                </Descriptions.Item>
+              </Descriptions>{" "}
+              <Descriptions>
+                <Descriptions.Item label="Submission Time">
+                  {new Date(quiz.submmittedTime).toLocaleString()}
+                </Descriptions.Item>
+              </Descriptions>
+            </>
+          )}
+          {quiz.onGoing && (
+            <>
+              <Descriptions>
+                <Descriptions.Item label="Start Time">
+                  {new Date(quiz.startTime).toLocaleString()}
+                </Descriptions.Item>
+              </Descriptions>{" "}
+              <Descriptions>
+                <Descriptions.Item label="End Time">
+                  {new Date(quiz.endTime).toLocaleString()}
+                </Descriptions.Item>
+              </Descriptions>
+            </>
+          )}
+          {quiz.canTakeQuiz && (
+            <Text>You're now eligible to take quiz</Text>
+          )}
+          {quiz.failedToSubmit && (
+            <Text>You've failed to submit quiz on time</Text>
+          )}
+        </>
+      )}
     </Card>
   );
 };
 
-export default TaskTwoProgress;
+export default TaskThreeProgress;
