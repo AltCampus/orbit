@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import { userStageUpgrade } from "../../../actions/users";
-import { Card, Col, Row, Input, Button, message, Spin } from "antd";
+import { Card, Col, Row, Input, Button, message, Spin, Icon } from "antd";
 import UserWrapper from "../../dashboard/user/UserWrapper";
 import TaskCompleted from "../taskCompleted/TaskCompleted";
 import CodeWarsTimer from "./CodeWarsTimer";
@@ -120,7 +120,16 @@ class TaskTwo extends Component {
     return (
       <UserWrapper activeKey={"2"}>
         {this.state.loading ? (
-          <Spin size="large" />
+          <div className="loading-div">
+            <Spin
+              indicator={
+                <Icon
+                  type="loading"
+                  style={{ fontSize: 100, margin: "3rem auto" }}
+                />
+              }
+            />
+          </div>
         ) : (
           <>
             {this.props.user.stage < 2 && <PendingTask />}
@@ -132,8 +141,8 @@ class TaskTwo extends Component {
                 ) : (
                   <>
                     <div className="task-container">
-                      <Row gutter={16}>
-                        <Col span={25}>
+                      <Row>
+                        <Col>
                           <Card title="Task Two" bordered={false}>
                             <div>
                               <ul>
@@ -189,33 +198,28 @@ class TaskTwo extends Component {
                                   </a>
                                 </li>
                               </ul>
-                              <div className="image-container">
-                                <img
-                                  src="https://www.indiemakers.tools/media/images/codewars.jpg"
-                                  alt="task"
-                                  border="0"
-                                ></img>
-                              </div>
                             </div>
                           </Card>
                         </Col>
                       </Row>
                     </div>
                     <div className="url-input">
-                      <Input
-                        size="large"
-                        name="username"
-                        placeholder="Submit your CodeWars username here..."
-                        value={this.state.username}
-                        onChange={this.handleChange}
-                      />
-                      <Button
-                        className="url-submit"
-                        onClick={this.handleSubmit}
-                        type="primary"
-                      >
-                        Submit
-                      </Button>
+                      <form onSubmit={this.handleSubmit}>
+                        <Input
+                          size="large"
+                          name="username"
+                          placeholder="Submit your CodeWars username here..."
+                          value={this.state.username}
+                          onChange={this.handleChange}
+                        />
+                        <Button
+                          className="url-submit"
+                          onClick={this.handleSubmit}
+                          type="primary"
+                        >
+                          Submit
+                        </Button>
+                      </form>
                     </div>
                   </>
                 )}

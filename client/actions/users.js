@@ -7,6 +7,8 @@ import {
   GET_USER_PENDING,
   GET_USER_SUCCESS,
   USER_STAGE_UPGRADE,
+  USER_LOGIN_PENDING,
+  USER_LOGIN_FAILED,
   SET_ERROR
 } from "./types";
 import { message } from "antd";
@@ -27,7 +29,7 @@ export const getCurrentUser = invalidToken => {
       await dispatch({
         type: GET_USER_PENDING
       });
-      const res = await axios.get(rootUrl, {
+      const res = await axios.get(rootUrl + "/me", {
         headers: {
           Authorization: JSON.parse(localStorage.getItem("authToken"))
         }
@@ -49,16 +51,19 @@ export const getCurrentUser = invalidToken => {
 export const userLogin = data => {
   return async dispatch => {
     try {
+      await dispatch({type: USER_LOGIN_PENDING });
+      
       const res = await axios.post(`${rootUrl}/login`, data);
       localStorage.setItem("authToken", JSON.stringify(res.data.authToken));
       // Set token
       // setTokenToAxios(res.data.authToken);
-      await dispatch({
+      dispatch({
         type: USER_LOGIN_SUCCESS,
         data: res.data.authToken
       });
     } catch (error) {
       if (error.response) {
+        dispatch({ type: USER_LOGIN_FAILED })
         dispatch({ type: SET_ERROR });
         message.error(error.response.data.message);
       } else console.error(error);
@@ -71,7 +76,6 @@ export const userStageUpgrade = () => {
     type: USER_STAGE_UPGRADE
   };
 };
-
 
 export const userLogOut = callback => {
   // Clear the localStorage

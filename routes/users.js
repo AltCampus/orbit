@@ -6,8 +6,21 @@ const User = require("../models/User");
 const Task = require("../models/Task");
 const auth = require("../utils/auth");
 
+// Get All Users
+router.get("/", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const users = await User.find({ isAdmin: false })
+      .sort({ createdAt: -1 })
+      .select("-password");
+    if (!users) res.status(200).json({ message: "No users yet", status: true });
+    res.status(200).json({ users, status: true });
+  } catch (error) {
+    res.status(400).json({ message: "Something went wrong", status: false });
+  }
+});
+
 //current Login User
-router.get("/", auth.verifyToken, async (req, res) => {
+router.get("/me", auth.verifyToken, async (req, res) => {
   try {
     return res.status(201).json({ status: true, user: req.user });
   } catch (error) {
@@ -128,44 +141,16 @@ router.post("/:hashMail", async (req, res) => {
   }
 });
 
-// Get Users
-router.get("/get", async (req, res) => {
-  try {
-    const users = await User.find({ isAdmin: false })
-      .sort({ createdAt: -1 })
-      .select("-password");
-    if (!users) res.status(200).json({ message: "No users yet", status: true });
-    res.status(200).json({ users, status: true });
-  } catch (error) {
-    res.status(400).json({ message: "Something went wrong", status: false });
-  }
-});
-
 /* GET User Progress */
 router.get("/:id", auth.verifyAdminToken, async (req, res) => {
   const userId = req.params.id;
   console.log(userId);
   try {
-    const user = await User.findById(userId)
-      .populate("task")
-      .select("-password, -hashMail");
-    console.log(user);
-    // const task = await Task.findById(user.task)
-    res.status(200).json({ user, status: true });
-  } catch (error) {
-    res.status(400).json({ message: "Something went wrong", status: false });
-  }
-});
-
-/* GET User Progress */
-router.get("/:id", auth.verifyAdminToken, async (req, res) => {
-  const userId = req.params.id;
-  console.log(userId);
-  try {
-    const user = await User.findById(userId)
-      .populate("task")
-      .select("-password, -hashMail");
-    console.log(user);
+    let user = await User.findById(
+      { _id: userId },
+      "-password -hashMail -__v -isAdmin -isProfileClaimed"
+    ).populate("task");
+    console.log("hel");
     // const task = await Task.findById(user.task)
     res.status(200).json({ user, status: true });
   } catch (error) {
@@ -177,13 +162,23 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
 router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findOne({ _id: id });
-    user.canScheduleInterview = true;
-    await user.save();
-    res.status(200).json({
-      status: true,
-      message: `${user.name}, can schedule interview!`
-    });
+    let user = await User.findOne({ _id: id });
+    if (user.stage > 3) {
+      user.canScheduleInterview = true;
+      user = await user.save();
+      user.password = undefined;
+      user.hashMail = undefined;
+      return res.status(200).json({
+        status: true,
+        message: `${user.name} now can schedule their interview.`,
+        user
+      });
+    } else {
+      return res.status(400).json({
+        status: false,
+        message: `Previous stages are not completed by ${user.name}`
+      });
+    }
   } catch (error) {
     console.log(error);
     res
@@ -196,18 +191,28 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
 router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findOne({ _id: id });
-    user.status = "accept";
-    await user.save();
-    // TODO: UnComment to sending mail once user accept
-    // const mail = await Mailer.mail('accept',user.email, user.name);
-    res.status(200).json({
-      status: true,
-      message: `${user.name}, now eligible for joining AltCampus`
-    });
+    let user = await User.findOne({ _id: id });
+    if (user.interview) {
+      user.status = "accept";
+      user = await user.save();
+      user.password = undefined;
+      user.hashMail = undefined;
+      // TODO: UnComment to sending mail once user accept
+      // const mail = await Mailer.mail('accept',user.email, user.name);
+      return res.status(200).json({
+        status: true,
+        message: `${user.name} now eligible for joining AltCampus`,
+        user
+      });
+    } else {
+      return res.status(400).json({
+        status: false,
+        message: `${user.name}, not been through the interview process.`
+      });
+    }
   } catch (error) {
     console.log(error);
-    res
+    return res
       .status(400)
       .json({ status: false, message: "some error occurs from Server" });
   }
@@ -217,18 +222,28 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
 router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findOne({ _id: id });
-    user.status = "reject";
-    await user.save();
-    // TODO: UnComment to sending mail once user accept
-    // const mail = await Mailer.mail('reject',user.email, user.name);
-    res.status(200).json({
-      status: true,
-      message: `${user.name}, not eligible for joining AltCampus!`
-    });
+    let user = await User.findOne({ _id: id });
+    if (user.stage > 3) {
+      user.status = "reject";
+      user = await user.save();
+      user.password = undefined;
+      user.hashMail = undefined;
+      // TODO: UnComment to sending mail once user accept
+      // const mail = await Mailer.mail('reject',user.email, user.name);
+      return res.status(200).json({
+        status: true,
+        message: `${user.name} not eligible for joining AltCampus!`,
+        user
+      });
+    } else {
+      return res.status(400).json({
+        status: false,
+        message: `Previous stages are not completed by ${user.name}`
+      });
+    }
   } catch (error) {
     console.log(error);
-    res
+    return res
       .status(400)
       .json({ status: false, message: "some error occurs from Server" });
   }

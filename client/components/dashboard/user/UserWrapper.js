@@ -1,7 +1,8 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { Layout, Menu, Icon, Avatar, Button, Anchor } from "antd";
+import { Layout, Menu, Icon, Avatar, Button, Steps } from "antd";
+const { Step } = Steps;
 import { userLogOut } from "../../../actions/users";
 
 const { Header, Sider, Content } = Layout;
@@ -18,12 +19,17 @@ function UserWrapper(props) {
     props.userLogOut(() => props.history.push("/"));
   };
 
+  const stepStyle = {
+    marginBottom: 10,
+    boxShadow: "0px -1px 0 0 #e8e8e8 inset"
+  };
+  const { user } = props;
   return (
     <Layout className="wrapper">
       <Sider
         style={{
           overflow: "auto",
-          height: "100vh",
+          height: "100vh"
         }}
         breakpoint="sm"
         onBreakpoint={broken => {
@@ -49,25 +55,63 @@ function UserWrapper(props) {
           <Menu.Item key="1">
             <Link to="/task/1">
               <Icon type="html5" />
-              <span> HTML / CSS </span>
+              <span>
+                <span>HTML / CSS</span>{" "}
+                {user.stage > 1 ? (
+                  <Icon
+                    type="check-circle"
+                    theme="filled"
+                    className="menu-icon"
+                  />
+                ) : (
+                  ""
+                )}
+              </span>
             </Link>
           </Menu.Item>
-          <Menu.Item key="2">
+          <Menu.Item key="2" disabled={user.stage < 2 ? true : false}>
             <Link to="/task/2">
               <Icon type="code" />
               <span> CodeWars </span>
+              {user.stage > 2 ? (
+                <Icon
+                  type="check-circle"
+                  theme="filled"
+                  className="menu-icon"
+                />
+              ) : (
+                ""
+              )}
             </Link>
           </Menu.Item>
-          <Menu.Item key="3">
+          <Menu.Item key="3" disabled={user.stage < 3 ? true : false}>
             <Link to="/task/3">
               <Icon type="question" />
               <span> Q / A </span>
+              {user.stage > 3 ? (
+                <Icon
+                  type="check-circle"
+                  theme="filled"
+                  className="menu-icon"
+                />
+              ) : (
+                ""
+              )}
             </Link>
           </Menu.Item>
-          <Menu.Item key="4">
+          <Menu.Item key="4" disabled={user.stage < 4 ? true : false}>
             <Link to="/task/4">
               <Icon type="video-camera" />
               <span> Interview </span>
+              {user.stage > 4 ? (
+                <Icon
+                  type="check-circle"
+                  theme="filled"
+                  className="menu-icon"
+                />
+              ) : (
+                ""
+              )}
             </Link>
           </Menu.Item>
           <Menu.Item key="5">
@@ -122,6 +166,52 @@ function UserWrapper(props) {
             />
           </div>
         </Header>
+        <Steps
+          type="navigation"
+          current={Number(props.activeKey) - 1}
+          style={stepStyle}
+        >
+          <Step
+            status={
+              Number(props.activeKey) === 1
+                ? "process"
+                : Number(props.activeKey) < 1
+                ? "wait"
+                : "finish"
+            }
+            title="HTML"
+          />
+          <Step
+            status={
+              Number(props.activeKey) === 2
+                ? "process"
+                : Number(props.activeKey) < 2
+                ? "wait"
+                : "finish"
+            }
+            title="CodeWars"
+          />
+          <Step
+            status={
+              Number(props.activeKey) === 3
+                ? "process"
+                : Number(props.activeKey) < 3
+                ? "wait"
+                : "finish"
+            }
+            title="Quiz"
+          />
+          <Step
+            status={
+              Number(props.activeKey) === 4
+                ? "process"
+                : Number(props.activeKey) < 4
+                ? "wait"
+                : "finish"
+            }
+            title="Interview"
+          />
+        </Steps>
         <Content
           style={{
             margin: "24px 16px 0",
@@ -143,4 +233,13 @@ function UserWrapper(props) {
   );
 }
 
-export default withRouter(connect(null, { userLogOut })(UserWrapper));
+const mapStateToProps = state => {
+  const { user } = state.currentUser;
+  return {
+    user
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, { userLogOut })(UserWrapper)
+);

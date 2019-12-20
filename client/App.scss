@@ -8,3 +8,12 @@
 body {
   font-family: "ABeeZee", sans-serif;
 }
+
+.loading-div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 0;
+  width: 100%;
+}

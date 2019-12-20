@@ -1,5 +1,5 @@
 import React from "react";
-import { message } from "antd";
+import { message, Button } from "antd";
 import { connect } from "react-redux";
 import { userLogin, getCurrentUser } from "../../actions/users";
 import "./Login.scss";
@@ -51,7 +51,13 @@ class Login extends React.Component {
               placeholder="Password"
               onChange={this.handleChange}
             />
-            <button type="submit">Login</button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={this.props.isLoginInProgress}
+              onClick={this.handleSubmit}
+              >Login
+            </Button>
           </form>
         </div>
       </div>
@@ -60,9 +66,10 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { isAuthenticated, isError } = state.currentUser;
+  const { isAuthenticated, isError, isLoginInProgress } = state.currentUser;
   return {
     isAuthenticated,
+    isLoginInProgress,
     isError
   };
 };
