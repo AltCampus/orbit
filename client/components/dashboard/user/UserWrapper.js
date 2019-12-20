@@ -1,7 +1,8 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { Layout, Menu, Icon, Avatar, Button } from "antd";
+import { Layout, Menu, Icon, Avatar, Button, Steps } from "antd";
+const { Step } = Steps;
 import { userLogOut } from "../../../actions/users";
 
 const { Header, Sider, Content } = Layout;
@@ -18,6 +19,10 @@ function UserWrapper(props) {
     props.userLogOut(() => props.history.push("/"));
   };
 
+  const stepStyle = {
+    marginBottom: 10,
+    boxShadow: "0px -1px 0 0 #e8e8e8 inset"
+  };
   const { user } = props;
   return (
     <Layout className="wrapper">
@@ -161,6 +166,52 @@ function UserWrapper(props) {
             />
           </div>
         </Header>
+        <Steps
+          type="navigation"
+          current={Number(props.activeKey) - 1}
+          style={stepStyle}
+        >
+          <Step
+            status={
+              Number(props.activeKey) === 1
+                ? "process"
+                : Number(props.activeKey) < 1
+                ? "wait"
+                : "finish"
+            }
+            title="HTML"
+          />
+          <Step
+            status={
+              Number(props.activeKey) === 2
+                ? "process"
+                : Number(props.activeKey) < 2
+                ? "wait"
+                : "finish"
+            }
+            title="CodeWars"
+          />
+          <Step
+            status={
+              Number(props.activeKey) === 3
+                ? "process"
+                : Number(props.activeKey) < 3
+                ? "wait"
+                : "finish"
+            }
+            title="Quiz"
+          />
+          <Step
+            status={
+              Number(props.activeKey) === 4
+                ? "process"
+                : Number(props.activeKey) < 4
+                ? "wait"
+                : "finish"
+            }
+            title="Interview"
+          />
+        </Steps>
         <Content
           style={{
             margin: "24px 16px 0",

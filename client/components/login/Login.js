@@ -37,7 +37,7 @@ class Login extends React.Component {
           <div className="login-header">
             <h1 className="login-title">Sign In</h1>
           </div>
-          <form className="login-form">
+          <form className="login-form" onSubmit={this.handleSubmit}>
             <input
               type="email"
               name="email"
@@ -53,6 +53,7 @@ class Login extends React.Component {
             />
             <Button
               type="primary"
+              htmlType="submit"
               loading={this.props.isLoginInProgress}
               onClick={this.handleSubmit}
               >Login

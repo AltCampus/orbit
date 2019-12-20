@@ -54,7 +54,7 @@ class SetPassword extends React.Component {
           <div className="login-header">
             <h1 className="login-title">Set password for your account</h1>
           </div>
-          <form className="login-form">
+          <form className="login-form" onSubmit={this.handleSubmit}>
             <input
               type="password"
               name="password"
@@ -64,6 +64,7 @@ class SetPassword extends React.Component {
             {/* <button type="submit">Set password</button> */}
             <Button
               type="primary"
+              htmlType="submit"
               loading={this.state.isLoading}
               onClick={this.handleSubmit}
               >Set password
