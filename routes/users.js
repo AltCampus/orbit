@@ -6,8 +6,21 @@ const User = require("../models/User");
 const Task = require("../models/Task");
 const auth = require("../utils/auth");
 
+// Get All Users
+router.get("/", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const users = await User.find({ isAdmin: false })
+      .sort({ createdAt: -1 })
+      .select("-password");
+    if (!users) res.status(200).json({ message: "No users yet", status: true });
+    res.status(200).json({ users, status: true });
+  } catch (error) {
+    res.status(400).json({ message: "Something went wrong", status: false });
+  }
+});
+
 //current Login User
-router.get("/", auth.verifyToken, async (req, res) => {
+router.get("/me", auth.verifyToken, async (req, res) => {
   try {
     return res.status(201).json({ status: true, user: req.user });
   } catch (error) {
@@ -125,19 +138,6 @@ router.post("/:hashMail", async (req, res) => {
         .status(400)
         .json({ success: false, message: "Some error from server!" });
     }
-  }
-});
-
-// Get Users
-router.get("/get", async (req, res) => {
-  try {
-    const users = await User.find({ isAdmin: false })
-      .sort({ createdAt: -1 })
-      .select("-password");
-    if (!users) res.status(200).json({ message: "No users yet", status: true });
-    res.status(200).json({ users, status: true });
-  } catch (error) {
-    res.status(400).json({ message: "Something went wrong", status: false });
   }
 });
 

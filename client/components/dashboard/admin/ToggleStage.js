@@ -8,7 +8,7 @@ const columns = [
   {
     title: "Email",
     dataIndex: "email",
-    key: "_id",
+    key: "_id"
   },
   {
     title: "Name",
@@ -22,11 +22,11 @@ const columns = [
     dataIndex: "status",
     filters: [
       { text: "accept", value: "accept" },
-      { text: "pending", value: "pending" }, 
-      { text: "reject", value: "reject" },
+      { text: "pending", value: "pending" },
+      { text: "reject", value: "reject" }
     ],
 
-    onFilter: (value, record) => record.status === value,
+    onFilter: (value, record) => record.status === value
   },
   {
     title: "PhoneNumber",
@@ -36,7 +36,12 @@ const columns = [
   {
     title: "Stage",
     dataIndex: "stage",
-    filters: [{ text: "stage 1", value: 1 }, { text: "stage 2", value: 2 }, { text: "stage 3", value: 3 }, { text: "stage 4", value: 4 } ],
+    filters: [
+      { text: "stage 1", value: 1 },
+      { text: "stage 2", value: 2 },
+      { text: "stage 3", value: 3 },
+      { text: "stage 4", value: 4 }
+    ],
 
     onFilter: (value, record) => record.stage === value,
     sorter: (objA, objB) => objA.stage - objB.stage,
@@ -57,8 +62,9 @@ const columns = [
     dataIndex: "createdAt",
     key: "createdAt",
 
-    sorter: (objA, objB) => Number(new Date(objB.createdAt)) - Number(new Date(objA.createdAt)),
-    sortDirections: ['descend'],
+    sorter: (objA, objB) =>
+      Number(new Date(objB.createdAt)) - Number(new Date(objA.createdAt)),
+    sortDirections: ["descend"],
     render: time => new Date(time).toLocaleString()
   }
 ];
@@ -72,10 +78,14 @@ class ToggleStage extends Component {
   }
 
   async componentDidMount() {
-    const response = await axios.get("http://localhost:3000/api/v1/users/get");
+    const response = await axios.get("http://localhost:3000/api/v1/users/", {
+      headers: {
+        Authorization: JSON.parse(localStorage.getItem("authToken"))
+      }
+    });
     this.setState({
       users: response.data.users
-    })
+    });
   }
 
   getItemId = props => {

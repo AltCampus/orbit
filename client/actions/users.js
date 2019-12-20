@@ -28,7 +28,7 @@ export const getCurrentUser = invalidToken => {
       await dispatch({
         type: GET_USER_PENDING
       });
-      const res = await axios.get(rootUrl, {
+      const res = await axios.get(rootUrl + "/me", {
         headers: {
           Authorization: JSON.parse(localStorage.getItem("authToken"))
         }
@@ -74,7 +74,6 @@ export const userStageUpgrade = () => {
     type: USER_STAGE_UPGRADE
   };
 };
-
 
 export const userLogOut = callback => {
   // Clear the localStorage
