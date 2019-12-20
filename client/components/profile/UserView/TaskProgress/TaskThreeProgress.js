@@ -52,7 +52,7 @@ const TaskThreeProgress = ({ quiz, loading }) => {
               </Descriptions>{" "}
               <Descriptions>
                 <Descriptions.Item label="Submission Time">
-                  {new Date(quiz.submmittedTime).toLocaleString()}
+                  {new Date(quiz.submittedTime).toLocaleString()}
                 </Descriptions.Item>
               </Descriptions>
             </>
