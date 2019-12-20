@@ -5,6 +5,7 @@ const router = express.Router();
 const Task = require("../models/Task");
 const User = require("../models/User");
 const Quiz = require("../models/Quiz");
+const Interview = require("../models/Interview");
 const auth = require("../utils/auth");
 
 router.get("/all/status", auth.verifyToken, async (req, res) => {
@@ -126,27 +127,27 @@ router.get("/all/status", auth.verifyToken, async (req, res) => {
       } else {
         // If user has started the quiz
         const quiz = await Quiz.findById(req.user.quiz);
-        if (!req.user.canTakeQuiz && quiz.submittedTime) {
-          // User has submitted the quiz
-          return res.status(200).json({
-            html: htmlTaskStatus,
-            codewars: codewarsTaskStatus,
-            quiz: {
-              reachedStage: true,
-              canTakeQuiz: false,
-              onGoing: false,
-              submitted: true,
-              startTime: quiz.startTime,
-              submittedTime: quiz.submittedTime
-            },
-            interview: {
-              reachedStage: false,
-              approvedForInterview: false,
-              onGoing: false
-            },
-            stageUpdated
-          });
-        }
+        // if (!req.user.canTakeQuiz && quiz.submittedTime) {
+        //   // User has submitted the quiz
+        //   return res.status(200).json({
+        //     html: htmlTaskStatus,
+        //     codewars: codewarsTaskStatus,
+        //     quiz: {
+        //       reachedStage: true,
+        //       canTakeQuiz: false,
+        //       onGoing: false,
+        //       submitted: true,
+        //       startTime: quiz.startTime,
+        //       submittedTime: quiz.submittedTime
+        //     },
+        //     interview: {
+        //       reachedStage: false,
+        //       approvedForInterview: false,
+        //       onGoing: false
+        //     },
+        //     stageUpdated
+        //   });
+        // }
         if (quiz.endTime.valueOf() < Date.now()) {
           // User has not submitted the quiz on time
           return res.status(200).json({
@@ -183,6 +184,7 @@ router.get("/all/status", auth.verifyToken, async (req, res) => {
               onGoing: true,
               submitted: false,
               startTime: quiz.startTime,
+              endTime: quiz.endTime,
               timeLeft: quiz.endTime.valueOf() - Date.now()
             },
             interview: {
@@ -195,11 +197,107 @@ router.get("/all/status", auth.verifyToken, async (req, res) => {
         }
       }
     }
+    const quiz = await Quiz.findById(req.user.quiz);
 
+    const quizStatus = {
+      reachedStage: true,
+      canTakeQuiz: false,
+      onGoing: false,
+      submitted: true,
+      startTime: quiz.startTime,
+      submittedTime: quiz.submittedTime
+    };
+    if (req.user.stage === 4) {
+      if (
+        !req.user.canScheduleInterview &&
+        req.user.status === "pending" &&
+        !req.user.interview
+      ) {
+        // User Profile is pending approval for being able to schedule the interview
+        return res.status(200).json({
+          html: htmlTaskStatus,
+          codewars: codewarsTaskStatus,
+          quiz: quizStatus,
+          interview: {
+            reachedStage: true,
+            canScheduleInterview: false,
+            pendingApproval: true,
+            hasScheduleInterview: false
+          }
+        });
+      }
+      if (
+        req.user.canScheduleInterview &&
+        req.user.status === "pending" &&
+        !req.user.interview
+      ) {
+        // User can schedule interview and has been approved for scheduling interview
+        return res.status(200).json({
+          html: htmlTaskStatus,
+          codewars: codewarsTaskStatus,
+          quiz: quizStatus,
+          interview: {
+            reachedStage: true,
+            canScheduleInterview: true,
+            pendingApproval: false,
+            hasScheduleInterview: false
+          }
+        });
+      }
+      if (
+        !req.user.canScheduleInterview &&
+        req.user.status === "pending" &&
+        req.user.interview
+      ) {
+        // User has scheduled interview
+        const interview = await Interview.findById(req.user.interview);
+        return res.status(200).json({
+          html: htmlTaskStatus,
+          codewars: codewarsTaskStatus,
+          quiz: quizStatus,
+          interview: {
+            reachedStage: true,
+            canScheduleInterview: false,
+            pendingApproval: false,
+            hasScheduleInterview: true,
+            interview: interview.scheduleEvent
+          }
+        });
+      }
+      if (
+        !req.user.canScheduleInterview &&
+        req.user.status === "reject" &&
+        !req.user.interview
+      ) {
+        // User has been rejected for scheduling an interview
+        return res.status(200).json({
+          html: htmlTaskStatus,
+          codewars: codewarsTaskStatus,
+          quiz: quizStatus,
+          interview: {
+            reachedStage: true,
+            canScheduleInterview: false,
+            pendingApproval: false,
+            hasScheduleInterview: true,
+            rejectedForInterview: true
+          }
+        });
+      }
+    }
+    const interview = await Interview.findById(req.user.interview);
     // Response was not send
-    return res
-      .status(403)
-      .json({ error: "Some Error occured. Please try again." });
+    return res.status(200).json({
+      html: htmlTaskStatus,
+      codewars: codewarsTaskStatus,
+      quiz: quizStatus,
+      interview: {
+        reachedStage: true,
+        canScheduleInterview: false,
+        pendingApproval: false,
+        hasScheduleInterview: true,
+        interview: interview.scheduleEvent
+      }
+    });
   } catch (error) {
     return res
       .status(400)
