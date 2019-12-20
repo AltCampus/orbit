@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 import {
   PageHeader,
   Statistic,
   Descriptions,
   Button,
   message,
-  Alert
-} from "antd";
+  Alert,
+} from 'antd';
 
 const Content = ({ children, extra }) => {
   return (
@@ -23,20 +23,20 @@ class UserProfile extends Component {
     super(props);
 
     this.state = {
-      user: ""
+      user: '',
     };
   }
 
   acceptUserInterview = async id => {
     try {
-      const token = JSON.parse(localStorage.getItem("authToken"));
+      const token = JSON.parse(localStorage.getItem('authToken'));
       const res = await axios.patch(
         `http://localhost:3000/api/v1/users/interview/${id}`,
         null,
         {
           headers: {
-            authorization: token
-          }
+            authorization: token,
+          },
         }
       );
       message.success(res.data.message);
@@ -50,14 +50,14 @@ class UserProfile extends Component {
 
   handleUserAccept = async id => {
     try {
-      const token = JSON.parse(localStorage.getItem("authToken"));
+      const token = JSON.parse(localStorage.getItem('authToken'));
       const res = await axios.patch(
         `http://localhost:3000/api/v1/users/status/${id}`,
         null,
         {
           headers: {
-            authorization: token
-          }
+            authorization: token,
+          },
         }
       );
       message.success(res.data.message);
@@ -71,13 +71,13 @@ class UserProfile extends Component {
 
   handleUserReject = async id => {
     try {
-      const token = JSON.parse(localStorage.getItem("authToken"));
+      const token = JSON.parse(localStorage.getItem('authToken'));
       const res = await axios.delete(
         `http://localhost:3000/api/v1/users/status/${id}`,
         {
           headers: {
-            authorization: token
-          }
+            authorization: token,
+          },
         }
       );
       message.error(res.data.message);
@@ -90,32 +90,32 @@ class UserProfile extends Component {
   };
 
   extraContent = ({ user }) => {
-    if (user.status === "reject") return;
+    if (user.status === 'reject') return;
     return (
       <div
         style={{
-          display: "flex",
-          width: "max-content",
-          justifyContent: "flex-end"
+          display: 'flex',
+          width: 'max-content',
+          justifyContent: 'flex-end',
         }}
       >
         <Statistic
           title="Stage"
           value={user.stage}
           style={{
-            marginRight: 32
+            marginRight: 32,
           }}
         />
         <Statistic
           title="Score"
           value={10}
           style={{
-            marginRight: 32
+            marginRight: 32,
           }}
         />
         <div
           style={{
-            marginRight: 32
+            marginRight: 32,
           }}
         >
           {user.stage > 3 && !user.canScheduleInterview ? (
@@ -126,7 +126,7 @@ class UserProfile extends Component {
               Accept for Interview
             </Button>
           ) : (
-            ""
+            ''
           )}
           {user.interview ? (
             <Button
@@ -135,13 +135,15 @@ class UserProfile extends Component {
             >
               Accept
             </Button>
-          ) : (
+          ) : this.canScheduleInterview ? (
             <Alert
-              style={{ display: "inline-block", marginRight: "10px" }}
+              style={{ display: 'inline-block', marginRight: '10px' }}
               message="Interview is not scheduled yet "
               type="info"
               showIcon
             />
+          ) : (
+            ''
           )}
           {user.stage > 3 ? (
             <Button
@@ -151,7 +153,7 @@ class UserProfile extends Component {
               Reject
             </Button>
           ) : (
-            ""
+            ''
           )}
         </div>
       </div>
@@ -169,12 +171,12 @@ class UserProfile extends Component {
           <section>
             <PageHeader
               style={{
-                border: "1px solid rgb(235, 237, 240)"
+                border: '1px solid rgb(235, 237, 240)',
               }}
               onBack={() => window.history.back()}
               avatar={{
                 src:
-                  "https://avatars1.githubusercontent.com/u/8186664?s=460&v=4"
+                  'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4',
               }}
               title={this.props.user.name}
             >
