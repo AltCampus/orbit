@@ -49,8 +49,8 @@ class UserProgress extends Component {
         <div className="progress-container">
           <TaskOneProgress user={this.props.user} fetchUsers={this.props.fetchUsers} />
           <TaskTwoProgress user={this.props.user} fetchUsers={this.props.fetchUsers} />
-          {/* <TaskThreeProgress />
-          <TaskFourProgress /> */}
+          {this.props.user && this.props.user.quiz && <TaskThreeProgress user={this.props.user} />}
+          {/* <TaskFourProgress /> */}
         </div>
       </>
     );
