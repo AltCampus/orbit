@@ -6,3 +6,4 @@ export const NO_TOKEN = "NO_TOKEN";
 export const LOG_OUT = "LOG_OUT";
 export const USER_STAGE_UPGRADE = "USER_STAGE_UPGRADE";
 export const USER_LOGIN_PENDING = "USER_LOGIN_PENDING";
+export const USER_LOGIN_FAILED = "USER_LOGIN_FAILED";

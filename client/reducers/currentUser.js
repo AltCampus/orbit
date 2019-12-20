@@ -6,7 +6,8 @@ import {
   NO_TOKEN,
   SET_ERROR,
   USER_STAGE_UPGRADE,
-  USER_LOGIN_PENDING
+  USER_LOGIN_PENDING,
+  USER_LOGIN_FAILED
 } from "./../actions/types";
 
 const initialState = {
@@ -30,6 +31,12 @@ const currentUser = (state = initialState, action) => {
       return {
         ...state,
         isLoginInProgress: true
+      };
+    }
+    case USER_LOGIN_FAILED: {
+      return {
+        ...state,
+        isLoginInProgress: false
       };
     }
     case USER_LOGIN_SUCCESS: {
