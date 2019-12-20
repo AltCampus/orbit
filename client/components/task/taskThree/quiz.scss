@@ -30,8 +30,14 @@ button + button {
   margin-left: 1rem;
 }
 
-.question-answered {
-  background: rgb(94, 255, 94);
+.ant-pagination-item.question-answered {
+  background:  rgb(85, 158, 85);
+  color: #fff;
+  border: rgb(94, 255, 94);
+}
+.ant-pagination-item.question-answered.ant-pagination-item-active{
+  background: rgb(55, 199, 55);
+  color: #fff;
 }
 .quiz-info {
   display: flex;
