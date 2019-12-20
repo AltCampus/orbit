@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import UserWrapper from "../../dashboard/user/UserWrapper";
 import Quiz from "./Quiz";
 import TaskCompleted from "../taskCompleted/TaskCompleted";
+import PendingTask from "../../message/PendingTask";
 
 class TaskThree extends Component {
   constructor(props) {
@@ -12,7 +13,13 @@ class TaskThree extends Component {
   render() {
     return (
       <UserWrapper activeKey={"3"}>
-        {this.props.user.user.stage === 3 ? <Quiz /> : <TaskCompleted />}
+        {this.props.user.user.stage === 3 ? (
+          <Quiz />
+        ) : this.props.user.user.stage < 3 ? (
+          <PendingTask />
+        ) : (
+          <TaskCompleted />
+        )}
       </UserWrapper>
     );
   }
