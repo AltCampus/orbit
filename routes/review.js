@@ -38,7 +38,8 @@ router.post("/html", auth.verifyAdminToken, async (req, res) => {
 });
 
 router.post('/codewars', auth.verifyAdminToken, async (req, res) => {
-  let { score = 0, review = '', taskId = '' } = req.body.data;
+  console.log(req.body, "@@@@")
+  let { score = 0, taskId = '' } = req.body.data;
   const updatedTask = {
     score: score,
   };
