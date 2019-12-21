@@ -1,8 +1,10 @@
-import React, { Component, Fragment } from "react";
-import axios from "axios";
+import React, { Fragment, useEffect } from "react";
+import { connect } from "react-redux";
 import { Table } from "antd";
 import { Link } from "react-router-dom";
 import { Icon } from "antd";
+
+import { getApplicantsList } from "../../../actions/admin_dashboard.js";
 
 const columns = [
   {
@@ -69,34 +71,23 @@ const columns = [
   }
 ];
 
-class ToggleStage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      users: null
-    };
-  }
+// React functional component
+const ToggleStage = props => {
 
-  async componentDidMount() {
-    const response = await axios.get("http://localhost:3000/api/v1/users/", {
-      headers: {
-        Authorization: JSON.parse(localStorage.getItem("authToken"))
-      }
-    });
-    this.setState({
-      users: response.data.users
-    });
-  }
+  useEffect(() => {
+    props.getApplicantsList();
 
-  getItemId = props => {
+  }, []);
+
+  const getItemId = props => {
     props.forEach(user => {
       return user._id;
     });
   };
 
-  renderTable = props => {
-    var dataSource = this.state.users;
-    switch (props) {
+  const renderTable = name => {
+    var dataSource = props.applicants;
+    switch (name) {
       case "all":
         break;
       case "stageOne":
@@ -121,23 +112,28 @@ class ToggleStage extends Component {
       </div>
     );
   };
-  render() {
     return (
       <Fragment>
         <div>
-          {!this.state.users ? (
+          {!props.applicants ? (
             <Icon
               type="loading"
               style={{ fontSize: 100, width: "100%", paddingTop: "7rem" }}
               spin
             />
           ) : (
-            <div>{this.renderTable(this.props.name)}</div>
+            <div>{renderTable(props.name)}</div>
           )}
         </div>
       </Fragment>
     );
   }
+
+const mapStateToProps = state => {
+  const { applicants } = state.admin_applicants;
+  return {
+    applicants
+  }
 }
 
-export default ToggleStage;
+export default connect(mapStateToProps, { getApplicantsList })(ToggleStage);
