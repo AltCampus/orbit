@@ -1,7 +1,7 @@
 const express = require("express");
 const https = require("https");
 const router = express.Router();
-const axios = require('axios');
+const axios = require("axios");
 
 const Task = require("../models/Task");
 const User = require("../models/User");
@@ -305,7 +305,7 @@ router.get("/all/status", auth.verifyToken, async (req, res) => {
       .json({ status: false, error: "Some Error Occurred" });
   }
 });
-router.post("/one/save", auth.verifyToken, async (req, res) => {
+router.post("/1/save", auth.verifyToken, async (req, res) => {
   let { url = "" } = req.body;
   let { id } = req.user;
   const updatedTask = {
@@ -319,7 +319,9 @@ router.post("/one/save", auth.verifyToken, async (req, res) => {
       error: "You've already send your HTML assignment link"
     });
   }
-  if (url.indexOf("https://codesandbox.io/s") !== 0) {
+  const csbRegex = /https?:\/\/([a-z0-9]+[.])*csb[.]app/;
+
+  if (url.indexOf("https://codesandbox.io/s") !== 0 && !csbRegex.test(url)) {
     return res
       .status(400)
       .json({ status: false, error: "Invalid Sandbox Url" });
@@ -343,7 +345,7 @@ router.post("/one/save", auth.verifyToken, async (req, res) => {
 });
 
 // Check status of codewars task
-router.get("/two/status", auth.verifyToken, async (req, res) => {
+router.get("/2/status", auth.verifyToken, async (req, res) => {
   let { id } = req.user;
   // send request to codewars api to validate username
   if (req.user.stage > 2) {
@@ -377,10 +379,14 @@ router.get("/two/status", auth.verifyToken, async (req, res) => {
 
 // Save CodeWars username
 
-router.post("/two/save", auth.verifyToken, (req, res) => {
+router.post("/2/save", auth.verifyToken, (req, res) => {
   let { username = "" } = req.body;
   let { id } = req.user;
   // send request to codewars api to validate username
+  if (username.indexOf("https://www.codewars.com/users/") === 0) {
+    // If it is codewars profile link
+    username = username.replace("https://www.codewars.com/users/", "");
+  }
   if (req.user.stage !== 2) {
     // Check if user already is on stage 2
     return res.status(400).json({
@@ -445,15 +451,11 @@ router.post("/two/save", auth.verifyToken, (req, res) => {
 
 // Get Number Of Kata's Solved by User
 
-router.post('/two/katas', auth.verifyAdminToken, (req, res) => {
-  console.log('!!!',req.body)
+router.post("/two/katas", auth.verifyAdminToken, (req, res) => {
   let task = req.body.props.task;
   let codewars = req.body.props.task.codewars;
-  console.log(req.body.props)
-  console.log(codewars, 'body');
   const getKatas = async () => {
     try {
-      console.log('INSIDE TRY');
       const response = await axios.get(
         `https://www.codewars.com/api/v1/users/${codewars.codewarsUsername}/code-challenges/completed?page=0`
       );
@@ -461,13 +463,10 @@ router.post('/two/katas', auth.verifyAdminToken, (req, res) => {
       const filteredArray = response.data.data.filter(
         kata => kata.completedAt > codewars.startTime
       );
-      console.log(filteredArray, 'FIL111');
       const refilteredArray = filteredArray.filter(
         kata => kata.completedAt < codewars.endTime
       );
-      console.log(refilteredArray, 'FIL222');
       const katasSolved = refilteredArray.length;
-      console.log(katasSolved);
 
       // Save number of katas solved to backend
       try {
@@ -487,7 +486,7 @@ router.post('/two/katas', auth.verifyAdminToken, (req, res) => {
 
       return res
         .status(200)
-        .json({ data: { katasSolved }, status: true, message: 'success' });
+        .json({ data: { katasSolved }, status: true, message: "success" });
     } catch (error) {
       console.log(error);
       return res.status(400).json({ status: false });
