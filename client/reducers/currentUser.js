@@ -14,7 +14,7 @@ const initialState = {
   user: null,
   token: null,
   isAuthenticated: false,
-  isAuthInProgress: false,
+  tokenValidationInProgress: false,
   isLoginInProgress: false,
   isError: false
 };
@@ -44,14 +44,14 @@ const currentUser = (state = initialState, action) => {
         ...state,
         token: action.data,
         isAuthenticated: true,
-        isAuthInProgress: false,
+        tokenValidationInProgress: false,
         isLoginInProgress: false
       };
     }
     case GET_USER_PENDING: {
       return {
         ...state,
-        isAuthInProgress: true
+        tokenValidationInProgress: true
       };
     }
     case GET_USER_SUCCESS: {
@@ -59,7 +59,7 @@ const currentUser = (state = initialState, action) => {
         ...state,
         user: action.data,
         isAuthenticated: true,
-        isAuthInProgress: false
+        tokenValidationInProgress: false
       };
     }
     case USER_STAGE_UPGRADE: {
@@ -75,7 +75,7 @@ const currentUser = (state = initialState, action) => {
     case NO_TOKEN:
       return {
         ...state,
-        isAuthInProgress: false,
+        tokenValidationInProgress: false,
         isAuthenticated: false,
         token: null,
         user: null
