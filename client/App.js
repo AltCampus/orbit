@@ -87,13 +87,8 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        {/* Conditional Routing, Checks if tokenValidationInProgress true or false, Checks
-        if user is available or not */}
-        {this.props.tokenValidationInProgress
-          ? null
-          : this.props.user
-          ? this.protectedRoutes()
-          : this.unprotectedRoutes()}
+        {/* Conditional Routing, Checks if user is available or not */}
+        {this.props.user ? this.protectedRoutes() : this.unprotectedRoutes()}
       </React.Fragment>
     );
   }
