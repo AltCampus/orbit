@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { connect } from "react-redux";
-import { Card, Col, Row, Input, Button, message, Spin, Icon } from "antd";
-import UserWrapper from "../../dashboard/user/UserWrapper";
-import TaskCompleted from "../taskCompleted/TaskCompleted";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { Card, Col, Row, Input, Button, message, Spin, Icon } from 'antd';
+import UserWrapper from '../../dashboard/user/UserWrapper';
+import TaskCompleted from '../taskCompleted/TaskCompleted';
 
-import { userStageUpgrade } from "../../../actions/users";
+import { userStageUpgrade } from '../../../actions/users';
 
 class TaskOne extends Component {
   state = {
-    url: "",
-    loading: false
+    url: '',
+    loading: false,
   };
 
   handleChange = e => {
@@ -22,17 +22,18 @@ class TaskOne extends Component {
     this.setState({ loading: true });
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/tasks/1/save",
+        'http://localhost:3000/api/v1/tasks/one/save',
+
         {
-          url: this.state.url
+          url: this.state.url,
         },
         {
           headers: {
-            authorization: JSON.parse(localStorage.getItem("authToken"))
-          }
+            authorization: JSON.parse(localStorage.getItem('authToken')),
+          },
         }
       );
-      message.success(res.status && "Your Project has been submitted.");
+      message.success(res.status && 'Your Project has been submitted.');
       this.setState({ loading: false });
 
       this.props.userStageUpgrade();
@@ -48,7 +49,7 @@ class TaskOne extends Component {
          */
         message.error(error.response.data.error);
       } else {
-        message.error("An error occured");
+        message.error('An error occured');
       }
     }
   };
@@ -56,14 +57,14 @@ class TaskOne extends Component {
   render() {
     return (
       <>
-        <UserWrapper activeKey={"1"}>
+        <UserWrapper activeKey={'1'}>
           {this.state.loading ? (
             <div className="loading-div">
               <Spin
                 indicator={
                   <Icon
                     type="loading"
-                    style={{ fontSize: 100, margin: "3rem auto" }}
+                    style={{ fontSize: 100, margin: '3rem auto' }}
                   />
                 }
               />
@@ -112,17 +113,26 @@ class TaskOne extends Component {
                           <h2>Resources</h2>
                           <ul>
                             <li>
-                              <a href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72">
+                              <a
+                                href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72"
+                                target="_blank"
+                              >
                                 <mark>freecodecamp</mark>
                               </a>
                             </li>
                             <li>
-                              <a href="https://learn.shayhowe.com/html-css/building-your-first-web-page/">
+                              <a
+                                href="https://learn.shayhowe.com/html-css/building-your-first-web-page/"
+                                target="_blank"
+                              >
                                 <mark>shayhowe</mark>
                               </a>
                             </li>
                             <li>
-                              <a href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css">
+                              <a
+                                href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css"
+                                target="_blank"
+                              >
                                 <mark>abeautifulsite</mark>
                               </a>
                             </li>
@@ -172,7 +182,7 @@ class TaskOne extends Component {
 const mapStateToProps = state => {
   const { user } = state.currentUser;
   return {
-    user
+    user,
   };
 };
 

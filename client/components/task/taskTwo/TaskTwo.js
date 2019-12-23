@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { connect } from "react-redux";
-import { userStageUpgrade } from "../../../actions/users";
-import { Card, Col, Row, Input, Button, message, Spin, Icon } from "antd";
-import UserWrapper from "../../dashboard/user/UserWrapper";
-import TaskCompleted from "../taskCompleted/TaskCompleted";
-import CodeWarsTimer from "./CodeWarsTimer";
-import PendingTask from "../../message/PendingTask";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { userStageUpgrade } from '../../../actions/users';
+import { Card, Col, Row, Input, Button, message, Spin, Icon } from 'antd';
+import UserWrapper from '../../dashboard/user/UserWrapper';
+import TaskCompleted from '../taskCompleted/TaskCompleted';
+import CodeWarsTimer from './CodeWarsTimer';
+import PendingTask from '../../message/PendingTask';
 class TaskTwo extends Component {
   state = {
-    username: "",
+    username: '',
     onGoing: null,
     timeLeft: null,
     completed: null,
-    loading: false
+    loading: false,
   };
   intervalId = React.createRef();
 
@@ -34,18 +34,19 @@ class TaskTwo extends Component {
     try {
       this.setState({ loading: true });
       const res = await axios.get(
-        "http://localhost:3000/api/v1/tasks/2/status",
+        'http://localhost:3000/api/v1/tasks/two/status',
+
         {
           headers: {
-            authorization: JSON.parse(localStorage.getItem("authToken"))
-          }
+            authorization: JSON.parse(localStorage.getItem('authToken')),
+          },
         }
       );
       this.setState({
         timeLeft: parseInt(res.data.timeLeft / 1000),
         onGoing: res.data.onGoing,
         completed: res.data.completed,
-        loading: false
+        loading: false,
       });
       if (res.data.stageUpdated) {
         this.props.userStageUpgrade();
@@ -64,7 +65,7 @@ class TaskTwo extends Component {
          */
         message.error(error.response.data.error);
       } else {
-        message.error("An error occured");
+        message.error('An error occured');
       }
     }
   }
@@ -87,23 +88,24 @@ class TaskTwo extends Component {
     this.setState({ loading: true });
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/tasks/2/save",
+        'http://localhost:3000/api/v1/tasks/two/save',
+
         {
-          username: this.state.username
+          username: this.state.username,
         },
         {
           headers: {
-            authorization: JSON.parse(localStorage.getItem("authToken"))
-          }
+            authorization: JSON.parse(localStorage.getItem('authToken')),
+          },
         }
       );
       message.success(
-        res.status && "Your codewars username has been submitted."
+        res.status && 'Your codewars username has been submitted.'
       );
       this.setState({
         loading: false,
         onGoing: true,
-        timeLeft: parseInt(res.data.timeLeft / 1000)
+        timeLeft: parseInt(res.data.timeLeft / 1000),
       });
       this.startTimer();
     } catch (error) {
@@ -115,21 +117,21 @@ class TaskTwo extends Component {
          */
         message.error(error.response.data.error);
       } else {
-        message.error("An error occured");
+        message.error('An error occured');
       }
     }
   };
 
   render() {
     return (
-      <UserWrapper activeKey={"2"}>
+      <UserWrapper activeKey={'2'}>
         {this.state.loading ? (
           <div className="loading-div">
             <Spin
               indicator={
                 <Icon
                   type="loading"
-                  style={{ fontSize: 100, margin: "3rem auto" }}
+                  style={{ fontSize: 100, margin: '3rem auto' }}
                 />
               }
             />
@@ -187,17 +189,26 @@ class TaskTwo extends Component {
                               <h2>Resources</h2>
                               <ul>
                                 <li>
-                                  <a href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72">
+                                  <a
+                                    href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72"
+                                    target="_blank"
+                                  >
                                     <mark>JavaScript.info</mark>
                                   </a>
                                 </li>
                                 <li>
-                                  <a href="https://learn.shayhowe.com/html-css/building-your-first-web-page/">
+                                  <a
+                                    href="https://learn.shayhowe.com/html-css/building-your-first-web-page/"
+                                    target="_blank"
+                                  >
                                     <mark>resources 2</mark>
                                   </a>
                                 </li>
                                 <li>
-                                  <a href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css">
+                                  <a
+                                    href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css"
+                                    target="_blank"
+                                  >
                                     <mark>resources</mark>
                                   </a>
                                 </li>
@@ -239,7 +250,7 @@ class TaskTwo extends Component {
 const mapStateToProps = state => {
   const { user } = state.currentUser;
   return {
-    user
+    user,
   };
 };
 
