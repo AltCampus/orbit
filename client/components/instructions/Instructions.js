@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Timeline, Button } from 'antd';
+
 import UserWrapper from '../dashboard/user/UserWrapper';
 
 export default function Instructions() {
@@ -88,7 +90,9 @@ export default function Instructions() {
         </Timeline>
       </div>
       <div className="instruction-btn">
-        <Button>Next</Button>
+        <Link to="task/1">
+          <Button>Next</Button>
+        </Link>
       </div>
     </UserWrapper>
   );
