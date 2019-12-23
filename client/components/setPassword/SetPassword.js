@@ -6,7 +6,7 @@ import { message, Button } from "antd";
 class SetPassword extends React.Component {
   state = {
     password: "",
-    isLoading: false,
+    isLoading: false
   };
 
   handleSubmit = e => {
@@ -28,7 +28,7 @@ class SetPassword extends React.Component {
   fetchResetPassword = async hashmail => {
     try {
       // Set isLoading to true to enable loader
-      this.setState({isLoading: true});
+      this.setState({ isLoading: true });
 
       let password = { password: this.state.password };
       // Post the user password
@@ -36,11 +36,11 @@ class SetPassword extends React.Component {
         `http://localhost:3000/api/v1/users/${hashmail}`,
         password
       );
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       message.success("Password Reset Now you Can Login!");
       this.props.history.push("/login");
     } catch (error) {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       error.response.data.message
         ? message.error(error.response.data.message)
         : console.error(error);
@@ -66,8 +66,8 @@ class SetPassword extends React.Component {
               type="primary"
               htmlType="submit"
               loading={this.state.isLoading}
-              onClick={this.handleSubmit}
-              >Set password
+            >
+              Set password
             </Button>
           </form>
         </div>
