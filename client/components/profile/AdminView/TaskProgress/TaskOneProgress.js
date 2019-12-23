@@ -50,7 +50,7 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
                     message: 'Please write a review'
                   }
                 ]
-              })(<Input type="textarea" />)}
+              })(<TextArea type="textarea" />)}
             </Form.Item>
           </Form>
         </Modal>
