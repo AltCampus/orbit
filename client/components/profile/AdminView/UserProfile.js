@@ -1,13 +1,14 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 import {
   PageHeader,
   Statistic,
   Descriptions,
   Button,
   message,
-  Alert
-} from "antd";
+  Alert,
+  Icon
+} from 'antd';
 
 const Content = ({ children, extra }) => {
   return (
@@ -23,7 +24,7 @@ class UserProfile extends Component {
     super(props);
 
     this.state = {
-      user: "",
+      user: '',
       acceptloading: false,
       interviewloading: false,
       loading: false
@@ -33,7 +34,7 @@ class UserProfile extends Component {
   acceptUserInterview = async id => {
     try {
       this.setState({ interviewloading: true });
-      const token = JSON.parse(localStorage.getItem("authToken"));
+      const token = JSON.parse(localStorage.getItem('authToken'));
       const res = await axios.patch(
         `http://localhost:3000/api/v1/users/interview/${id}`,
         null,
@@ -57,7 +58,7 @@ class UserProfile extends Component {
   handleUserAccept = async id => {
     try {
       this.setState({ acceptloading: true });
-      const token = JSON.parse(localStorage.getItem("authToken"));
+      const token = JSON.parse(localStorage.getItem('authToken'));
       const res = await axios.patch(
         `http://localhost:3000/api/v1/users/status/${id}`,
         null,
@@ -81,7 +82,7 @@ class UserProfile extends Component {
   handleUserReject = async id => {
     try {
       this.setState({ loading: true });
-      const token = JSON.parse(localStorage.getItem("authToken"));
+      const token = JSON.parse(localStorage.getItem('authToken'));
       const res = await axios.delete(
         `http://localhost:3000/api/v1/users/status/${id}`,
         {
@@ -102,13 +103,13 @@ class UserProfile extends Component {
   };
 
   extraContent = ({ user }) => {
-    if (user.status === "reject") return;
+    if (user.status === 'reject') return;
     return (
       <div
         style={{
-          display: "flex",
-          width: "max-content",
-          justifyContent: "flex-end"
+          display: 'flex',
+          width: 'max-content',
+          justifyContent: 'flex-end'
         }}
       >
         <Statistic
@@ -139,7 +140,7 @@ class UserProfile extends Component {
               Accept for Interview
             </Button>
           ) : (
-            ""
+            ''
           )}
           {user.interview ? (
             <Button
@@ -151,13 +152,13 @@ class UserProfile extends Component {
             </Button>
           ) : user.canScheduleInterview ? (
             <Alert
-              style={{ display: "inline-block", marginRight: "10px" }}
+              style={{ display: 'inline-block', marginRight: '10px' }}
               message="Interview is not scheduled yet "
               type="info"
               showIcon
             />
           ) : (
-            ""
+            ''
           )}
           {user.stage > 3 ? (
             <Button
@@ -168,7 +169,7 @@ class UserProfile extends Component {
               Reject
             </Button>
           ) : (
-            ""
+            ''
           )}
         </div>
       </div>
@@ -180,23 +181,24 @@ class UserProfile extends Component {
   };
 
   render() {
+    // console.log(this.props.user.task.html.htmlUrl)
     return (
       <>
         {this.state.user && (
           <section>
             <PageHeader
               style={{
-                border: "1px solid rgb(235, 237, 240)"
+                border: '1px solid rgb(235, 237, 240)'
               }}
               onBack={() => window.history.back()}
               avatar={{
                 src:
-                  "https://avatars1.githubusercontent.com/u/8186664?s=460&v=4"
+                  'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4'
               }}
               title={this.props.user.name}
             >
               <Content extra={this.extraContent(this.state)}>
-                <Descriptions size="small" column={2}>
+                <Descriptions size="small" column={3}>
                   <Descriptions.Item label="Name">
                     {this.props.user.name}
                   </Descriptions.Item>
@@ -204,6 +206,26 @@ class UserProfile extends Component {
                     <a href={this.props.user.socialProfile} target="_blank">
                       {this.props.user.socialProfile}
                     </a>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Task One">
+                    {this.props.user.task.html &&
+                    this.props.user.task.html.taskUrl ? (
+                      <div>
+                        <Icon
+                          type="check-circle"
+                          style={{ fontSize: 20, width: '100%' }}
+                          theme="twoTone"
+                        />
+                      </div>
+                    ) : (
+                      <div>
+                        <Icon
+                          type="clock-circle"
+                          style={{ fontSize: 20, width: '100%' }}
+                          theme="twoTone"
+                        />
+                      </div>
+                    )}
                   </Descriptions.Item>
                   <Descriptions.Item label="Phone number">
                     <a href={`mailto:${this.props.user.phoneNo}`}>
@@ -215,11 +237,51 @@ class UserProfile extends Component {
                       {this.props.user.email}
                     </a>
                   </Descriptions.Item>
+                  <Descriptions.Item label="Task Two">
+                    {this.props.user.task.codewars &&
+                    this.props.user.task.codewars.endTime <
+                      new Date().toISOString() ? (
+                      <div>
+                        <Icon
+                          type="check-circle"
+                          style={{ fontSize: 20, width: '100%' }}
+                          theme="twoTone"
+                        />
+                      </div>
+                    ) : (
+                      <div>
+                        <Icon
+                          type="clock-circle"
+                          style={{ fontSize: 20, width: '100%' }}
+                          theme="twoTone"
+                        />
+                      </div>
+                    )}
+                  </Descriptions.Item>
                   <Descriptions.Item label="Motivation">
                     {this.props.user.motivation}
                   </Descriptions.Item>
                   <Descriptions.Item label="Status">
                     {this.props.user.status}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Task Three">
+                    {this.props.user && this.props.user.quiz ? (
+                      <div>
+                        <Icon
+                          type="check-circle"
+                          style={{ fontSize: 20, width: '100%' }}
+                          theme="twoTone"
+                        />
+                      </div>
+                    ) : (
+                      <div>
+                        <Icon
+                          type="clock-circle"
+                          style={{ fontSize: 20, width: '100%' }}
+                          theme="twoTone"
+                        />
+                      </div>
+                    )}
                   </Descriptions.Item>
                 </Descriptions>
               </Content>

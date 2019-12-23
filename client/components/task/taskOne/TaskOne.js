@@ -23,6 +23,7 @@ class TaskOne extends Component {
     try {
       const res = await axios.post(
         'http://localhost:3000/api/v1/tasks/one/save',
+
         {
           url: this.state.url,
         },
@@ -161,7 +162,7 @@ class TaskOne extends Component {
                       />
                       <Button
                         className="url-submit"
-                        onClick={this.handleSubmit}
+                        htmlType="submit"
                         type="primary"
                       >
                         Submit

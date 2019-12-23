@@ -35,6 +35,7 @@ class TaskTwo extends Component {
       this.setState({ loading: true });
       const res = await axios.get(
         'http://localhost:3000/api/v1/tasks/two/status',
+
         {
           headers: {
             authorization: JSON.parse(localStorage.getItem('authToken')),
@@ -74,6 +75,10 @@ class TaskTwo extends Component {
     }
   }
 
+  componentWillUnmount() {
+    window.clearInterval(this.intervalId);
+  }
+
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -84,6 +89,7 @@ class TaskTwo extends Component {
     try {
       const res = await axios.post(
         'http://localhost:3000/api/v1/tasks/two/save',
+
         {
           username: this.state.username,
         },
@@ -223,7 +229,7 @@ class TaskTwo extends Component {
                         />
                         <Button
                           className="url-submit"
-                          onClick={this.handleSubmit}
+                          htmlType="submit"
                           type="primary"
                         >
                           Submit

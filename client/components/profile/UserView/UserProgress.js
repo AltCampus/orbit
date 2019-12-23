@@ -6,7 +6,7 @@ import TaskTwoProgress from "./TaskProgress/TaskTwoProgress";
 import TaskThreeProgress from "./TaskProgress/TaskThreeProgress";
 import TaskFourProgress from "./TaskProgress/TaskFourProgress";
 import { connect } from "react-redux";
-import { userStageUpgrade } from "../../../actions/types";
+import { userStageUpgrade } from "../../../actions/users";
 
 const { Meta } = Card;
 

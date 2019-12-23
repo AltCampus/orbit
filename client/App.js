@@ -75,7 +75,7 @@ class App extends Component {
 
   componentDidMount = () => {
     if (localStorage.getItem("authToken")) {
-      const invalidToken = async msg => {
+      const invalidToken = async (msg) => {
         message.error(`${msg}, Redirect to Login please wait!`);
         await localStorage.clear();
         setTimeout(() => this.props.history.push("/login"), 1000);
@@ -87,9 +87,9 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        {/* Conditional Routing, Checks if isAuthInProgress true or false, Checks
+        {/* Conditional Routing, Checks if tokenValidationInProgress true or false, Checks
         if user is available or not */}
-        {this.props.isAuthInProgress
+        {this.props.tokenValidationInProgress
           ? null
           : this.props.user
           ? this.protectedRoutes()
@@ -99,11 +99,11 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const { user, isAuthInProgress } = state.currentUser;
+const mapStateToProps = (state) => {
+  const { user, tokenValidationInProgress } = state.currentUser;
   return {
     user,
-    isAuthInProgress
+    tokenValidationInProgress
   };
 };
 
