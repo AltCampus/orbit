@@ -1,26 +1,28 @@
-var express = require("express");
+var express = require('express');
 var router = express.Router();
 
 // const Mailer = require("../utils/Mailer");
-const User = require("../models/User");
-const Task = require("../models/Task");
-const auth = require("../utils/auth");
+const User = require('../models/User');
+const Task = require('../models/Task');
+const auth = require('../utils/auth');
 
 // Get All Users
-router.get("/", auth.verifyAdminToken, async (req, res) => {
+router.get('/', auth.verifyAdminToken, async (req, res) => {
   try {
     const users = await User.find({ isAdmin: false })
       .sort({ createdAt: -1 })
-      .select("-password");
-    if (!users) res.status(200).json({ message: "No users yet", status: true });
+      .select('-password')
+      .populate('task')
+      .populate('quiz');
+    if (!users) res.status(200).json({ message: 'No users yet', status: true });
     res.status(200).json({ users, status: true });
   } catch (error) {
-    res.status(400).json({ message: "Something went wrong", status: false });
+    res.status(400).json({ message: 'Something went wrong', status: false });
   }
 });
 
 //current Login User
-router.get("/me", auth.verifyToken, async (req, res) => {
+router.get('/me', auth.verifyToken, async (req, res) => {
   try {
     return res.status(201).json({ status: true, user: req.user });
   } catch (error) {
@@ -29,14 +31,14 @@ router.get("/me", auth.verifyToken, async (req, res) => {
 });
 
 /* POST req from altcampus to orbit and create user */
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   let { name, email, phoneNo, socialProfile, motivation } = req.body;
   try {
     // validations for required profile
     if (!name || !email || !phoneNo || !socialProfile || !motivation) {
       return res.status(400).json({
         status: false,
-        message: "Please fill all Required data"
+        message: 'Please fill all Required data'
       });
     }
     hashMail =
@@ -62,7 +64,7 @@ router.post("/", async (req, res) => {
 });
 
 //Login route
-router.post("/login", async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     let { email, password } = req.body;
 
@@ -70,7 +72,7 @@ router.post("/login", async (req, res) => {
     if (!email || !password) {
       return res
         .status(400)
-        .json({ status: false, message: "Please Fill Both Fields" });
+        .json({ status: false, message: 'Please Fill Both Fields' });
     }
 
     const user = await User.findOne({ email: req.body.email });
@@ -78,30 +80,30 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ status: false, message: "User not found!!!" });
+        .json({ status: false, message: 'User not found!!!' });
     }
 
     if (!user.verifyPassword(password)) {
       return res
         .status(400)
-        .json({ status: false, message: "Invaild password" });
+        .json({ status: false, message: 'Invaild password' });
     }
 
     const authToken = await auth.generateToken(user.id);
 
-    return res.status(200).json({ status: "success", authToken });
+    return res.status(200).json({ status: 'success', authToken });
   } catch (error) {
-    return res.status(400).json({ status: "failed", error });
+    return res.status(400).json({ status: 'failed', error });
   }
 });
 
 // on first login reset Password
-router.post("/:hashMail", async (req, res) => {
+router.post('/:hashMail', async (req, res) => {
   let { password } = req.body;
   if (password.length < 6) {
     return res
       .status(400)
-      .json({ status: true, message: "Password must contain 6 letter!" });
+      .json({ status: true, message: 'Password must contain 6 letter!' });
   } else {
     try {
       let { hashMail } = req.params;
@@ -124,42 +126,42 @@ router.post("/:hashMail", async (req, res) => {
         // Set user profile to be claimed.
         user.isProfileClaimed = true;
         const updatedUser = await user.save();
-        updatedUser.password = "";
+        updatedUser.password = '';
         return res.status(201).json({ status: true, user: updatedUser });
       } else {
         return res.status(401).json({
           success: false,
-          message: "User already Claimed there account"
+          message: 'User already Claimed there account'
         });
       }
     } catch (error) {
       console.log(error);
       return res
         .status(400)
-        .json({ success: false, message: "Some error from server!" });
+        .json({ success: false, message: 'Some error from server!' });
     }
   }
 });
 
 /* GET User Progress */
-router.get("/:id", auth.verifyAdminToken, async (req, res) => {
+router.get('/:id', auth.verifyAdminToken, async (req, res) => {
   const userId = req.params.id;
   console.log(userId);
   try {
     let user = await User.findById(
       { _id: userId },
-      "-password -hashMail -__v -isAdmin -isProfileClaimed"
-    ).populate("task");
-    console.log("hel");
+      '-password -hashMail -__v -isAdmin -isProfileClaimed'
+    ).populate('task');
+    console.log('hel');
     // const task = await Task.findById(user.task)
     res.status(200).json({ user, status: true });
   } catch (error) {
-    res.status(400).json({ message: "Something went wrong", status: false });
+    res.status(400).json({ message: 'Something went wrong', status: false });
   }
 });
 
 // Admin can accept for interview user route
-router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
+router.patch('/interview/:id', auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
     let user = await User.findOne({ _id: id });
@@ -183,17 +185,17 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
     console.log(error);
     res
       .status(400)
-      .json({ status: false, message: "some error occurs from Server" });
+      .json({ status: false, message: 'some error occurs from Server' });
   }
 });
 
 // Admin can accept user route
-router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
+router.patch('/status/:id', auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
     let user = await User.findOne({ _id: id });
     if (user.interview) {
-      user.status = "accept";
+      user.status = 'accept';
       user = await user.save();
       user.password = undefined;
       user.hashMail = undefined;
@@ -214,17 +216,17 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
     console.log(error);
     return res
       .status(400)
-      .json({ status: false, message: "some error occurs from Server" });
+      .json({ status: false, message: 'some error occurs from Server' });
   }
 });
 
 // Admin can Reject user route
-router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
+router.delete('/status/:id', auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
     let user = await User.findOne({ _id: id });
     if (user.stage > 3) {
-      user.status = "reject";
+      user.status = 'reject';
       user = await user.save();
       user.password = undefined;
       user.hashMail = undefined;
@@ -245,7 +247,7 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
     console.log(error);
     return res
       .status(400)
-      .json({ status: false, message: "some error occurs from Server" });
+      .json({ status: false, message: 'some error occurs from Server' });
   }
 });
 
