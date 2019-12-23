@@ -170,6 +170,9 @@ function UserWrapper(props) {
           type="navigation"
           current={Number(props.activeKey) - 1}
           style={stepStyle}
+          onChange={index =>
+            console.log(index) || props.history.push(`/task/${index + 1}`)
+          }
         >
           <Step
             status={
