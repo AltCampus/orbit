@@ -55,8 +55,8 @@ class Login extends React.Component {
               type="primary"
               htmlType="submit"
               loading={this.props.isLoginInProgress}
-              onClick={this.handleSubmit}
-              >Login
+            >
+              Login
             </Button>
           </form>
         </div>
