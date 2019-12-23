@@ -51,8 +51,8 @@ export const getCurrentUser = invalidToken => {
 export const userLogin = data => {
   return async dispatch => {
     try {
-      await dispatch({type: USER_LOGIN_PENDING });
-      
+      await dispatch({ type: USER_LOGIN_PENDING });
+
       const res = await axios.post(`${rootUrl}/login`, data);
       localStorage.setItem("authToken", JSON.stringify(res.data.authToken));
       // Set token
@@ -62,8 +62,8 @@ export const userLogin = data => {
         data: res.data.authToken
       });
     } catch (error) {
+      dispatch({ type: USER_LOGIN_FAILED });
       if (error.response) {
-        dispatch({ type: USER_LOGIN_FAILED })
         dispatch({ type: SET_ERROR });
         message.error(error.response.data.message);
       } else console.error(error);
