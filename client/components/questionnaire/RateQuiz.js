@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import ReviewQuizForm from "./ReviewQuizForm";
 import AdminWrapper from "../dashboard/admin/AdminWrapper";
+import "./RateQuiz.scss";
 
 import { Table, Typography, Button, message, Spin, Icon } from "antd";
 const { Column } = Table;
@@ -128,7 +129,11 @@ class RateQuiz extends React.Component {
     return (
       <AdminWrapper>
         <div>
-          <Button shape="circle" icon="arrow-left" onClick={() => window.history.back()}/>
+          <Button
+            shape="circle"
+            icon="arrow-left"
+            onClick={() => window.history.back()}
+          />
           {this.state.loading ? (
             <div className="loading-div">
               <Spin
@@ -165,9 +170,6 @@ class RateQuiz extends React.Component {
                       </Paragraph>
                     </>
                   )}
-                  <Text strong>
-                    Now you aren't suppose to scroll through the modal. :P
-                  </Text>
                   {this.state.quizId && (
                     <ReviewQuizForm
                       wrappedComponentRef={this.saveFormRef}
