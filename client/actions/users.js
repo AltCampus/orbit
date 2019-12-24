@@ -13,7 +13,9 @@ import {
 } from "./types";
 import { message } from "antd";
 
-const rootUrl = "http://localhost:3000/api/v1/users";
+axios.defaults.baseURL = "http://localhost:3000/";
+
+const rootUrl = "/api/v1/users";
 
 // const setTokenToAxios = token => {
 //   const newToken = token || "";
