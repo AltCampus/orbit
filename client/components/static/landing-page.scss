@@ -3,7 +3,7 @@
     width: 80%;
     display: flex;
     justify-content: center;
-    margin-top: 15rem;
+    margin-top: 10rem;
 }
 
 .image-wrapper {
@@ -18,10 +18,19 @@
     }
 
     p {
-        font-size: 3rem;
+        font-size: 5rem;
     }
 
     strong {
-        font-size: 5rem;
+        font-size: 7rem;
     }
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 2rem;
+    justify-content: flex-end;
 }

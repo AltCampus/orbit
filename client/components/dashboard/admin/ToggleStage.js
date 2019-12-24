@@ -86,6 +86,7 @@ class ToggleStage extends Component {
     this.setState({
       users: response.data.users
     });
+    console.log(response.data)
   }
 
   getItemId = props => {
@@ -107,6 +108,15 @@ class ToggleStage extends Component {
         break;
       case "stageThree":
         dataSource = dataSource.filter(user => user.stage === 3);
+        break;
+        case "toBeReviewed":
+        dataSource = dataSource.filter(user => user.stage === 4 || user.stage === 3 || user.stage === 2);
+        dataSource = dataSource.filter(user => !user.task.html.score)
+        dataSource = dataSource.filter(user=> user.task.codewars)
+        dataSource = dataSource.filter(user=> !user.task.codewars.score)
+        dataSource = dataSource.filter(user=> user.quiz)
+        dataSource = dataSource.filter(user=> !user.quiz.score)         
+        // dataSource = dataSource.filter(user => console.log("user"))
         break;
       case "stageFour":
         dataSource = dataSource.filter(user => user.stage === 4);

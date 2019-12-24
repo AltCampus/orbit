@@ -94,7 +94,7 @@ class RenderModal extends Component {
               value={this.state.score}
               onChange={this.handleChange}
               placeholder="score" />
-            <input
+            <textarea
               style={{ display: 'block', margin: '6px' }}
               placeholder="review"
               name="review"

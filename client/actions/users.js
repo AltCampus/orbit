@@ -64,8 +64,8 @@ export const userLogin = data => {
         data: res.data.authToken
       });
     } catch (error) {
+      dispatch({ type: USER_LOGIN_FAILED });
       if (error.response) {
-        dispatch({ type: USER_LOGIN_FAILED });
         dispatch({ type: SET_ERROR });
         message.error(error.response.data.message);
       } else console.error(error);

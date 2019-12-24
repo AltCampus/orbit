@@ -1,0 +1,21 @@
+.answer-container {
+  .question {
+    font-size: 1.5rem;
+  }
+  .answer-submitted {
+    border: 1px solid lightgray;
+    border-radius: 1rem;
+    padding: 1rem;
+    line-height: 1.5;
+    font-size: 1.2rem;
+  }
+  label {
+    font-weight: 600;
+  }
+  .ant-form-item-control-wrapper {
+    display: inline-block;
+  }
+  .ant-form-item-label {
+    display: inline-block;
+  }
+}

@@ -170,12 +170,15 @@ function UserWrapper(props) {
           type="navigation"
           current={Number(props.activeKey) - 1}
           style={stepStyle}
+          onChange={index =>
+            console.log(index) || props.history.push(`/task/${index + 1}`)
+          }
         >
           <Step
             status={
-              Number(props.activeKey) === 1
+              Number(user.stage) === 1
                 ? "process"
-                : Number(props.activeKey) < 1
+                : Number(user.stage) < 1
                 ? "wait"
                 : "finish"
             }
@@ -183,9 +186,9 @@ function UserWrapper(props) {
           />
           <Step
             status={
-              Number(props.activeKey) === 2
+              Number(user.stage) === 2
                 ? "process"
-                : Number(props.activeKey) < 2
+                : Number(user.stage) < 2
                 ? "wait"
                 : "finish"
             }
@@ -193,9 +196,9 @@ function UserWrapper(props) {
           />
           <Step
             status={
-              Number(props.activeKey) === 3
+              Number(user.stage) === 3
                 ? "process"
-                : Number(props.activeKey) < 3
+                : Number(user.stage) < 3
                 ? "wait"
                 : "finish"
             }
@@ -203,9 +206,9 @@ function UserWrapper(props) {
           />
           <Step
             status={
-              Number(props.activeKey) === 4
+              Number(user.stage) === 4
                 ? "process"
-                : Number(props.activeKey) < 4
+                : Number(user.stage) < 4
                 ? "wait"
                 : "finish"
             }

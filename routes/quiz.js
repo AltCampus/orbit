@@ -122,6 +122,7 @@ router.get("/generate", auth.verifyToken, async (req, res, next) => {
     }
     // Add validation that number of questions required are been sent
     const newQuiz = await Quiz.create({
+      user: req.user.id,
       questions: quizQuestions.map(question => question.id),
       startTime: Date.now(),
       endTime: new Date(Date.now() + 1800000)
