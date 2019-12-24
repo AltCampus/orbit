@@ -8,6 +8,7 @@ const User = require("../models/User");
 const Quiz = require("../models/Quiz");
 const Interview = require("../models/Interview");
 const auth = require("../utils/auth");
+const config = require("../utils/config");
 
 router.get("/all/status", auth.verifyToken, async (req, res) => {
   try {
@@ -402,13 +403,12 @@ router.post("/2/save", auth.verifyToken, (req, res) => {
         if (apiResponse.statusCode === 200) {
           // Username is valid
           // const endTime = new Date(Date.now() + 259200 * 1000);
-          const endTime = new Date(Date.now() + 300000);
+          const endTime = new Date(Date.now() + config.TIME_FOR_CODEWARS_ASSIGNMENT * 86400 * 1000);
           console.log(endTime);
           const codewarsTask = {
             codewarsUsername: username,
             startTime: Date.now(),
-            endTime,
-            timeLimit: 259200
+            endTime
           };
 
           try {

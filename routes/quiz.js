@@ -4,6 +4,7 @@ const auth = require("../utils/auth");
 const User = require("../models/User");
 const Question = require("../models/Question");
 const Quiz = require("../models/Quiz");
+const config = require("../utils/config")
 
 router.get("/status", auth.verifyToken, async (req, res, next) => {
   // Route for getting status of stage 3
@@ -85,7 +86,7 @@ router.get("/generate", auth.verifyToken, async (req, res, next) => {
 
   // User is eligible to take quiz. We can generate quiz with random questions
 
-  const TOTAL_QUESTION_IN_QUIZ = 5;
+  const TOTAL_QUESTION_IN_QUIZ = 2;
   let quizQuestions = [];
   try {
     const fixedQuestions = await Question.find(
@@ -125,7 +126,7 @@ router.get("/generate", auth.verifyToken, async (req, res, next) => {
       user: req.user.id,
       questions: quizQuestions.map(question => question.id),
       startTime: Date.now(),
-      endTime: new Date(Date.now() + 1800000)
+      endTime: new Date(Date.now() + config.TIME_FOR_QUIZ_ASSIGNMENT * 60 * 1000)
     });
     await User.findByIdAndUpdate(req.user.id, {
       quiz: newQuiz.id,

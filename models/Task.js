@@ -32,9 +32,6 @@ const taskSchema = new Schema(
       startTime: {
         type: Date
       },
-      timeLimit: {
-        type: Number
-      },
       endTime: {
         type: Date
       },

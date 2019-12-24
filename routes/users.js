@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-// const Mailer = require("../utils/Mailer");
+const Mailer = require("../utils/Mailer");
 const User = require('../models/User');
 const Task = require('../models/Task');
 const auth = require('../utils/auth');
@@ -54,10 +54,14 @@ router.post('/', async (req, res) => {
       motivation,
       hashMail
     });
+
+    res.status(201).json({ status: true, user });
+
     // TODO: UnComment to sending mail once user Register
-    // const mail = await Mailer.mail('apply',user.email, user.name, user.hashMail);
-    // console.log("mailer");
-    return res.status(201).json({ status: true, user });
+    if(process.env.NODE_ENV === 'production') {
+      const mail = Mailer.mail('apply',user.email, user.name, user.hashMail);
+    }
+    
   } catch (error) {
     return res.status(400).json({ status: false, error });
   }
