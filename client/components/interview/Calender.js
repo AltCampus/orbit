@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DatePicker, Button, message, Modal, TimePicker } from "antd";
 
-export default function Calendar() {
+export default function Calendar(props) {
   const [date, setDate] = useState();
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
@@ -19,12 +19,13 @@ export default function Calendar() {
 
   async function scheduleInterview() {
     if (!date || !startTime || !endTime) {
-      message.warning("All field are required");
+      return message.warning("All field are required");
     } else if (startTime >= endTime) {
-      message.warning("Start time must less than end time!");
+      return message.warning("Start time must less than end time!");
     } else if (date < Date.now()) {
-      message.warning("Please select vaild date.");
-    } else {
+      return message.warning("Please select vaild date.");
+    }
+    try {
       await axios.post(
         "/api/v1/interviews/",
         { date, startTime, endTime },
@@ -34,7 +35,14 @@ export default function Calendar() {
           }
         }
       );
+      props.getSlots();
       message.success("Scheduled Interview");
+    } catch (error) {
+      console.log(error);
+      if (error.response) {
+        return message.error(error.response.error);
+      }
+      message.error("Unable to connect to server.");
     }
   }
 

@@ -6,8 +6,8 @@ const interviewSchema = Schema({
     type: mongoose.SchemaTypes.ObjectId,
     ref: "User"
   },
-  date: { type: Date, required: true },
-  time: { type: Date, required: true }
+  startTime: { type: Date, required: true },
+  endTime: { type: Date, required: true }
 });
 
 const interview = mongoose.model("Interview", interviewSchema);
