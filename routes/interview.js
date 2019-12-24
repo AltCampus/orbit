@@ -13,11 +13,22 @@ Router.get("/", auth.verifyToken, async (req, res) => {
   res.json({ data });
 });
 
-// Admin list Interview
+// Admin list all slot
 Router.get("/all", auth.verifyAdminToken, async (req, res) => {
   try {
     const slots = await Interview.find({});
     return res.status(200).json({ status: true, slots });
+  } catch (error) {
+    return res.status(400).json({ status: "failed", error });
+  }
+});
+
+Router.get("/scheduled", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const scheduledInterviews = await Interview.find({
+      user: { $ne: null }
+    }).populate("user");
+    return res.status(200).json({ status: true, scheduledInterviews });
   } catch (error) {
     return res.status(400).json({ status: "failed", error });
   }

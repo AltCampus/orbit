@@ -4,6 +4,7 @@ import AdminWrapper from "../dashboard/admin/AdminWrapper";
 import SlotList from "./SlotList";
 import Calender from "./Calender";
 import { message, Typography } from "antd";
+import InterviewsList from "./InterviewsList";
 const { Title } = Typography;
 function Interview() {
   const [slots, setSlots] = useState(null);
@@ -44,7 +45,7 @@ function Interview() {
     } catch (error) {
       console.log(error);
       if (error.response) {
-        message.error(error.response.error);
+        return message.error(error.response.data.error);
       }
       message.error("An error occured");
     }
@@ -60,6 +61,7 @@ function Interview() {
         <Title>Schedule Interviews</Title>
         <Calender getSlots={getSlots} />
         <SlotList sortedSlots={sortedSlots} deleteSlot={deleteSlot} />
+        <InterviewsList />
       </AdminWrapper>
     </>
   );
