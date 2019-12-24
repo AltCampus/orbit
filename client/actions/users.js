@@ -12,8 +12,9 @@ import {
   SET_ERROR
 } from "./types";
 import { message } from "antd";
+import config from "../config";
 
-axios.defaults.baseURL = "http://localhost:3000/";
+axios.defaults.baseURL = process.env.NODE_ENV === "production" ? config.productionRootURL : "http://localhost:3000/";
 
 const rootUrl = "/api/v1/users";
 
