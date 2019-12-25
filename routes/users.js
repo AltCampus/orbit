@@ -13,7 +13,8 @@ router.get("/", auth.verifyAdminToken, async (req, res) => {
       .sort({ createdAt: -1 })
       .select("-password")
       .populate("task")
-      .populate("quiz");
+      .populate("quiz")
+      .populate("screener");
     if (!users) res.status(200).json({ message: "No users yet", status: true });
     res.status(200).json({ users, status: true });
   } catch (error) {
