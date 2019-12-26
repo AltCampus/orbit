@@ -23,27 +23,32 @@ const programmingExperience = [
   "Experienced"
 ];
 
-const ScreenerSchema = Schema({
-  sourcePlatform: {
-    type: String,
-    enum: sourcePlatform
+const screenerSchema = new Schema(
+  {
+    sourcePlatform: {
+      type: String,
+      enum: sourcePlatform
+    },
+    screenerMotivation: { type: String },
+    background: { type: String },
+    programmingExperience: {
+      type: String,
+      enum: programmingExperience
+    },
+    location: { type: String },
+    age: { type: Number },
+    graduationYear: { type: "Number" },
+    graduationDetails: { type: String },
+    isCurrentlyEmployed: { type: Boolean, default: false },
+    expectedJoiningMonth: { type: String },
+    expectedJoiningYear: { type: Number },
+    screenerRemarks: { type: String }
   },
-  screenerMotivation: { type: String },
-  background: { type: String },
-  programmingExperience: {
-    type: String,
-    enum: programmingExperience
-  },
-  location: { type: String },
-  age: { type: Number },
-  graduationYear: { type: "Number" },
-  graduationDetails: { type: String },
-  isCurrentlyEmployed: { type: Boolean, default: false },
-  expectedJoiningMonth: { type: String },
-  expectedJoiningYear: { type: Number },
-  screenerRemarks: { type: String }
-});
+  {
+    timestamps: true
+  }
+);
 
-const Screener = mongoose.model("Screener", ScreenerSchema);
+const Screener = mongoose.model("Screener", screenerSchema);
 
 module.exports = Screener;

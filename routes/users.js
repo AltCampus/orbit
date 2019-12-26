@@ -13,8 +13,7 @@ router.get("/", auth.verifyAdminToken, async (req, res) => {
       .sort({ createdAt: -1 })
       .select("-password")
       .populate("task")
-      .populate("quiz")
-      .populate("screener");
+      .populate("quiz");
     if (!users) res.status(200).json({ message: "No users yet", status: true });
     res.status(200).json({ users, status: true });
   } catch (error) {
@@ -84,7 +83,7 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ status: false, message: "User not found!!!" });
+        .json({ status: false, message: "Account does not exist" });
     }
 
     if (!user.verifyPassword(password)) {
@@ -112,7 +111,11 @@ router.post("/:hashMail", async (req, res) => {
     try {
       let { hashMail } = req.params;
       const user = await User.findOne({ hashMail });
-      if (!user.isProfileClaimed) {
+      if (!user) {
+        return res
+          .status(400)
+          .json({ status: true, message: "Invaild login link" });
+      } else if (!user.isProfileClaimed) {
         user.password = password;
 
         // Start the timer for HTML task and link it to user model.
@@ -150,16 +153,17 @@ router.post("/:hashMail", async (req, res) => {
 /* GET User Progress */
 router.get("/:id", auth.verifyAdminToken, async (req, res) => {
   const userId = req.params.id;
-  console.log(userId);
   try {
     let user = await User.findById(
       { _id: userId },
       "-password -hashMail -__v -isAdmin -isProfileClaimed"
-    ).populate("task");
-    console.log("hel");
+    )
+      .populate("task")
+      .populate("screener");
     // const task = await Task.findById(user.task)
     res.status(200).json({ user, status: true });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: "Something went wrong", status: false });
   }
 });
