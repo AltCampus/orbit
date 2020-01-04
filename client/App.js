@@ -15,18 +15,14 @@ import UserProfile from "./components/dashboard/admin/userprofile/UserProfileWra
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
 import TaskThree from "./components/task/taskThree/TaskThree";
-import UserProgress from "./components/dashboard/user/UserProgress";
-import Question from "./components/questionnaire/Question";
 import UserInterview from "./components/task/interview/Interview";
 import QuestionList from "./components/questionnaire/QuestionList";
-import Dashboard from "./components/dashboard/user/Dashboard";
 import AdminInterview from "./components/interview/Interview";
 import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
 import Instructions from "./components/instructions/Instructions";
 import UserView from "./components/profile/UserView/UserView";
 import RateQuiz from "./components/questionnaire/RateQuiz";
 import { message } from "antd";
-Question;
 class App extends Component {
   protectedRoutes = () => {
     // console.log(this.props.user);
@@ -34,7 +30,7 @@ class App extends Component {
       return (
         <Switch>
           <Route exact path="/" component={DisplayApplicants} />
-          <Route path="/questions" component={Question} />
+          <Route path="/questions" component={QuestionList} />
           <Route path="/interviews" component={AdminInterview} />
           <Route path="/user/:id" component={UserProfile} />
           <Route path="/quiz/rate/:id" component={RateQuiz} />
@@ -77,7 +73,7 @@ class App extends Component {
 
   componentDidMount = () => {
     if (localStorage.getItem("authToken")) {
-      const invalidToken = async (msg) => {
+      const invalidToken = async msg => {
         message.error(`${msg}, Redirect to Login please wait!`);
         await localStorage.clear();
         setTimeout(() => this.props.history.push("/login"), 1000);
@@ -101,7 +97,7 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { user, tokenValidationInProgress } = state.currentUser;
   return {
     user,
