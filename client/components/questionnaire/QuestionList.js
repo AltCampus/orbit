@@ -59,7 +59,6 @@ class QuestionList extends React.Component {
 
   // EditQuestionModal
   handleChange = e => {
-    console.log(e.target);
     const { name, value } = e.target;
     this.setState({
       editingData: {
@@ -70,7 +69,6 @@ class QuestionList extends React.Component {
   };
 
   handleCheckbox = e => {
-    console.log(e);
     const { name, checked } = e.target;
     this.setState({
       editingData: {
@@ -123,7 +121,6 @@ class QuestionList extends React.Component {
         visible: true
       });
     } catch (error) {
-      console.log(error);
       message.error("An error occured");
     }
   };
@@ -141,7 +138,6 @@ class QuestionList extends React.Component {
       if (err) {
         return;
       }
-      if (values) console.log("Received values of form: ", values);
       const requestBody = {
         questionTitle: values.questionTitle,
         type: values.questionType,

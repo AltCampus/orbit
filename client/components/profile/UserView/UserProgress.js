@@ -31,13 +31,11 @@ export class UserProgress extends Component {
           }
         }
       );
-      console.log(response);
       this.setState({ progress: response.data, loading: false });
       if (response.data.stageUpdated) {
         this.props.userStageUpgrade();
       }
     } catch (error) {
-      console.log(error);
       this.setState({ loading: false });
       if (error.response) {
         message.error(error.response.errror);

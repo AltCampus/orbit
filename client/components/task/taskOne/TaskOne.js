@@ -38,8 +38,6 @@ class TaskOne extends Component {
 
       this.props.userStageUpgrade();
     } catch (error) {
-      console.log(error);
-
       this.setState({ loading: false });
 
       if (error.response) {

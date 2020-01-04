@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 
 import {
   Button,
@@ -11,13 +11,13 @@ import {
   Input,
   Form,
   InputNumber
-} from 'antd';
+} from "antd";
 
 const { Meta } = Card;
 
 const { TextArea } = Input;
 
-const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
+const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
@@ -33,11 +33,11 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
         >
           <Form layout="vertical">
             <Form.Item label="Score">
-              {getFieldDecorator('score', {
+              {getFieldDecorator("score", {
                 rules: [
                   {
                     required: true,
-                    message: 'Please enter a score'
+                    message: "Please enter a score"
                   }
                 ]
               })(<InputNumber min={0} max={10} />)}
@@ -60,7 +60,6 @@ class RenderCodeWarsProgress extends Component {
 
   fetchKatas = async props => {
     try {
-      console.log(props);
       const response = await axios.post(
         `http://localhost:3000/api/v1/tasks/two/katas`,
         { props: props.user },
@@ -70,11 +69,8 @@ class RenderCodeWarsProgress extends Component {
           }
         }
       );
-      console.log(response.data);
       this.setState({ katasSolved: response.data.data.katasSolved });
-    } catch (err) {
-      console.log(err, 'P1');
-    }
+    } catch (err) {}
     // try {
     //   await axios.post(
     //     `http://localhost:3000/api/v1/task/review/codewars/`,
@@ -91,12 +87,10 @@ class RenderCodeWarsProgress extends Component {
   };
 
   componentDidMount() {
-    console.log('CDM', this.props);
     this.fetchKatas(this.props.props);
   }
 
   render() {
-    console.log(this.props);
     if (this.state.isFetching) {
       return <div>Loading</div>;
     } else {
@@ -139,7 +133,6 @@ class TaskTwoProgress extends Component {
         score: values.score,
         taskId: this.props.user.task._id
       };
-      console.log(data);
       await axios.post(
         `http://localhost:3000/api/v1/task/review/codewars`,
         { data },
@@ -184,7 +177,7 @@ class TaskTwoProgress extends Component {
             </Button>
           ]}
         >
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: "20px" }}>
             <Meta title="Progress" />
             <Progress percent={100} size="small" />
           </div>
@@ -198,22 +191,22 @@ class TaskTwoProgress extends Component {
               />
               <Descriptions>
                 <Descriptions.Item label="Submission Date">
-                  {new Date(codewars.startTime).toLocaleString().split(',')[0]}
+                  {new Date(codewars.startTime).toLocaleString().split(",")[0]}
                 </Descriptions.Item>
               </Descriptions>
               <Descriptions>
                 <Descriptions.Item label="Submission Time">
-                  {new Date(codewars.startTime).toLocaleString().split(',')[1]}
+                  {new Date(codewars.startTime).toLocaleString().split(",")[1]}
                 </Descriptions.Item>
               </Descriptions>
               <Descriptions>
                 <Descriptions.Item label="End Date">
-                  {new Date(codewars.endTime).toLocaleString().split(',')[0]}
+                  {new Date(codewars.endTime).toLocaleString().split(",")[0]}
                 </Descriptions.Item>
               </Descriptions>
               <Descriptions>
                 <Descriptions.Item label="End Time">
-                  {new Date(codewars.endTime).toLocaleString().split(',')[1]}
+                  {new Date(codewars.endTime).toLocaleString().split(",")[1]}
                 </Descriptions.Item>
               </Descriptions>
               {codewars.katasSolved ? (
@@ -235,7 +228,7 @@ class TaskTwoProgress extends Component {
               )}
             </div>
           ) : (
-            ''
+            ""
           )}
 
           {codewars.score ? (
@@ -247,14 +240,12 @@ class TaskTwoProgress extends Component {
               </Descriptions>
             </div>
           ) : (
-            ''
+            ""
           )}
         </Card>
       );
     } else {
-      return(
-        <div></div>
-      )
+      return <div></div>;
     }
   }
 }

@@ -1,7 +1,7 @@
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { Route, Switch, withRouter, Redirect } from "react-router-dom";
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 import {
   Spin,
   Icon,
@@ -12,10 +12,10 @@ import {
   Input,
   Modal,
   InputNumber
-} from 'antd';
-import AdminWrapper from './AdminWrapper';
-import './index.css';
-import UserProfileWrapper from './userprogress/UserProfileWrapper';
+} from "antd";
+import AdminWrapper from "./AdminWrapper";
+import "./index.css";
+import UserProfileWrapper from "./userprogress/UserProfileWrapper";
 
 class RenderModal extends Component {
   state = {
@@ -29,30 +29,25 @@ class RenderModal extends Component {
   };
 
   handleOk = (e, values) => {
-    console.log(values);
     this.setState({
       visible: false
     });
   };
 
   handleChange = e => {
-    console.log(e.target)
     const { name, value } = e.target;
-    console.log(name,value)
     this.setState({ [name]: value });
   };
 
-
-  handleSubmit = async (e) => {
+  handleSubmit = async e => {
     e.preventDefault();
-    console.log(this.state)
     const data = {
       score: this.state.score,
       review: this.state.review
-    }
+    };
     await axios.post(
       `http://localhost:3000/api/v1/task/review/`,
-      { data},
+      { data },
       {
         headers: {
           authorization: JSON.parse(localStorage.authToken)
@@ -90,21 +85,20 @@ class RenderModal extends Component {
               onChange={this.handleChange}
               placeholder="score"
             /> */}
-           <input name="score"
+            <input
+              name="score"
               value={this.state.score}
               onChange={this.handleChange}
-              placeholder="score" />
+              placeholder="score"
+            />
             <textarea
-              style={{ display: 'block', margin: '6px' }}
+              style={{ display: "block", margin: "6px" }}
               placeholder="review"
               name="review"
               value={this.state.review}
               onChange={this.handleChange}
             />
-            <Button
-              type="primary"
-              htmlType="submit"
-            >
+            <Button type="primary" htmlType="submit">
               Submit
             </Button>
           </Form>
@@ -125,16 +119,15 @@ class UserProfile extends Component {
   }
 
   RenderTaskOneProgress = props => {
-    console.log(props);
     if (props.html) {
       const html = props.html;
       return (
         <div>
           <p>
-            {this.state.user.name} submitted his{' '}
+            {this.state.user.name} submitted his{" "}
             <a target="_blank" href={html.taskUrl}>
               assignment
-            </a>{' '}
+            </a>{" "}
             at {new Date(html.submitTime).toLocaleString()}
           </p>
           {html.score && html.review ? (
@@ -161,14 +154,14 @@ class UserProfile extends Component {
       return (
         <div>
           <p>
-            {this.state.user.name} submitted his codewars{' '}
+            {this.state.user.name} submitted his codewars{" "}
             <a
               target="_blank"
               href={`https://www.codewars.com/users/${codewars.codewarsUsername}`}
             >
               username
-            </a>{' '}
-            at{' '}
+            </a>{" "}
+            at{" "}
           </p>
           {codewars.timeLimit ? (
             <div>
@@ -198,16 +191,16 @@ class UserProfile extends Component {
         {!this.state.user ? (
           <Icon
             type="loading"
-            style={{ fontSize: 100, width: '100%', paddingTop: '7rem' }}
+            style={{ fontSize: 100, width: "100%", paddingTop: "7rem" }}
             spin
           />
         ) : (
           <div className="user-container">
             <div className="user-info">
               <Card
-                headStyle={{ fontSize: '1.5rem' }}
+                headStyle={{ fontSize: "1.5rem" }}
                 title={this.state.user.name}
-                style={{ width: 550, height: '75vh', borderRadius: '5px' }}
+                style={{ width: 550, height: "75vh", borderRadius: "5px" }}
               >
                 <p className="card-child">{this.state.user.email}</p>
                 <p className="card-child">
@@ -233,8 +226,8 @@ class UserProfile extends Component {
             <div className="user-task-info">
               <Card
                 title="User Progress"
-                headStyle={{ fontSize: '1.5rem' }}
-                style={{ width: 1150, height: '75vh', borderRadius: '5px' }}
+                headStyle={{ fontSize: "1.5rem" }}
+                style={{ width: 1150, height: "75vh", borderRadius: "5px" }}
               >
                 <div>
                   {this.state.user.task &&
@@ -248,7 +241,7 @@ class UserProfile extends Component {
             </div>
           </div>
         )}
-        <UserProfileWrapper/>
+        <UserProfileWrapper />
       </AdminWrapper>
     );
   }
@@ -263,7 +256,6 @@ class UserProfile extends Component {
         }
       }
     );
-    console.log('CDM', response.data.user);
     this.setState({ user: response.data.user, isFetching: false });
   }
 }

@@ -43,7 +43,6 @@ function Interview() {
       message.info("Slot has been deleted");
       await getSlots();
     } catch (error) {
-      console.log(error);
       if (error.response) {
         return message.error(error.response.data.error);
       }

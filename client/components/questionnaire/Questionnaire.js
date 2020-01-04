@@ -25,7 +25,6 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
 
     onCreate = {};
     handleChange = e => {
-      console.log(e.target);
       const { name, value } = e.target;
       this.setState({
         [name]: value
@@ -33,7 +32,6 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
     };
 
     handleCheckbox = e => {
-      console.log(e);
       const { name, checked } = e.target;
       this.setState({
         [name]: checked
@@ -194,7 +192,6 @@ class Questionnaire extends React.Component {
       if (err) {
         return;
       }
-      if (values) console.log("Received values of form: ", values);
       const requestBody = {
         questionTitle: values.questionTitle,
         type: values.questionType,

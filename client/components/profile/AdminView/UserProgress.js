@@ -4,15 +4,14 @@ import TaskTwoProgress from "./TaskProgress/TaskTwoProgress";
 import TaskThreeProgress from "./TaskProgress/TaskThreeProgress";
 import TaskFourProgress from "./TaskProgress/TaskFourProgress";
 
-
 class UserProgress extends Component {
   constructor(props) {
-    super(props)
-  this.state = {
-    loading: false,
-    visible: false
-  };
-}
+    super(props);
+    this.state = {
+      loading: false,
+      visible: false
+    };
+  }
 
   showScoreModal = () => {
     this.setState({
@@ -47,9 +46,17 @@ class UserProgress extends Component {
     return (
       <>
         <div className="progress-container">
-          <TaskOneProgress user={this.props.user} fetchUsers={this.props.fetchUsers} />
-          <TaskTwoProgress user={this.props.user} fetchUsers={this.props.fetchUsers} />
-          {this.props.user && this.props.user.quiz && <TaskThreeProgress user={this.props.user} />}
+          <TaskOneProgress
+            user={this.props.user}
+            fetchUsers={this.props.fetchUsers}
+          />
+          <TaskTwoProgress
+            user={this.props.user}
+            fetchUsers={this.props.fetchUsers}
+          />
+          {this.props.user && this.props.user.quiz && (
+            <TaskThreeProgress user={this.props.user} />
+          )}
           {/* <TaskFourProgress /> */}
         </div>
       </>
