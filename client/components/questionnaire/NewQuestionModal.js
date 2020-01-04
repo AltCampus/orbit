@@ -176,7 +176,7 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
   }
 );
 
-class Questionnaire extends React.Component {
+class NewQuestionModal extends React.Component {
   state = {
     visible: false
   };
@@ -258,6 +258,7 @@ class Questionnaire extends React.Component {
         );
 
         message.success("Your question has been added");
+        this.props.getQuestion();
         form.resetFields();
         this.setState({ visible: false });
       } catch (error) {
@@ -280,7 +281,7 @@ class Questionnaire extends React.Component {
     return (
       <div>
         <Button type="primary" onClick={this.showModal}>
-          New Collection
+          New Question
         </Button>
         <CollectionCreateForm
           wrappedComponentRef={this.saveFormRef}
@@ -293,4 +294,4 @@ class Questionnaire extends React.Component {
   }
 }
 
-export default Questionnaire;
+export default NewQuestionModal;
