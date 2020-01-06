@@ -1,7 +1,7 @@
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { Route, Switch, withRouter, Redirect } from "react-router-dom";
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 import {
   Spin,
   Icon,
@@ -12,10 +12,10 @@ import {
   Input,
   Modal,
   InputNumber
-} from 'antd';
+} from "antd";
 
-import AdminWrapper from '../AdminWrapper';
-import AdminView from '../../../profile/AdminView/AdminView';
+import AdminWrapper from "../AdminWrapper";
+import AdminView from "../../../profile/AdminView/AdminView";
 // import UserInfo from './UserInfo';
 // import UserProgress from './UserProgress';
 // import '../index.css';
@@ -40,18 +40,16 @@ class UserProfileWrapper extends Component {
         }
       }
     );
-    console.log('CDM', response.data.user);
     this.setState({ user: response.data.user, isFetching: false });
   };
   render() {
-    console.log(this.state);
     return (
       <div>
         <AdminWrapper>
           {!this.state.user ? (
             <Icon
               type="loading"
-              style={{ fontSize: 100, width: '100%', paddingTop: '7rem' }}
+              style={{ fontSize: 100, width: "100%", paddingTop: "7rem" }}
               spin
             />
           ) : (

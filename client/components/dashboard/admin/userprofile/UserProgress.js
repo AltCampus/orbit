@@ -31,16 +31,13 @@ class RenderModal extends Component {
   };
 
   handleOk = (e, values) => {
-    console.log(values, this.props.user);
     this.setState({
       visible: false
     });
   };
 
   handleChange = e => {
-    console.log(e.target);
     const { name, value } = e.target;
-    console.log(name, value);
     this.setState({ [name]: value });
   };
 
@@ -51,7 +48,6 @@ class RenderModal extends Component {
       review: this.state.review,
       taskId: this.props.user.task._id
     };
-    console.log(data);
     await axios.post(
       `http://localhost:3000/api/v1/task/review/html`,
       { data },
@@ -127,7 +123,6 @@ class UserProgress extends Component {
     };
   }
   RenderTaskOneProgress = props => {
-    console.log(props.name, "FROM RENDER PROGRESS");
     if (props.task.html) {
       const html = props.task.html;
       return (
@@ -194,7 +189,6 @@ class UserProgress extends Component {
     }
   };
   render() {
-    console.log(this.props.user.task, "UserProgress");
     return (
       <div className="user-task-info">
         <Card

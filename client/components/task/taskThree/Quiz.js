@@ -94,7 +94,6 @@ class Quiz extends Component {
         return { question: question._id, answer: question.answer };
       })
     };
-    console.log(formData);
     try {
       this.setState({ loading: true });
 
@@ -138,7 +137,6 @@ class Quiz extends Component {
         return { question: question._id, answer: question.answer };
       })
     };
-    console.log(formData);
     try {
       const res = await axios.put(
         "http://localhost:3000/api/v1/quiz/current",
@@ -154,7 +152,6 @@ class Quiz extends Component {
       this.setState({ requestOnGoing: false });
     } catch (error) {
       this.setState({ requestOnGoing: false });
-      console.log(error);
     }
   };
 

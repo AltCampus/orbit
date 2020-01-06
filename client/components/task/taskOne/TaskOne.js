@@ -20,6 +20,12 @@ class TaskOne extends Component {
   handleSubmit = async e => {
     e.preventDefault();
     this.setState({ loading: true });
+    const url = this.state.url;
+    const csbRegex = /https?:\/\/([a-z0-9]+[.])*csb[.]app/;
+
+    if (url.indexOf("https://codesandbox.io/s") !== 0 && !csbRegex.test(url)) {
+      return message.error("Invalid Sandbox Url!");
+    }
     try {
       const res = await axios.post(
         "http://localhost:3000/api/v1/tasks/1/save",
@@ -38,8 +44,6 @@ class TaskOne extends Component {
 
       this.props.userStageUpgrade();
     } catch (error) {
-      console.log(error);
-
       this.setState({ loading: false });
 
       if (error.response) {

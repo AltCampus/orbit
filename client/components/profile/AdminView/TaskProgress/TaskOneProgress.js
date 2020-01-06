@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 
 import {
   Button,
@@ -10,14 +10,14 @@ import {
   Modal,
   Input,
   Form,
-  InputNumber,
-} from 'antd';
+  InputNumber
+} from "antd";
 
 const { Meta } = Card;
 
 const { TextArea } = Input;
 
-const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
+const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
@@ -33,21 +33,21 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
         >
           <Form layout="vertical">
             <Form.Item label="Score">
-              {getFieldDecorator('score', {
+              {getFieldDecorator("score", {
                 rules: [
                   {
                     required: true,
-                    message: 'Please enter a score'
+                    message: "Please enter a score"
                   }
                 ]
               })(<InputNumber min={0} max={10} />)}
             </Form.Item>
             <Form.Item label="Review">
-              {getFieldDecorator('review', {
+              {getFieldDecorator("review", {
                 rules: [
                   {
                     required: true,
-                    message: 'Please write a review'
+                    message: "Please write a review"
                   }
                 ]
               })(<TextArea type="textarea" />)}
@@ -88,7 +88,6 @@ class TaskOneProgress extends Component {
         review: values.review,
         taskId: this.props.user.task._id
       };
-      console.log(data);
       await axios.post(
         `http://localhost:3000/api/v1/task/review/html`,
         { data },
@@ -128,26 +127,26 @@ class TaskOneProgress extends Component {
           </Button>
         ]}
       >
-        <div style={{ marginBottom: '20px' }}>
+        <div style={{ marginBottom: "20px" }}>
           <Meta title="Progress" />
           <Progress percent={100} size="small" />
         </div>
         {htmlTask.taskUrl ? (
           <div>
             <CollectionCreateForm
-          wrappedComponentRef={this.saveFormRef}
-          visible={this.state.visible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
-        />
+              wrappedComponentRef={this.saveFormRef}
+              visible={this.state.visible}
+              onCancel={this.handleCancel}
+              onCreate={this.handleCreate}
+            />
             <Descriptions>
               <Descriptions.Item label="Submission Date">
-                {new Date(htmlTask.submitTime).toLocaleString().split(',')[0]}
+                {new Date(htmlTask.submitTime).toLocaleString().split(",")[0]}
               </Descriptions.Item>
             </Descriptions>
             <Descriptions>
               <Descriptions.Item label="Submission Time">
-                {new Date(htmlTask.submitTime).toLocaleString().split(',')[1]}
+                {new Date(htmlTask.submitTime).toLocaleString().split(",")[1]}
               </Descriptions.Item>
             </Descriptions>
             {htmlTask.score ? (
@@ -164,12 +163,12 @@ class TaskOneProgress extends Component {
                 </Descriptions>
               </div>
             ) : (
-              ''
-            )}{' '}
+              ""
+            )}{" "}
             {/* <ReviewPage user={this.props.user} fetchUsers={this.props.fetchUsers} /> */}
           </div>
         ) : (
-          ''
+          ""
         )}
       </Card>
     );
