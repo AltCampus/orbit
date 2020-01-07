@@ -33,7 +33,7 @@ class UserProfileWrapper extends Component {
   fetchUsers = async () => {
     this.setState({ isFetching: true });
     const response = await axios.get(
-      `http://localhost:3000/api/v1/users/${this.props.match.params.id}`,
+      `/api/v1/users/${this.props.match.params.id}`,
       {
         headers: {
           authorization: JSON.parse(localStorage.authToken)

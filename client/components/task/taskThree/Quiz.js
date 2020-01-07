@@ -35,7 +35,7 @@ class Quiz extends Component {
   }
   async componentDidMount() {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/quiz/status", {
+      const res = await axios.get("/api/v1/quiz/status", {
         headers: {
           authorization: JSON.parse(localStorage.authToken)
         }
@@ -98,7 +98,7 @@ class Quiz extends Component {
       this.setState({ loading: true });
 
       const res = await axios.post(
-        "http://localhost:3000/api/v1/quiz/current",
+        "/api/v1/quiz/current",
         {
           answers: formData.questions
         },
@@ -139,7 +139,7 @@ class Quiz extends Component {
     };
     try {
       const res = await axios.put(
-        "http://localhost:3000/api/v1/quiz/current",
+        "/api/v1/quiz/current",
         {
           answers: formData.questions
         },
@@ -158,14 +158,11 @@ class Quiz extends Component {
   startQuiz = async () => {
     this.setState({ loading: true });
     try {
-      const res = await axios.get(
-        "http://localhost:3000/api/v1/quiz/generate",
-        {
-          headers: {
-            authorization: JSON.parse(localStorage.authToken)
-          }
+      const res = await axios.get("/api/v1/quiz/generate", {
+        headers: {
+          authorization: JSON.parse(localStorage.authToken)
         }
-      );
+      });
       this.setState({
         questions: res.data.questions,
         timeLeft: parseInt(res.data.timeLeft / 1000),
@@ -189,7 +186,7 @@ class Quiz extends Component {
   resumeQuiz = async () => {
     this.setState({ loading: true });
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/quiz/current", {
+      const res = await axios.get("/api/v1/quiz/current", {
         headers: {
           authorization: JSON.parse(localStorage.authToken)
         }

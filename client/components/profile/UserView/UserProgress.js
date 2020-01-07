@@ -23,14 +23,11 @@ export class UserProgress extends Component {
   async getTaskData() {
     try {
       this.setState({ loading: true });
-      const response = await axios.get(
-        "http://localhost:3000/api/v1/tasks/all/status",
-        {
-          headers: {
-            authorization: JSON.parse(localStorage.authToken)
-          }
+      const response = await axios.get("/api/v1/tasks/all/status", {
+        headers: {
+          authorization: JSON.parse(localStorage.authToken)
         }
-      );
+      });
       this.setState({ progress: response.data, loading: false });
       if (response.data.stageUpdated) {
         this.props.userStageUpgrade();

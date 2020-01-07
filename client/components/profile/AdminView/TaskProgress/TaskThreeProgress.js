@@ -25,14 +25,11 @@ class TaskThreeProgress extends React.Component {
   }
   getQuiz = async _ => {
     try {
-      const res = await axios.get(
-        `http://localhost:3000/api/v1/quiz/${this.state.quizId}`,
-        {
-          headers: {
-            Authorization: JSON.parse(localStorage.authToken)
-          }
+      const res = await axios.get(`/api/v1/quiz/${this.state.quizId}`, {
+        headers: {
+          Authorization: JSON.parse(localStorage.authToken)
         }
-      );
+      });
       this.setState({
         totalScore: res.data.totalScore,
         maximumScore: res.data.maximumScore,

@@ -244,15 +244,11 @@ class NewQuestionModal extends React.Component {
         requestBody.options = options;
       }
       try {
-        const response = await axios.post(
-          "http://localhost:3000/api/v1/questions/",
-          requestBody,
-          {
-            headers: {
-              authorization: JSON.parse(localStorage.authToken)
-            }
+        const response = await axios.post("/api/v1/questions/", requestBody, {
+          headers: {
+            authorization: JSON.parse(localStorage.authToken)
           }
-        );
+        });
 
         message.success("Your question has been added");
         this.props.getQuestion();
