@@ -19,13 +19,13 @@ function AdminWrapper(props) {
   };
 
   return (
-    <Layout className="wrapper">
+    <Layout className='wrapper'>
       <Sider
         style={{
           overflow: 'auto',
           height: '100vh',
         }}
-        breakpoint="sm"
+        breakpoint='sm'
         onBreakpoint={broken => {
           setBroken(broken);
         }}
@@ -34,27 +34,27 @@ function AdminWrapper(props) {
         collapsedWidth={broken ? '0' : '80'}
         collapsed={collapsed}
       >
-        <div className="logo"> Alt Campus </div>
+        <div className='logo'> Alt Campus </div>
         <Menu
-          theme="dark"
-          mode="inline"
+          theme='dark'
+          mode='inline'
           defaultSelectedKeys={[props.activeKey]}
         >
-          <Menu.Item key="0">
-            <Link to="/">
-              <Icon type="paper-clip" />
+          <Menu.Item key='0'>
+            <Link to='/'>
+              <Icon type='paper-clip' />
               <span> Applicants </span>
             </Link>
           </Menu.Item>
-          <Menu.Item key="1">
-            <Link to="/questions">
-              <Icon type="html5" />
+          <Menu.Item key='1'>
+            <Link to='/questions'>
+              <Icon type='html5' />
               <span> Question </span>
             </Link>
           </Menu.Item>
-          <Menu.Item key="2">
-            <Link to="/interviews">
-              <Icon type="code" />
+          <Menu.Item key='2'>
+            <Link to='/interviews'>
+              <Icon type='code' />
               <span> Interview </span>
             </Link>
           </Menu.Item>
@@ -76,22 +76,23 @@ function AdminWrapper(props) {
           }}
         >
           <Icon
-            className="trigger"
+            className='trigger'
             type={collapsed ? 'menu-unfold' : 'menu-fold'}
             onClick={toggle}
             style={{
               padding: '16px',
             }}
           />
-          <p className="profile-name">Howdy, {props.user.name}</p>
-
-          <Button
-            className="button-logout"
-            onClick={handleClick}
-            title="Logout"
-            type="danger"
-            icon="logout"
-          />
+          <div>
+            <span className='profile-name'> Howdy, {props.user.name}</span>
+            <Button
+              className='button-logout'
+              onClick={handleClick}
+              title='Logout'
+              type='danger'
+              icon='logout'
+            />
+          </div>
         </Header>
         <Content
           style={{
@@ -122,5 +123,5 @@ const mapStateToProps = state => {
 };
 
 export default withRouter(
-  connect(mapStateToProps, { userLogOut })(AdminWrapper)
+  connect(mapStateToProps, { userLogOut })(AdminWrapper),
 );
