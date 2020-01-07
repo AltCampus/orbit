@@ -1,8 +1,8 @@
-import React from 'react';
-import { withRouter, Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Layout, Menu, Icon, Avatar, Button, Anchor } from 'antd';
-import { userLogOut } from '../../../actions/users';
+import React from "react";
+import { withRouter, Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { Layout, Menu, Icon, Avatar, Button, Anchor } from "antd";
+import { userLogOut } from "../../../actions/users";
 
 const { Header, Sider, Content } = Layout;
 
@@ -15,46 +15,46 @@ function AdminWrapper(props) {
   };
 
   const handleClick = () => {
-    props.userLogOut(() => props.history.push('/'));
+    props.userLogOut(() => props.history.push("/"));
   };
 
   return (
-    <Layout className='wrapper'>
+    <Layout className="wrapper">
       <Sider
         style={{
-          overflow: 'auto',
-          height: '100vh',
+          overflow: "auto",
+          height: "100vh"
         }}
-        breakpoint='sm'
+        breakpoint="sm"
         onBreakpoint={broken => {
+          setCollapsed(broken);
           setBroken(broken);
         }}
-        trigger={null}
         collapsible
-        collapsedWidth={broken ? '0' : '80'}
+        collapsedWidth={broken ? "0" : "80"}
         collapsed={collapsed}
       >
-        <div className='logo'> Alt Campus </div>
+        <div className="logo"> Alt Campus </div>
         <Menu
-          theme='dark'
-          mode='inline'
+          theme="dark"
+          mode="inline"
           defaultSelectedKeys={[props.activeKey]}
         >
-          <Menu.Item key='0'>
-            <Link to='/'>
-              <Icon type='paper-clip' />
+          <Menu.Item key="0">
+            <Link to="/">
+              <Icon type="paper-clip" />
               <span> Applicants </span>
             </Link>
           </Menu.Item>
-          <Menu.Item key='1'>
-            <Link to='/questions'>
-              <Icon type='html5' />
+          <Menu.Item key="1">
+            <Link to="/questions">
+              <Icon type="html5" />
               <span> Question </span>
             </Link>
           </Menu.Item>
-          <Menu.Item key='2'>
-            <Link to='/interviews'>
-              <Icon type='code' />
+          <Menu.Item key="2">
+            <Link to="/interviews">
+              <Icon type="code" />
               <span> Interview </span>
             </Link>
           </Menu.Item>
@@ -63,48 +63,48 @@ function AdminWrapper(props) {
       {/* Display container */}
       <Layout
         style={{
-          borderRadius: '10px',
+          borderRadius: "10px"
         }}
       >
         {/* Header  */}
         <Header
           style={{
-            background: '#fff',
-            padding: '0',
-            display: 'flex',
-            justifyContent: 'space-between',
+            background: "#fff",
+            padding: "0",
+            display: "flex",
+            justifyContent: "space-between"
           }}
         >
           <Icon
-            className='trigger'
-            type={collapsed ? 'menu-unfold' : 'menu-fold'}
+            className="trigger"
+            type={collapsed ? "menu-unfold" : "menu-fold"}
             onClick={toggle}
             style={{
-              padding: '16px',
+              padding: "16px"
             }}
           />
           <div>
-            <span className='profile-name'> Howdy, {props.user.name}</span>
+            <span className="profile-name"> Howdy, {props.user.name}</span>
             <Button
-              className='button-logout'
+              className="button-logout"
               onClick={handleClick}
-              title='Logout'
-              type='danger'
-              icon='logout'
+              title="Logout"
+              type="danger"
+              icon="logout"
             />
           </div>
         </Header>
         <Content
           style={{
-            margin: '24px 16px 0',
-            overflow: 'initial',
+            margin: "24px 16px 0",
+            overflow: "initial"
           }}
         >
           <div
             style={{
               padding: 24,
-              background: '#fff',
-              textAlign: 'left',
+              background: "#fff",
+              textAlign: "left"
             }}
           >
             {props.children}
@@ -118,10 +118,10 @@ function AdminWrapper(props) {
 const mapStateToProps = state => {
   const { user } = state.currentUser;
   return {
-    user,
+    user
   };
 };
 
 export default withRouter(
-  connect(mapStateToProps, { userLogOut })(AdminWrapper),
+  connect(mapStateToProps, { userLogOut })(AdminWrapper)
 );

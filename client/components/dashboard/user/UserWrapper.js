@@ -1,9 +1,9 @@
-import React from 'react';
-import { withRouter, Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Layout, Menu, Icon, Avatar, Button, Steps } from 'antd';
+import React from "react";
+import { withRouter, Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { Layout, Menu, Icon, Avatar, Button, Steps } from "antd";
 const { Step } = Steps;
-import { userLogOut } from '../../../actions/users';
+import { userLogOut } from "../../../actions/users";
 
 const { Header, Sider, Content } = Layout;
 
@@ -16,107 +16,108 @@ function UserWrapper(props) {
   };
 
   const handleClick = () => {
-    props.userLogOut(() => props.history.push('/'));
+    props.userLogOut(() => props.history.push("/"));
   };
 
   const stepStyle = {
     marginBottom: 10,
-    boxShadow: '0px -1px 0 0 #e8e8e8 inset',
+    boxShadow: "0px -1px 0 0 #e8e8e8 inset"
   };
   const { user } = props;
   return (
-    <Layout className='wrapper'>
+    <Layout className="wrapper">
       <Sider
         style={{
-          overflow: 'auto',
-          height: '100vh',
+          overflow: "auto",
+          height: "100vh"
         }}
-        breakpoint='sm'
+        breakpoint="sm"
         onBreakpoint={broken => {
+          setCollapsed(broken);
           setBroken(broken);
         }}
         trigger={null}
         collapsible
-        collapsedWidth={broken ? '0' : '80'}
+        collapsedWidth={broken ? "0" : "80"}
         collapsed={collapsed}
       >
-        <div className='logo'> AltCampus </div>
+        <div className="logo"> AltCampus </div>
         <Menu
-          theme='dark'
-          mode='inline'
+          theme="dark"
+          mode="inline"
           defaultSelectedKeys={[props.activeKey]}
         >
-          <Menu.Item key='0'>
-            <Link to='/'>
-              <Icon type='paper-clip' />
+          <Menu.Item key="0">
+            <Link to="/">
+              <Icon type="paper-clip" />
               <span> Instructions </span>
             </Link>
           </Menu.Item>
-          <Menu.Item key='1'>
-            <Link to='/task/1'>
-              <Icon type='html5' />
+          <Menu.Item key="1">
+            <Link to="/task/1">
+              <Icon type="html5" />
               <span>
-                <span>HTML / CSS</span>{' '}
+                <span>HTML / CSS</span>{" "}
                 {user.stage > 1 ? (
                   <Icon
-                    type='check-circle'
-                    theme='filled'
-                    className='menu-icon'
+                    type="check-circle"
+                    theme="filled"
+                    className="menu-icon"
                   />
                 ) : (
-                  ''
+                  ""
                 )}
               </span>
             </Link>
           </Menu.Item>
-          <Menu.Item key='2' disabled={user.stage < 2 ? true : false}>
-            <Link to='/task/2'>
-              <Icon type='code' />
+          <Menu.Item key="2" disabled={user.stage < 2 ? true : false}>
+            <Link to="/task/2">
+              <Icon type="code" />
               <span> CodeWars </span>
               {user.stage > 2 ? (
                 <Icon
-                  type='check-circle'
-                  theme='filled'
-                  className='menu-icon'
+                  type="check-circle"
+                  theme="filled"
+                  className="menu-icon"
                 />
               ) : (
-                ''
+                ""
               )}
             </Link>
           </Menu.Item>
-          <Menu.Item key='3' disabled={user.stage < 3 ? true : false}>
-            <Link to='/task/3'>
-              <Icon type='question' />
+          <Menu.Item key="3" disabled={user.stage < 3 ? true : false}>
+            <Link to="/task/3">
+              <Icon type="question" />
               <span> Q / A </span>
               {user.stage > 3 ? (
                 <Icon
-                  type='check-circle'
-                  theme='filled'
-                  className='menu-icon'
+                  type="check-circle"
+                  theme="filled"
+                  className="menu-icon"
                 />
               ) : (
-                ''
+                ""
               )}
             </Link>
           </Menu.Item>
-          <Menu.Item key='4' disabled={user.stage < 4 ? true : false}>
-            <Link to='/task/4'>
-              <Icon type='video-camera' />
+          <Menu.Item key="4" disabled={user.stage < 4 ? true : false}>
+            <Link to="/task/4">
+              <Icon type="video-camera" />
               <span> Interview </span>
               {user.stage > 4 ? (
                 <Icon
-                  type='check-circle'
-                  theme='filled'
-                  className='menu-icon'
+                  type="check-circle"
+                  theme="filled"
+                  className="menu-icon"
                 />
               ) : (
-                ''
+                ""
               )}
             </Link>
           </Menu.Item>
-          <Menu.Item key='5'>
-            <Link to='/profile'>
-              <Icon type='user' />
+          <Menu.Item key="5">
+            <Link to="/profile">
+              <Icon type="user" />
               <span> Your Profile </span>
             </Link>
           </Menu.Item>
@@ -125,42 +126,42 @@ function UserWrapper(props) {
       {/* Display container */}
       <Layout
         style={{
-          borderRadius: '10px',
+          borderRadius: "10px"
         }}
       >
         {/* Header  */}
         <Header
           style={{
-            background: '#fff',
-            padding: '0',
-            display: 'flex',
-            justifyContent: 'space-between',
+            background: "#fff",
+            padding: "0",
+            display: "flex",
+            justifyContent: "space-between"
           }}
         >
           <Icon
-            className='trigger'
-            type={collapsed ? 'menu-unfold' : 'menu-fold'}
+            className="trigger"
+            type={collapsed ? "menu-unfold" : "menu-fold"}
             onClick={toggle}
             style={{
-              padding: '16px',
+              padding: "16px"
             }}
           />
           <div>
-            <span className='profile-name'>
-              Howdy, <Link to='/profile'>{props.user.name}</Link>
+            <span className="profile-name">
+              Howdy, <Link to="/profile">{props.user.name}</Link>
             </span>
 
             <Button
-              className='button-logout'
+              className="button-logout"
               onClick={handleClick}
-              title='Logout'
-              type='danger'
-              icon='logout'
+              title="Logout"
+              type="danger"
+              icon="logout"
             />
           </div>
         </Header>
         <Steps
-          type='navigation'
+          type="navigation"
           current={Number(props.activeKey) - 1}
           style={stepStyle}
           onChange={index => props.history.push(`/task/${index + 1}`)}
@@ -168,55 +169,55 @@ function UserWrapper(props) {
           <Step
             status={
               Number(user.stage) === 1
-                ? 'process'
+                ? "process"
                 : Number(user.stage) < 1
-                ? 'wait'
-                : 'finish'
+                ? "wait"
+                : "finish"
             }
-            title='HTML'
+            title="HTML"
           />
           <Step
             status={
               Number(user.stage) === 2
-                ? 'process'
+                ? "process"
                 : Number(user.stage) < 2
-                ? 'wait'
-                : 'finish'
+                ? "wait"
+                : "finish"
             }
-            title='CodeWars'
+            title="CodeWars"
           />
           <Step
             status={
               Number(user.stage) === 3
-                ? 'process'
+                ? "process"
                 : Number(user.stage) < 3
-                ? 'wait'
-                : 'finish'
+                ? "wait"
+                : "finish"
             }
-            title='Quiz'
+            title="Quiz"
           />
           <Step
             status={
               Number(user.stage) === 4
-                ? 'process'
+                ? "process"
                 : Number(user.stage) < 4
-                ? 'wait'
-                : 'finish'
+                ? "wait"
+                : "finish"
             }
-            title='Interview'
+            title="Interview"
           />
         </Steps>
         <Content
           style={{
-            margin: '24px 16px 0',
-            overflow: 'initial',
+            margin: "24px 16px 0",
+            overflow: "initial"
           }}
         >
           <div
             style={{
               padding: 24,
-              background: '#fff',
-              textAlign: 'left',
+              background: "#fff",
+              textAlign: "left"
             }}
           >
             {props.children}
@@ -230,10 +231,10 @@ function UserWrapper(props) {
 const mapStateToProps = state => {
   const { user } = state.currentUser;
   return {
-    user,
+    user
   };
 };
 
 export default withRouter(
-  connect(mapStateToProps, { userLogOut })(UserWrapper),
+  connect(mapStateToProps, { userLogOut })(UserWrapper)
 );

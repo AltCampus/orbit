@@ -34,3 +34,10 @@ body {
     cursor: pointer;
   }
 }
+
+.ant-table-body {
+  overflow: auto;
+}
+a {
+  overflow-wrap: break-word;
+}
