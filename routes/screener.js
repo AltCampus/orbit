@@ -5,10 +5,11 @@ const Screener = require("./../models/Screener");
 const User = require("./../models/User");
 const auth = require("./../utils/auth");
 
+//get screener data
 router.post("/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const ScreenerData = await Screener.create(req.body);
-    const user = await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { _id: req.params.id },
       { screener: ScreenerData._id },
       { new: true }
