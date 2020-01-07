@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Switch, withRouter, Redirect } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 import "./css-reset.scss";
@@ -36,9 +36,9 @@ class App extends Component {
           <Route path="/questions" component={Question} />
           <Route path="/user/:id" component={UserProfile} />
           <Route path="/quiz/rate/:id" component={RateQuiz} />
-          <Route path="/login">
+          {/* <Route path="/login">
             <Redirect to="/" />
-          </Route>
+          </Route> */}
         </Switch>
       );
     } else {
@@ -51,10 +51,6 @@ class App extends Component {
           <Route exact path="/task/4" component={Interview} />
           <Route path="/task/:taskId" component={UserDashboard} />
           <Route exact path="/profile" component={UserView} />
-          {/* Redirects the user to login if user attempts to login */}
-          <Route path="/login">
-            <Redirect to="/" />
-          </Route>
         </Switch>
       );
     }
@@ -63,9 +59,6 @@ class App extends Component {
   unprotectedRoutes = () => {
     return (
       <Switch>
-        <Route exact path="/dashboard">
-          <Redirect to="/login" />
-        </Route>
         <Route exact path="/" component={LandingPage} />
         <Route path="/account/claim/:hashmail" component={SetPassword} />
         <Route path="/login" component={Login} />
@@ -84,6 +77,12 @@ class App extends Component {
     }
   };
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.tokenValidationInProgress && prevProps.isAuthenticated) {
+      prevProps.history.push("/");
+    }
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -95,10 +94,15 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { user, tokenValidationInProgress } = state.currentUser;
+  const {
+    user,
+    tokenValidationInProgress,
+    isAuthenticated
+  } = state.currentUser;
   return {
     user,
-    tokenValidationInProgress
+    tokenValidationInProgress,
+    isAuthenticated
   };
 };
 
