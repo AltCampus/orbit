@@ -40,7 +40,10 @@ class UserProfileWrapper extends Component {
         }
       }
     );
-    this.setState({ user: response.data.user, isFetching: false });
+    this.setState({
+      user: { ...response.data.user, totalScore: response.data.totalScore },
+      isFetching: false
+    });
   };
   render() {
     return (

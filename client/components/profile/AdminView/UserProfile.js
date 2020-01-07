@@ -110,7 +110,7 @@ class UserProfile extends Component {
         />
         <Statistic
           title="Score"
-          value={10}
+          value={user.totalScore}
           style={{
             marginRight: 32
           }}
@@ -170,7 +170,7 @@ class UserProfile extends Component {
   };
 
   render() {
-    // console.log(this.props.user.task.html.htmlUrl)
+    console.log(this.props.user);
     return (
       <>
         {this.state.user && (
