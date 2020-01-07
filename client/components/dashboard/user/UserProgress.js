@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { connect } from 'react-redux';
-import './index.css';
+import React, { Component } from "react";
+import axios from "axios";
+import { connect } from "react-redux";
+import "./index.css";
 
-import { Icon, Card } from 'antd';
+import { Icon, Card } from "antd";
 
-import UserWrapper from '../../dashboard/user/UserWrapper';
+import UserWrapper from "../../dashboard/user/UserWrapper";
 
 class UserProgress extends Component {
   state = {
@@ -17,7 +17,7 @@ class UserProgress extends Component {
       return (
         <div>
           <h1>
-            Application Status: Rejected{' '}
+            Application Status: Rejected{" "}
             <Icon
               className="close-circle"
               type="close-circle"
@@ -30,7 +30,7 @@ class UserProgress extends Component {
       return (
         <div>
           <h1>
-            Application Status: Accepted{' '}
+            Application Status: Accepted{" "}
             <Icon
               className="check-circle"
               type="check-circle"
@@ -43,7 +43,7 @@ class UserProgress extends Component {
       return (
         <div>
           <h1>
-            Application Status: Pending{' '}
+            Application Status: Pending{" "}
             <Icon
               className="clock-circle"
               type="clock-circle"
@@ -57,12 +57,13 @@ class UserProgress extends Component {
 
   RenderStageOneCard = () => {
     if (this.state.task && this.state.task.html) {
-      const html = this.state.task.html
+      const html = this.state.task.html;
       return (
         <div>
           <h1>HTML/CSS Assignment</h1>
           <p className="padding-top">
-            You have submitted the task at {new Date(html.submitTime).toLocaleString()}
+            You have submitted the task at{" "}
+            {new Date(html.submitTime).toLocaleString()}
           </p>
           {!html.score ? (
             <div>
@@ -87,24 +88,23 @@ class UserProgress extends Component {
     }
   };
   RenderStageTwoCard = () => {
-    console.log(this.state)
     if (this.state.task && this.state.task.codewars) {
-      const codewars = this.state.task.codewars
+      const codewars = this.state.task.codewars;
       return (
         <div>
           <h1>CodeWars Assignment</h1>
           <p>
-            You Have Submitted your codewars username i.e{' '}
+            You Have Submitted your codewars username i.e{" "}
             {codewars.codewarsUsername}
           </p>
           <p>
-            Your countdown for this task was started at{' '}
+            Your countdown for this task was started at{" "}
             {new Date(codewars.startTime).toLocaleString()}
           </p>
           {/* The time limit will turn to zero i.e falsy value */}
           {codewars.timeLimit ? (
             <div>
-              <p>You have {(codewars.timeLimit)/60} minutes left.</p>{' '}
+              <p>You have {codewars.timeLimit / 60} minutes left.</p>{" "}
             </div>
           ) : (
             <div>
@@ -140,11 +140,11 @@ class UserProgress extends Component {
   render() {
     return (
       <>
-        <UserWrapper activeKey={'5'}>
+        <UserWrapper activeKey={"5"}>
           {!this.props ? (
             <Icon
               type="loading"
-              style={{ fontSize: 100, width: '100%', paddingTop: '7rem' }}
+              style={{ fontSize: 100, width: "100%", paddingTop: "7rem" }}
               spin
             />
           ) : (

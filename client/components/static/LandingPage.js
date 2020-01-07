@@ -1,10 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Row, Col, Button } from "antd";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Row, Col, Button } from 'antd';
 
 const LandingPage = () => {
   return (
     <>
+      <header>
+        <nav className="header-container">
+          <Link to="/login">
+            <Button>Login</Button>
+          </Link>
+        </nav>
+      </header>
       <div className="banner-container wrapper">
         <Row>
           <Col span={15}>
@@ -20,11 +27,6 @@ const LandingPage = () => {
               <strong>Welcome</strong>
               <p>to Orbit</p>
             </div>
-            <Link to="/login">
-              <Button className="btn" shape="round" size="large">
-                Login
-              </Button>
-            </Link>
           </Col>
         </Row>
       </div>

@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { connect } from "react-redux";
-import { userStageUpgrade } from "../../../actions/users";
-import { Card, Col, Row, Input, Button, message, Spin, Icon } from "antd";
-import UserWrapper from "../../dashboard/user/UserWrapper";
-import TaskCompleted from "../taskCompleted/TaskCompleted";
-import CodeWarsTimer from "./CodeWarsTimer";
-import PendingTask from "../../message/PendingTask";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { userStageUpgrade } from '../../../actions/users';
+import { Card, Col, Row, Input, Button, message, Spin, Icon } from 'antd';
+import UserWrapper from '../../dashboard/user/UserWrapper';
+import TaskCompleted from '../taskCompleted/TaskCompleted';
+import CodeWarsTimer from './CodeWarsTimer';
+import PendingTask from '../../message/PendingTask';
 class TaskTwo extends Component {
   state = {
-    username: "",
+    username: '',
     onGoing: null,
     timeLeft: null,
     completed: null,
-    loading: false
+    loading: false,
   };
   intervalId = React.createRef();
 
@@ -34,18 +34,19 @@ class TaskTwo extends Component {
     try {
       this.setState({ loading: true });
       const res = await axios.get(
-        "http://localhost:3000/api/v1/tasks/two/status",
+        'http://localhost:3000/api/v1/tasks/2/status',
+
         {
           headers: {
-            authorization: JSON.parse(localStorage.getItem("authToken"))
-          }
+            authorization: JSON.parse(localStorage.getItem('authToken')),
+          },
         }
       );
       this.setState({
         timeLeft: parseInt(res.data.timeLeft / 1000),
         onGoing: res.data.onGoing,
         completed: res.data.completed,
-        loading: false
+        loading: false,
       });
       if (res.data.stageUpdated) {
         this.props.userStageUpgrade();
@@ -64,7 +65,7 @@ class TaskTwo extends Component {
          */
         message.error(error.response.data.error);
       } else {
-        message.error("An error occured");
+        message.error('An error occured');
       }
     }
   }
@@ -72,6 +73,10 @@ class TaskTwo extends Component {
     if (this.props.user.stage === 2) {
       this.getStageData();
     }
+  }
+
+  componentWillUnmount() {
+    window.clearInterval(this.intervalId);
   }
 
   handleChange = e => {
@@ -83,23 +88,24 @@ class TaskTwo extends Component {
     this.setState({ loading: true });
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/tasks/two/save",
+        'http://localhost:3000/api/v1/tasks/2/save',
+
         {
-          username: this.state.username
+          username: this.state.username,
         },
         {
           headers: {
-            authorization: JSON.parse(localStorage.getItem("authToken"))
-          }
+            authorization: JSON.parse(localStorage.getItem('authToken')),
+          },
         }
       );
       message.success(
-        res.status && "Your codewars username has been submitted."
+        res.status && 'Your codewars username has been submitted.'
       );
       this.setState({
         loading: false,
         onGoing: true,
-        timeLeft: parseInt(res.data.timeLeft / 1000)
+        timeLeft: parseInt(res.data.timeLeft / 1000),
       });
       this.startTimer();
     } catch (error) {
@@ -111,21 +117,21 @@ class TaskTwo extends Component {
          */
         message.error(error.response.data.error);
       } else {
-        message.error("An error occured");
+        message.error('An error occured');
       }
     }
   };
 
   render() {
     return (
-      <UserWrapper activeKey={"2"}>
+      <UserWrapper activeKey={'2'}>
         {this.state.loading ? (
           <div className="loading-div">
             <Spin
               indicator={
                 <Icon
                   type="loading"
-                  style={{ fontSize: 100, margin: "3rem auto" }}
+                  style={{ fontSize: 100, margin: '3rem auto' }}
                 />
               }
             />
@@ -148,17 +154,20 @@ class TaskTwo extends Component {
                               <ul>
                                 <li>
                                   <p>
-                                    Kudos on solving your first task. Task Two
-                                    is learning based. You need to create an
-                                    account on
+                                    Create an account on{' '}
                                     <a
-                                      href="https://www.codewars.com/"
+                                      href="https://codewars.com"
                                       target="_blank"
                                     >
-                                      <mark>CodeWars</mark>
-                                    </a>
-                                    and solve the katas based on your learning
-                                    from the resources.
+                                      https://codewars.com.
+                                    </a>{' '}
+                                    It’s a problem solving platform.
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    A problem on the platform is called a
+                                    ‘Kata’.
                                   </p>
                                 </li>
                                 <li>
@@ -167,14 +176,28 @@ class TaskTwo extends Component {
                                     skills, critical thinking and ability to
                                     learn. You have to take help from the
                                     resources and solve the katas based on your
-                                    learning. This task has a deadline of three
-                                    days.
+                                    learning.
                                   </p>
                                 </li>
                                 <li>
                                   <p>
-                                    One can use the resources below to help you
-                                    with the task.
+                                    Start solving problems on{' '}
+                                    <a
+                                      href="https://codewars.com"
+                                      target="_blank"
+                                    >
+                                      https://codewars.com.
+                                    </a>{' '}
+                                    There is no such limit, or minimum
+                                    requirement, solve as many problems as you
+                                    can before the given date.
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    Send us your codewars profile via email. We
+                                    would like to see the progress you have
+                                    made.
                                   </p>
                                 </li>
                               </ul>
@@ -183,19 +206,31 @@ class TaskTwo extends Component {
                               <h2>Resources</h2>
                               <ul>
                                 <li>
-                                  <a href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72">
-                                    <mark>JavaScript.info</mark>
-                                  </a>
+                                  <p>
+                                    You can learn basics of JS from{' '}
+                                    <a
+                                      href="http://javascript.info"
+                                      target="_blank"
+                                    >
+                                      http://javascript.info{' '}
+                                    </a>
+                                    or{' '}
+                                    <a
+                                      href="https://www.learn-js.org"
+                                      target="_blank"
+                                    >
+                                      https://www.learn-js.org/
+                                    </a>{' '}
+                                    which ever you feel comfortable with.
+                                  </p>
                                 </li>
                                 <li>
-                                  <a href="https://learn.shayhowe.com/html-css/building-your-first-web-page/">
-                                    <mark>resources 2</mark>
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css">
-                                    <mark>resources</mark>
-                                  </a>
+                                  <p>
+                                    CodeWars, the platform, might take some time
+                                    to getting used to. Try to figure out how to
+                                    use it, Google is your friend. Again, don’t
+                                    give up. YOU CAN DO IT.
+                                  </p>
                                 </li>
                               </ul>
                             </div>
@@ -214,7 +249,7 @@ class TaskTwo extends Component {
                         />
                         <Button
                           className="url-submit"
-                          onClick={this.handleSubmit}
+                          htmlType="submit"
                           type="primary"
                         >
                           Submit
@@ -235,7 +270,7 @@ class TaskTwo extends Component {
 const mapStateToProps = state => {
   const { user } = state.currentUser;
   return {
-    user
+    user,
   };
 };
 

@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { connect } from "react-redux";
-import { Card, Col, Row, Input, Button, message, Spin, Icon } from "antd";
-import UserWrapper from "../../dashboard/user/UserWrapper";
-import TaskCompleted from "../taskCompleted/TaskCompleted";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { Card, Col, Row, Input, Button, message, Spin, Icon } from 'antd';
+import UserWrapper from '../../dashboard/user/UserWrapper';
+import TaskCompleted from '../taskCompleted/TaskCompleted';
 
-import { userStageUpgrade } from "../../../actions/users";
+import { userStageUpgrade } from '../../../actions/users';
 
 class TaskOne extends Component {
   state = {
-    url: "",
-    loading: false
+    url: '',
+    loading: false,
   };
 
   handleChange = e => {
@@ -20,25 +20,30 @@ class TaskOne extends Component {
   handleSubmit = async e => {
     e.preventDefault();
     this.setState({ loading: true });
+    const url = this.state.url;
+    const csbRegex = /https?:\/\/([a-z0-9]+[.])*csb[.]app/;
+
+    if (url.indexOf('https://codesandbox.io/s') !== 0 && !csbRegex.test(url)) {
+      return message.error('Invalid Sandbox Url!');
+    }
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/tasks/one/save",
+        'http://localhost:3000/api/v1/tasks/1/save',
+
         {
-          url: this.state.url
+          url: this.state.url,
         },
         {
           headers: {
-            authorization: JSON.parse(localStorage.getItem("authToken"))
-          }
+            authorization: JSON.parse(localStorage.getItem('authToken')),
+          },
         }
       );
-      message.success(res.status && "Your Project has been submitted.");
+      message.success(res.status && 'Your Project has been submitted.');
       this.setState({ loading: false });
 
       this.props.userStageUpgrade();
     } catch (error) {
-      console.log(error);
-
       this.setState({ loading: false });
 
       if (error.response) {
@@ -48,7 +53,7 @@ class TaskOne extends Component {
          */
         message.error(error.response.data.error);
       } else {
-        message.error("An error occured");
+        message.error('An error occured');
       }
     }
   };
@@ -56,14 +61,14 @@ class TaskOne extends Component {
   render() {
     return (
       <>
-        <UserWrapper activeKey={"1"}>
+        <UserWrapper activeKey={'1'}>
           {this.state.loading ? (
             <div className="loading-div">
               <Spin
                 indicator={
                   <Icon
                     type="loading"
-                    style={{ fontSize: 100, margin: "3rem auto" }}
+                    style={{ fontSize: 100, margin: '3rem auto' }}
                   />
                 }
               />
@@ -77,33 +82,42 @@ class TaskOne extends Component {
                     <Row gutter={16}>
                       <Card title="Task One" bordered={false}>
                         <div>
-                          <h1 className="heading">
-                            Welcome to task one of the application process.
-                          </h1>
                           <ul>
                             <li>
                               <p>
-                                Task one is simple. All you have to do is
-                                convert the layout in the image into HTML
-                                format.
+                                In this folder there is an image called
+                                "html-css-assignment.png".
                               </p>
                             </li>
                             <li>
                               <p>
-                                You need to complete the assignment on
+                                All you have to do is convert the layout given
+                                in the PNG image into HTML/CSS format on this
+                                CodeSandbox platform -
                                 <a
-                                  href="https://codesandbox.io/"
+                                  href="https://codesandbox.io"
                                   target="_blank"
                                 >
-                                  <mark>CodeSandbox</mark>
+                                  https://codesandbox.io
                                 </a>
-                                and submit the URL link below.
                               </p>
                             </li>
                             <li>
                               <p>
-                                One can use the resources below to help you with
-                                the task.
+                                You won’t need any JavaScript. You can use the
+                                following sandbox, as the starting point -
+                                <a
+                                  target="_blank"
+                                  href="https://codesandbox.io/s/github/codesandbox-app/static-template"
+                                >
+                                  https://codesandbox.io/s/github/codesandbox-app/static-template
+                                </a>
+                              </p>
+                            </li>
+                            <li>
+                              <p>
+                                Write all the HTML/CSS code there and submit us
+                                the link of the sandbox in response.
                               </p>
                             </li>
                           </ul>
@@ -112,28 +126,41 @@ class TaskOne extends Component {
                           <h2>Resources</h2>
                           <ul>
                             <li>
-                              <a href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72">
+                              <a
+                                href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72"
+                                target="_blank"
+                              >
                                 <mark>freecodecamp</mark>
                               </a>
                             </li>
                             <li>
-                              <a href="https://learn.shayhowe.com/html-css/building-your-first-web-page/">
+                              <a
+                                href="https://learn.shayhowe.com/html-css/building-your-first-web-page/"
+                                target="_blank"
+                              >
                                 <mark>shayhowe</mark>
                               </a>
                             </li>
                             <li>
-                              <a href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css">
+                              <a
+                                href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css"
+                                target="_blank"
+                              >
                                 <mark>abeautifulsite</mark>
                               </a>
                             </li>
                           </ul>
                         </div>
-                        <div className="image-container">
-                          <img
-                            src="https://i.ibb.co/chGQtD8/task.png"
-                            alt="task"
-                            border="0"
-                          ></img>
+                        <div>
+                          <a
+                            href="https://i.ibb.co/7WqkWMD/html-css-assignment.png"
+                            download
+                            target="_blank"
+                          >
+                            <Button type="primary" icon="download">
+                              Download
+                            </Button>
+                          </a>
                         </div>
                       </Card>
                     </Row>
@@ -152,7 +179,7 @@ class TaskOne extends Component {
                       />
                       <Button
                         className="url-submit"
-                        onClick={this.handleSubmit}
+                        htmlType="submit"
                         type="primary"
                       >
                         Submit
@@ -172,7 +199,7 @@ class TaskOne extends Component {
 const mapStateToProps = state => {
   const { user } = state.currentUser;
   return {
-    user
+    user,
   };
 };
 

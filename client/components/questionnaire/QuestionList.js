@@ -12,6 +12,8 @@ import {
   Checkbox,
   message
 } from "antd";
+import NewQuestionModal from "./NewQuestionModal";
+import AdminWrapper from "../dashboard/admin/AdminWrapper";
 const { Column } = Table;
 
 class QuestionList extends React.Component {
@@ -59,7 +61,6 @@ class QuestionList extends React.Component {
 
   // EditQuestionModal
   handleChange = e => {
-    console.log(e.target);
     const { name, value } = e.target;
     this.setState({
       editingData: {
@@ -70,7 +71,6 @@ class QuestionList extends React.Component {
   };
 
   handleCheckbox = e => {
-    console.log(e);
     const { name, checked } = e.target;
     this.setState({
       editingData: {
@@ -123,7 +123,6 @@ class QuestionList extends React.Component {
         visible: true
       });
     } catch (error) {
-      console.log(error);
       message.error("An error occured");
     }
   };
@@ -141,7 +140,6 @@ class QuestionList extends React.Component {
       if (err) {
         return;
       }
-      if (values) console.log("Received values of form: ", values);
       const requestBody = {
         questionTitle: values.questionTitle,
         type: values.questionType,
@@ -205,6 +203,7 @@ class QuestionList extends React.Component {
         );
 
         message.success("Your question has been updated");
+        this.getQuestion();
         form.resetFields();
         this.setState({
           visible: false,
@@ -230,39 +229,44 @@ class QuestionList extends React.Component {
 
   render() {
     return (
-      <div className="search-result-list">
-        {this.state.data && (
-          <Table dataSource={this.state.data}>
-            <Column title="Question" dataIndex="questionTitle" key="_id" />
-            <Column title="Type" dataIndex="type" key="age" />
-            <Column title="Point" dataIndex="point" key="address" />
-            {/* <Column title="Is Active" dataIndex="isActive" key="address" />
+      <AdminWrapper activeKey={"1"}>
+        <NewQuestionModal getQuestion={this.getQuestion} />
+        <div style={{ margin: "1rem 0" }}>
+          {this.state.data && (
+            <Table dataSource={this.state.data}>
+              <Column title="Question" dataIndex="questionTitle" key="_id" />
+              <Column title="Type" dataIndex="type" key="age" />
+              <Column title="Point" dataIndex="point" key="address" />
+              {/* <Column title="Is Active" dataIndex="isActive" key="address" />
             <Column title="Is Random" dataIndex="isRandom" key="address" /> */}
-            <Column
-              title="Action"
-              key="action"
-              render={record => (
-                <span>
-                  <a onClick={() => this.editQuestion(record._id)}>Edit</a>
-                  <Divider type="vertical" />
-                  <a onClick={() => this.deleteQuestion(record._id)}>Delete</a>
-                </span>
-              )}
+              <Column
+                title="Action"
+                key="action"
+                render={record => (
+                  <span>
+                    <a onClick={() => this.editQuestion(record._id)}>Edit</a>
+                    <Divider type="vertical" />
+                    <a onClick={() => this.deleteQuestion(record._id)}>
+                      Delete
+                    </a>
+                  </span>
+                )}
+              />
+            </Table>
+          )}
+          {this.state.editingQuestionId && (
+            <EditQuestionModal
+              wrappedComponentRef={this.saveFormRef}
+              visible={this.state.visible}
+              onCancel={this.handleCancel}
+              onCreate={this.handleCreate}
+              handleChange={this.handleChange}
+              handleCheckbox={this.handleCheckbox}
+              editingData={this.state.editingData}
             />
-          </Table>
-        )}
-        {this.state.editingQuestionId && (
-          <EditQuestionModal
-            wrappedComponentRef={this.saveFormRef}
-            visible={this.state.visible}
-            onCancel={this.handleCancel}
-            onCreate={this.handleCreate}
-            handleChange={this.handleChange}
-            handleCheckbox={this.handleCheckbox}
-            editingData={this.state.editingData}
-          />
-        )}
-      </div>
+          )}
+        </div>
+      </AdminWrapper>
     );
   }
 }

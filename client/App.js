@@ -15,17 +15,14 @@ import UserProfile from "./components/dashboard/admin/userprofile/UserProfileWra
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
 import TaskThree from "./components/task/taskThree/TaskThree";
-import UserProgress from "./components/dashboard/user/UserProgress";
-import Question from "./components/questionnaire/Question";
-import Interview from "./components/task/interview/Interview";
+import UserInterview from "./components/task/interview/Interview";
 import QuestionList from "./components/questionnaire/QuestionList";
-import Dashboard from "./components/dashboard/user/Dashboard";
+import AdminInterview from "./components/interview/Interview";
 import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
 import Instructions from "./components/instructions/Instructions";
 import UserView from "./components/profile/UserView/UserView";
 import RateQuiz from "./components/questionnaire/RateQuiz";
 import { message } from "antd";
-
 class App extends Component {
   protectedRoutes = () => {
     // console.log(this.props.user);
@@ -33,7 +30,8 @@ class App extends Component {
       return (
         <Switch>
           <Route exact path="/" component={DisplayApplicants} />
-          <Route path="/questions" component={Question} />
+          <Route path="/questions" component={QuestionList} />
+          <Route path="/interviews" component={AdminInterview} />
           <Route path="/user/:id" component={UserProfile} />
           <Route path="/quiz/rate/:id" component={RateQuiz} />
           <Route path="/login">
@@ -48,7 +46,7 @@ class App extends Component {
           <Route exact path="/task/1" component={TaskOne} />
           <Route exact path="/task/2" component={TaskTwo} />
           <Route exact path="/task/3" component={TaskThree} />
-          <Route exact path="/task/4" component={Interview} />
+          <Route exact path="/task/4" component={UserInterview} />
           <Route path="/task/:taskId" component={UserDashboard} />
           <Route exact path="/profile" component={UserView} />
           {/* Redirects the user to login if user attempts to login */}
@@ -87,9 +85,9 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        {/* Conditional Routing, Checks if isAuthInProgress true or false, Checks
+        {/* Conditional Routing, Checks if tokenValidationInProgress true or false, Checks
         if user is available or not */}
-        {this.props.isAuthInProgress
+        {this.props.tokenValidationInProgress
           ? null
           : this.props.user
           ? this.protectedRoutes()
@@ -100,10 +98,10 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const { user, isAuthInProgress } = state.currentUser;
+  const { user, tokenValidationInProgress } = state.currentUser;
   return {
     user,
-    isAuthInProgress
+    tokenValidationInProgress
   };
 };
 

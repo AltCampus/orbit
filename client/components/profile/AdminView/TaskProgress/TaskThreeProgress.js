@@ -33,7 +33,6 @@ class TaskThreeProgress extends React.Component {
           }
         }
       );
-      console.log(res);
       this.setState({
         totalScore: res.data.totalScore,
         maximumScore: res.data.maximumScore,
@@ -43,7 +42,6 @@ class TaskThreeProgress extends React.Component {
         startTime: res.data.startTime
       });
     } catch (error) {
-      console.log(error);
       this.setState({ loading: false });
       message.error("Some error occured");
     }

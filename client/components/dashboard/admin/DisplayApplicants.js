@@ -42,6 +42,10 @@ class DisplayApplicants extends React.Component {
             <Icon type="question-circle" />
             Stage Three
           </Menu.Item>
+          <Menu.Item key="toBeReviewed">
+            <Icon type="question-circle" />
+            To Be Reviewed
+          </Menu.Item>
           <Menu.Item key="stageFour">
             <Icon type="video-camera" />
             Stage Four

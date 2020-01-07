@@ -30,13 +30,25 @@ const ReviewQuizForm = Form.create({ name: "form_in_modal" })(
         //   okText="Save"
         // >
         <Form layout="vertical" onSubmit={onCreate}>
-          {Object.keys(answers).map(questionId => (
+          {Object.keys(answers).map((questionId, index) => (
             <div className="answer-container">
               <Divider orientation="left">Question</Divider>
-              <Text strong>{answers[questionId].questionTitle}</Text>
+              <Text className="question" strong>
+                {index + 1}. {answers[questionId].questionTitle}
+              </Text>
               <br />
-              <Text strong> Answer Submitted: </Text>
-              <Paragraph>{answers[questionId].answer}</Paragraph>
+              <Text strong underline>
+                {" "}
+                Answer Submitted:-
+              </Text>
+              <Paragraph className="answer-submitted">
+                {answers[questionId].answer}
+                {!answers[questionId].answer && (
+                  <Text type="danger">
+                    User has not answered this question.
+                  </Text>
+                )}
+              </Paragraph>
               {answers[questionId].type === "MCQ" && (
                 <>
                   <Text mark>
@@ -44,7 +56,7 @@ const ReviewQuizForm = Form.create({ name: "form_in_modal" })(
                   </Text>
                 </>
               )}
-              <Form.Item>
+              <Form.Item label="Point: ">
                 {getFieldDecorator(questionId, {
                   initialValue: answers[questionId].point
                 })(
