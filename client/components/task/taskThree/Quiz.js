@@ -227,138 +227,143 @@ class Quiz extends Component {
       height: "30px",
       lineHeight: "30px"
     };
-    return this.state.loading ? (
-      <div className="loading-div">
-        <Spin
-          indicator={
-            <Icon
-              type="loading"
-              style={{ fontSize: 100, margin: "3rem auto" }}
-            />
-          }
-        />
-      </div>
-    ) : this.state.questions ? (
+    return (
       <>
-        <section style={{ textAlign: "center" }}>
-          <QuizPagination
-            active={this.state.currentQuestionIndex}
-            questions={this.state.questions.map(question =>
-              Boolean(question.answer)
-            )}
-            changeActive={index => this.changeActive(index)}
-          />
-          <QuizTimer time={this.state.timeLeft} />
-        </section>
-        <div className="container">
-          <div className="middle">
-            <Divider orientation="left">Question</Divider>
-            <p className="question">{currentQuestion.questionTitle}</p>
-            {/* <Divider orientation="left">Answer</Divider> */}
-            {currentQuestion.type === "MCQ" ? (
-              <Radio.Group
-                onChange={this.onValueChange}
-                value={currentQuestion.answer}
-              >
-                <Radio style={radioStyle} value={options.a}>
-                  {options.a}
-                </Radio>
-                <Radio style={radioStyle} value={options.b}>
-                  {options.b}
-                </Radio>
-                <Radio style={radioStyle} value={options.c}>
-                  {options.c}
-                </Radio>
-                <Radio style={radioStyle} value={options.d}>
-                  {options.d}
-                </Radio>
-              </Radio.Group>
-            ) : (
-              <TextArea
-                placeholder="Enter your answer here..."
-                value={currentQuestion.answer}
-                onChange={this.onValueChange}
-              />
-            )}
+        <Title style={{ marginBottom: 0 }}>Round 3: Quiz</Title>
+        <Divider />
+        {this.state.loading ? (
+          <div className="loading-div">
+            <Spin
+              indicator={
+                <Icon
+                  type="loading"
+                  style={{ fontSize: 100, margin: "3rem auto" }}
+                />
+              }
+            />
           </div>
-        </div>
-        <div className="next-prev-container container">
-          {this.state.currentQuestionIndex === 0 ? (
-            <Button
-              disabled="true"
-              aria-disabled="true"
-              onClick={() =>
-                this.changeActive(this.state.currentQuestionIndex - 1)
-              }
-            >
-              <Icon type="left" />
-              Previous
-            </Button>
-          ) : (
-            <Button
-              aria-disabled="false"
-              onClick={() =>
-                this.changeActive(this.state.currentQuestionIndex - 1)
-              }
-            >
-              <Icon type="left" />
-              Previous
-            </Button>
-          )}
-          {this.state.currentQuestionIndex ===
-          this.state.questions.length - 1 ? (
-            <Button
-              disabled
-              aria-disabled="true"
-              onClick={() =>
-                this.changeActive(this.state.currentQuestionIndex + 1)
-              }
-            >
-              Next
-              <Icon type="right" />
-            </Button>
-          ) : (
-            <Button
-              aria-disabled="false"
-              onClick={() =>
-                this.changeActive(this.state.currentQuestionIndex + 1)
-              }
-            >
-              Next
-              <Icon type="right" />
-            </Button>
-          )}
-        </div>
-        <div className="container">
-          {this.state.questions.filter(question => Boolean(question.answer))
-            .length === this.state.questions.length ? (
-            <Button onClick={() => this.submitQuiz()}>Submit</Button>
-          ) : (
-            <Text type="danger">
-              Submit button would be available here once you answer all the
-              questions.
-            </Text>
-          )}
-        </div>
+        ) : this.state.questions ? (
+          <>
+            <section style={{ textAlign: "center" }}>
+              <QuizPagination
+                active={this.state.currentQuestionIndex}
+                questions={this.state.questions.map(question =>
+                  Boolean(question.answer)
+                )}
+                changeActive={index => this.changeActive(index)}
+              />
+              <QuizTimer time={this.state.timeLeft} />
+            </section>
+            <div className="container">
+              <div className="middle">
+                <Divider orientation="left">Question</Divider>
+                <p className="question">{currentQuestion.questionTitle}</p>
+                {/* <Divider orientation="left">Answer</Divider> */}
+                {currentQuestion.type === "MCQ" ? (
+                  <Radio.Group
+                    onChange={this.onValueChange}
+                    value={currentQuestion.answer}
+                  >
+                    <Radio style={radioStyle} value={options.a}>
+                      {options.a}
+                    </Radio>
+                    <Radio style={radioStyle} value={options.b}>
+                      {options.b}
+                    </Radio>
+                    <Radio style={radioStyle} value={options.c}>
+                      {options.c}
+                    </Radio>
+                    <Radio style={radioStyle} value={options.d}>
+                      {options.d}
+                    </Radio>
+                  </Radio.Group>
+                ) : (
+                  <TextArea
+                    placeholder="Enter your answer here..."
+                    value={currentQuestion.answer}
+                    onChange={this.onValueChange}
+                  />
+                )}
+              </div>
+            </div>
+            <div className="next-prev-container container">
+              {this.state.currentQuestionIndex === 0 ? (
+                <Button
+                  disabled="true"
+                  aria-disabled="true"
+                  onClick={() =>
+                    this.changeActive(this.state.currentQuestionIndex - 1)
+                  }
+                >
+                  <Icon type="left" />
+                  Previous
+                </Button>
+              ) : (
+                <Button
+                  aria-disabled="false"
+                  onClick={() =>
+                    this.changeActive(this.state.currentQuestionIndex - 1)
+                  }
+                >
+                  <Icon type="left" />
+                  Previous
+                </Button>
+              )}
+              {this.state.currentQuestionIndex ===
+              this.state.questions.length - 1 ? (
+                <Button
+                  disabled
+                  aria-disabled="true"
+                  onClick={() =>
+                    this.changeActive(this.state.currentQuestionIndex + 1)
+                  }
+                >
+                  Next
+                  <Icon type="right" />
+                </Button>
+              ) : (
+                <Button
+                  aria-disabled="false"
+                  onClick={() =>
+                    this.changeActive(this.state.currentQuestionIndex + 1)
+                  }
+                >
+                  Next
+                  <Icon type="right" />
+                </Button>
+              )}
+            </div>
+            <div className="container">
+              {this.state.questions.filter(question => Boolean(question.answer))
+                .length === this.state.questions.length ? (
+                <Button onClick={() => this.submitQuiz()}>Submit</Button>
+              ) : (
+                <Text type="danger">
+                  Submit button would be available here once you answer all the
+                  questions.
+                </Text>
+              )}
+            </div>
+          </>
+        ) : this.state.canTakeQuiz ? (
+          <div class="quiz-info">
+            <Text strong>Time Limit: 30 min</Text>
+            <Text type="danger">*All questions are compulsory to answer.</Text>
+            <Button onClick={() => this.startQuiz()}>Start Quiz</Button>
+          </div>
+        ) : this.state.onGoing ? (
+          <div class="quiz-info">
+            <Divider />
+            <Text strong>You still have time to resume quiz.</Text>
+            <Text type="danger">Timer is running.</Text>
+            <Button onClick={() => this.resumeQuiz()}>Resume Quiz</Button>
+          </div>
+        ) : this.state.submitted ? (
+          <TaskCompleted />
+        ) : (
+          <span>You've ran out of time.</span>
+        )}
       </>
-    ) : this.state.canTakeQuiz ? (
-      <div class="quiz-info">
-        <Title>Round 3: Quiz</Title>
-        <Text strong>Time Limit: 30 min</Text>
-        <Text type="danger">*All questions are compulsory to answer.</Text>
-        <Button onClick={() => this.startQuiz()}>Start Quiz</Button>
-      </div>
-    ) : this.state.onGoing ? (
-      <div class="quiz-info">
-        <Title>Round 3: Quiz</Title>
-        <Text strong>You still have time to resume quiz.</Text>
-        <Text type="danger">Timer is running.</Text>
-        <Button onClick={() => this.resumeQuiz()}>Resume Quiz</Button>
-      </div>
-    ) : this.state.submitted ? (
-      <TaskCompleted />
-    ) : (
-      <span>You've ran out of time.</span>
     );
   }
 }
