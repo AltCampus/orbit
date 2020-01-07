@@ -19,11 +19,14 @@ function Interview() {
       setSlots(res.data.slots);
       setSortedSlots(
         res.data.slots.reduce((acc, val) => {
-          const slotDate = new Date(val.startTime).toLocaleDateString();
-          if (acc[slotDate]) {
-            acc[slotDate].push(val);
-          } else {
-            acc[slotDate] = [val];
+          if (new Date(val.startTime) > new Date()) {
+            // Filter upcoming slots
+            const slotDate = new Date(val.startTime).toLocaleDateString();
+            if (acc[slotDate]) {
+              acc[slotDate].push(val);
+            } else {
+              acc[slotDate] = [val];
+            }
           }
           return acc;
         }, {})
