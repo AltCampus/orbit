@@ -54,6 +54,7 @@ const userSchema = new Schema(
     canScheduleInterview: { type: Boolean, default: false },
     isAdmin: { type: Boolean, default: false },
     stage: { type: Number, default: 0 },
+    selectedForBatch: { type: String },
     status: {
       type: String,
       enum: ["pending", "reject", "accept"],

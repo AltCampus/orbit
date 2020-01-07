@@ -57,9 +57,15 @@ router.post("/", async (req, res) => {
 
     res.status(201).json({ status: true, user });
 
-    // TODO: UnComment to sending mail once user Register
     if (process.env.NODE_ENV === "production") {
-      mailer.mail("apply", user.email, user.name, user.hashMail);
+      setTimeout(() => {
+        mailer.mail(
+          "40_MINS_AFTER_APPLYING",
+          user.email,
+          user.name,
+          user.hashMail
+        );
+      }, 1000 * 60 * 40);
     }
   } catch (error) {
     return res.status(400).json({ status: false, error });
@@ -178,11 +184,14 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
       user = await user.save();
       user.password = undefined;
       user.hashMail = undefined;
-      return res.status(200).json({
+      res.status(200).json({
         status: true,
         message: `${user.name} now can schedule their interview.`,
         user
       });
+      if (process.env.NODE_ENV === "production") {
+        mailer.mail("SCHEDULE_INTERVIEW_MAIL_ALERT", user.email, user.name);
+      }
     } else {
       return res.status(400).json({
         status: false,
@@ -204,16 +213,25 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
     let user = await User.findOne({ _id: id });
     if (user.interview) {
       user.status = "accept";
+      user.selectedForBatch = req.body.selectedForBatch;
       user = await user.save();
       user.password = undefined;
       user.hashMail = undefined;
-      // TODO: UnComment to sending mail once user accept
-      // const mail = await mailer.mail('accept',user.email, user.name);
-      return res.status(200).json({
+
+      res.status(200).json({
         status: true,
         message: `${user.name} now eligible for joining AltCampus`,
         user
       });
+
+      if (process.env.NODE_ENV === "production") {
+        mailer.mail(
+          "ACCEPTANCE_MAIL_AFTER_INTERVIEW",
+          user.email,
+          user.name,
+          user.selectedForBatch
+        );
+      }
     } else {
       return res.status(400).json({
         status: false,
@@ -238,13 +256,28 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
       user = await user.save();
       user.password = undefined;
       user.hashMail = undefined;
-      // TODO: UnComment to sending mail once user accept
-      // const mail = await mailer.mail('reject',user.email, user.name);
-      return res.status(200).json({
+
+      res.status(200).json({
         status: true,
         message: `${user.name} not eligible for joining AltCampus!`,
         user
       });
+
+      if (process.env.NODE_ENV === "production") {
+        if (user.interview) {
+          await mailer.mail(
+            "ACCEPTANCE_MAIL_AFTER_INTERVIEW",
+            user.email,
+            user.name
+          );
+        } else {
+          await mailer.mail(
+            "REJECTION_MAIL_BEFORE_INTERVIEW",
+            user.email,
+            user.name
+          );
+        }
+      }
     } else {
       return res.status(400).json({
         status: false,
