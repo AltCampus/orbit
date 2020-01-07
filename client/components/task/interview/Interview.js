@@ -9,7 +9,11 @@ import PendingTask from "../../message/PendingTask";
 class Interview extends React.Component {
   render() {
     const { user } = this.props;
-    return <UserWrapper activeKey={"4"}>{<ScheduleInterview />}</UserWrapper>;
+    return (
+      <UserWrapper activeKey={"4"}>
+        <ScheduleInterview />
+      </UserWrapper>
+    );
   }
 }
 const mapStateToProps = state => {

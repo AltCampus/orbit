@@ -1,6 +1,7 @@
 import React from "react";
 import { Result, Button } from "antd";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 function ScheduleSuccess(props) {
   return (
@@ -16,9 +17,8 @@ function ScheduleSuccess(props) {
           props.interviewEndTime
         ).toLocaleTimeString()}`}
         extra={[
-          <Button type="primary" key="profile">
-            {" "}
-            View profile
+          <Button type="primary">
+            <Link to="/profile">See Profile</Link>
           </Button>
         ]}
       />

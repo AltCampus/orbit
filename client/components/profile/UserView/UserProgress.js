@@ -60,7 +60,7 @@ export class UserProgress extends Component {
           />
           <TaskFourProgress
             loading={this.state.loading}
-            quiz={this.state.progress.quiz || {}}
+            interview={this.state.progress.interview || {}}
           />
         </div>
       </>
