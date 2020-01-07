@@ -25,7 +25,9 @@ class ScheduleInterview extends Component {
   render() {
     return (
       <>
-        <Title style={{ marginBottom: 0 }}>Round 4: Interview</Title>
+        <Title level={2} style={{ marginBottom: 0 }}>
+          Round 4: Interview
+        </Title>
         <Divider />
         {this.props.isFetchingInterviewStatus ? (
           <div className="loading-div">

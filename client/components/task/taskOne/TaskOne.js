@@ -1,7 +1,18 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { Card, Col, Row, Input, Button, message, Spin, Icon } from "antd";
+import {
+  Card,
+  Row,
+  Input,
+  Button,
+  message,
+  Spin,
+  Icon,
+  Typography,
+  Divider
+} from "antd";
+const { Title } = Typography;
 import UserWrapper from "../../dashboard/user/UserWrapper";
 import TaskCompleted from "../taskCompleted/TaskCompleted";
 
@@ -60,138 +71,135 @@ class TaskOne extends Component {
 
   render() {
     return (
-      <>
-        <UserWrapper activeKey={"1"}>
-          {this.state.loading ? (
-            <div className="loading-div">
-              <Spin
-                indicator={
-                  <Icon
-                    type="loading"
-                    style={{ fontSize: 100, margin: "3rem auto" }}
-                  />
-                }
-              />
-            </div>
-          ) : (
-            <>
-              {this.props.user.stage > 1 && <TaskCompleted />}
-              {this.props.user.stage === 1 && (
-                <>
-                  <div className="task-container">
-                    <Row gutter={16}>
-                      <Card title="Task One" bordered={false}>
-                        <div>
-                          <ul>
-                            <li>
-                              <p>
-                                In this folder there is an image called
-                                "html-css-assignment.png".
-                              </p>
-                            </li>
-                            <li>
-                              <p>
-                                All you have to do is convert the layout given
-                                in the PNG image into HTML/CSS format on this
-                                CodeSandbox platform -
-                                <a
-                                  href="https://codesandbox.io"
-                                  target="_blank"
-                                >
-                                  https://codesandbox.io
-                                </a>
-                              </p>
-                            </li>
-                            <li>
-                              <p>
-                                You won’t need any JavaScript. You can use the
-                                following sandbox, as the starting point -
-                                <a
-                                  target="_blank"
-                                  href="https://codesandbox.io/s/github/codesandbox-app/static-template"
-                                >
-                                  https://codesandbox.io/s/github/codesandbox-app/static-template
-                                </a>
-                              </p>
-                            </li>
-                            <li>
-                              <p>
-                                Write all the HTML/CSS code there and submit us
-                                the link of the sandbox in response.
-                              </p>
-                            </li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h2>Resources</h2>
-                          <ul>
-                            <li>
-                              <a
-                                href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72"
-                                target="_blank"
-                              >
-                                <mark>freecodecamp</mark>
-                              </a>
-                            </li>
-                            <li>
-                              <a
-                                href="https://learn.shayhowe.com/html-css/building-your-first-web-page/"
-                                target="_blank"
-                              >
-                                <mark>shayhowe</mark>
-                              </a>
-                            </li>
-                            <li>
-                              <a
-                                href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css"
-                                target="_blank"
-                              >
-                                <mark>abeautifulsite</mark>
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <div>
-                          <a
-                            href="https://i.ibb.co/7WqkWMD/html-css-assignment.png"
-                            download
-                            target="_blank"
-                          >
-                            <Button type="primary" icon="download">
-                              Download
-                            </Button>
+      <UserWrapper activeKey={"1"}>
+        <Title level={2} style={{ marginBottom: 0 }}>
+          Round 1: HTML Task
+        </Title>
+        <Divider />
+        {this.props.user.stage > 1 && <TaskCompleted />}
+        {this.props.user.stage === 1 && (
+          <>
+            <div className="task-container">
+              <Row gutter={16}>
+                <Card bordered={false}>
+                  <div>
+                    <ul>
+                      <li>
+                        <p>
+                          In this folder there is an image called
+                          "html-css-assignment.png".
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          All you have to do is convert the layout given in the
+                          PNG image into HTML/CSS format on this CodeSandbox
+                          platform -
+                          <a href="https://codesandbox.io" target="_blank">
+                            https://codesandbox.io
                           </a>
-                        </div>
-                      </Card>
-                    </Row>
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          You won’t need any JavaScript. You can use the
+                          following sandbox, as the starting point -
+                          <a
+                            target="_blank"
+                            href="https://codesandbox.io/s/github/codesandbox-app/static-template"
+                          >
+                            https://codesandbox.io/s/github/codesandbox-app/static-template
+                          </a>
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          Write all the HTML/CSS code there and submit us the
+                          link of the sandbox in response.
+                        </p>
+                      </li>
+                    </ul>
                   </div>
-                  <div className="url-input">
-                    <form onSubmit={this.handleSubmit}>
-                      <Input
-                        size="large"
-                        placeholder="Submit your codesandbox URL here..."
-                        type="url"
-                        name="url"
-                        value={this.state.url}
-                        pattern="https://.*"
-                        required
-                        onChange={this.handleChange}
-                      />
-                      <Button
-                        className="url-submit"
-                        htmlType="submit"
-                        type="primary"
-                      >
-                        Submit
+                  <div>
+                    <h2>Resources</h2>
+                    <ul>
+                      <li>
+                        <a
+                          href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72"
+                          target="_blank"
+                        >
+                          <mark>freecodecamp</mark>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://learn.shayhowe.com/html-css/building-your-first-web-page/"
+                          target="_blank"
+                        >
+                          <mark>shayhowe</mark>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css"
+                          target="_blank"
+                        >
+                          <mark>abeautifulsite</mark>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <a
+                      href="https://i.ibb.co/7WqkWMD/html-css-assignment.png"
+                      download
+                      target="_blank"
+                    >
+                      <Button type="primary" icon="download">
+                        Download
                       </Button>
-                    </form>
+                    </a>
                   </div>
-                </>
-              )}
-            </>
-          )}
-        </UserWrapper>
-      </>
+                </Card>
+              </Row>
+            </div>
+            {this.state.loading ? (
+              <div className="loading-div">
+                <Spin
+                  indicator={
+                    <Icon
+                      type="loading"
+                      style={{ fontSize: 100, margin: "3rem auto" }}
+                    />
+                  }
+                />
+              </div>
+            ) : (
+              <div className="url-input">
+                <form onSubmit={this.handleSubmit}>
+                  <Input
+                    size="large"
+                    placeholder="Submit your codesandbox URL here..."
+                    type="url"
+                    name="url"
+                    value={this.state.url}
+                    pattern="https://.*"
+                    required
+                    onChange={this.handleChange}
+                  />
+                  <Button
+                    className="url-submit"
+                    htmlType="submit"
+                    type="primary"
+                  >
+                    Submit
+                  </Button>
+                </form>
+              </div>
+            )}
+          </>
+        )}
+      </UserWrapper>
     );
   }
 }

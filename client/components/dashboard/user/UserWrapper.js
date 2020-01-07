@@ -217,7 +217,8 @@ function UserWrapper(props) {
             style={{
               padding: 24,
               background: "#fff",
-              textAlign: "left"
+              textAlign: "left",
+              marginBottom: "1rem"
             }}
           >
             {props.children}

@@ -2,7 +2,19 @@ import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import { userStageUpgrade } from "../../../actions/users";
-import { Card, Col, Row, Input, Button, message, Spin, Icon } from "antd";
+import {
+  Card,
+  Col,
+  Row,
+  Input,
+  Button,
+  message,
+  Spin,
+  Icon,
+  Divider,
+  Typography
+} from "antd";
+const { Title } = Typography;
 import UserWrapper from "../../dashboard/user/UserWrapper";
 import TaskCompleted from "../taskCompleted/TaskCompleted";
 import CodeWarsTimer from "./CodeWarsTimer";
@@ -125,6 +137,10 @@ class TaskTwo extends Component {
   render() {
     return (
       <UserWrapper activeKey={"2"}>
+        <Title level={2} style={{ marginBottom: 0 }}>
+          Round 2: CodeWars Task
+        </Title>
+        <Divider />
         {this.state.loading ? (
           <div className="loading-div">
             <Spin
@@ -149,7 +165,7 @@ class TaskTwo extends Component {
                     <div className="task-container">
                       <Row>
                         <Col>
-                          <Card title="Task Two" bordered={false}>
+                          <Card bordered={false}>
                             <div>
                               <ul>
                                 <li>
