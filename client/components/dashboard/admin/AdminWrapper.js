@@ -1,8 +1,8 @@
-import React from "react";
-import { withRouter, Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { Layout, Menu, Icon, Avatar, Button, Anchor } from "antd";
-import { userLogOut } from "../../../actions/users";
+import React from 'react';
+import { withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Layout, Menu, Icon, Avatar, Button, Anchor } from 'antd';
+import { userLogOut } from '../../../actions/users';
 
 const { Header, Sider, Content } = Layout;
 
@@ -15,15 +15,15 @@ function AdminWrapper(props) {
   };
 
   const handleClick = () => {
-    props.userLogOut(() => props.history.push("/"));
+    props.userLogOut(() => props.history.push('/'));
   };
 
   return (
     <Layout className="wrapper">
       <Sider
         style={{
-          overflow: "auto",
-          height: "100vh"
+          overflow: 'auto',
+          height: '100vh',
         }}
         breakpoint="sm"
         onBreakpoint={broken => {
@@ -31,7 +31,7 @@ function AdminWrapper(props) {
         }}
         trigger={null}
         collapsible
-        collapsedWidth={broken ? "0" : "80"}
+        collapsedWidth={broken ? '0' : '80'}
         collapsed={collapsed}
       >
         <div className="logo"> Alt Campus </div>
@@ -63,58 +63,49 @@ function AdminWrapper(props) {
       {/* Display container */}
       <Layout
         style={{
-          borderRadius: "10px"
+          borderRadius: '10px',
         }}
       >
         {/* Header  */}
         <Header
           style={{
-            background: "#fff",
-            padding: "0",
-            display: "flex",
-            justifyContent: "space-between"
+            background: '#fff',
+            padding: '0',
+            display: 'flex',
+            justifyContent: 'space-between',
           }}
         >
           <Icon
             className="trigger"
-            type={collapsed ? "menu-unfold" : "menu-fold"}
+            type={collapsed ? 'menu-unfold' : 'menu-fold'}
             onClick={toggle}
             style={{
-              padding: "16px"
+              padding: '16px',
             }}
           />
-          <div
-            style={{
-              marginRight: "20px"
-            }}
-          >
-            <Avatar
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-              size={50}
-              style={{
-                marginRight: "6px"
-              }}
-            />
-            <Button
-              onClick={handleClick}
-              title="Logout"
-              type="danger"
-              shape="circle"
-              icon="logout"
-            />
-          </div>
+          <p className="profile-name">
+            Howdy, <Link to="/profile">{props.user.name}</Link>
+          </p>
+
+          <Button
+            className="button-logout"
+            onClick={handleClick}
+            title="Logout"
+            type="danger"
+            icon="logout"
+          />
         </Header>
         <Content
           style={{
-            margin: "24px 16px 0",
-            overflow: "initial"
+            margin: '24px 16px 0',
+            overflow: 'initial',
           }}
         >
           <div
             style={{
               padding: 24,
-              background: "#fff",
-              textAlign: "left"
+              background: '#fff',
+              textAlign: 'left',
             }}
           >
             {props.children}
@@ -125,4 +116,13 @@ function AdminWrapper(props) {
   );
 }
 
-export default withRouter(connect(null, { userLogOut })(AdminWrapper));
+const mapStateToProps = state => {
+  const { user } = state.currentUser;
+  return {
+    user,
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, { userLogOut })(AdminWrapper)
+);
