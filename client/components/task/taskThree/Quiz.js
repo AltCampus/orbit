@@ -223,7 +223,9 @@ class Quiz extends Component {
     };
     return (
       <>
-        <Title style={{ marginBottom: 0 }}>Round 3: Quiz</Title>
+        <Title level={2} style={{ marginBottom: 0 }}>
+          Round 3: Quiz
+        </Title>
         <Divider />
         {this.state.loading ? (
           <div className="loading-div">

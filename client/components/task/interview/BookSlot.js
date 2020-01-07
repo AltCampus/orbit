@@ -79,7 +79,7 @@ class ScheduleInterview extends Component {
           </div>
         ) : (
           <>
-            <Title level={2}>List of slots</Title>
+            <Title level={3}>List of slots</Title>
             <Text type="danger">Click on any slot to book it!</Text>
             {sortedSlots &&
               Object.keys(sortedSlots)
@@ -87,7 +87,7 @@ class ScheduleInterview extends Component {
                 .map(date => {
                   return (
                     <div className="day-wise-slot" key={date}>
-                      <Title level={3}>
+                      <Title level={4}>
                         {convertStringToDate(date).toDateString()}
                       </Title>
                       <div className="slots-container">
