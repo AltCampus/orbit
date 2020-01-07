@@ -18,3 +18,19 @@ body {
   padding: 3rem 0;
   width: 100%;
 }
+.slots-container {
+  span {
+    display: inline-block;
+    margin: 0.3rem;
+    &.booked {
+      span {
+        background-color: lightgreen;
+      }
+    }
+  }
+  .ant-tag {
+    font-size: 1rem;
+    padding: 0.25rem;
+    cursor: pointer;
+  }
+}

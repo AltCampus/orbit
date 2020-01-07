@@ -2,15 +2,120 @@ const express = require("express");
 const Router = express.Router();
 
 const auth = require("./../utils/auth");
-const user = require("./../models/User");
+const User = require("./../models/User");
 const Interview = require("../models/Interview");
 
+Router.get("/status", auth.verifyToken, async (req, res) => {
+  // User route for getting status of interview stage
+  try {
+    if (req.user.canScheduleInterview) {
+      return res.status(200).json({
+        canScheduleInterview: true,
+        hasScheduledInterview: false,
+        isReviewInProgress: false,
+        isFinalReviewInProgress: false
+      });
+    }
+    if (!req.user.canScheduleInterview) {
+      // User can't schdeule interview
+      if (req.user.interview) {
+        // User has scheduled interview already. Send the details
+        const interview = await Interview.findById(req.user.interview);
+        if (new Date(interview.endTime).valueOf() < Date.now().valueOf()) {
+          // Interview has ended
+          return res.status(200).json({
+            canScheduleInterview: false,
+            hasScheduledInterview: true,
+            isReviewInProgress: true,
+            isFinalReviewInProgress: true,
+            startTime: interview.startTime,
+            endTime: interview.endTime
+          });
+        } else {
+          // Interview is yet to take place
+          return res.status(200).json({
+            canScheduleInterview: false,
+            hasScheduledInterview: true,
+            isReviewInProgress: false,
+            isFinalReviewInProgress: false,
+            startTime: interview.startTime,
+            endTime: interview.endTime
+          });
+        }
+      } else {
+        // User application is under review
+        return res.status(200).json({
+          canScheduleInterview: false,
+          hasScheduledInterview: false,
+          isReviewInProgress: true,
+          isFinalReviewInProgress: false
+        });
+      }
+    }
+  } catch (error) {
+    return res
+      .status(403)
+      .json({ status: "failed", error: "Some error occurred." });
+  }
+});
 Router.get("/", auth.verifyToken, async (req, res) => {
-  const data = await Interview.find({
-    user: null,
-    date: { $gt: Date.now() }
-  });
-  res.json({ data });
+  // User route to get list of all available slots to book
+  try {
+    const data = await Interview.find({
+      user: null,
+      startTime: { $gt: Date.now() }
+    });
+    res.json({ availableSlots: data });
+  } catch (error) {
+    return res
+      .status(403)
+      .json({ status: "failed", error: "Some error occurred." });
+  }
+});
+
+Router.put("/book/:id", auth.verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const interview = await Interview.findById(id);
+    console.log(interview);
+    if (interview) {
+      // Interview slot with particular id exists
+      if (!interview.user) {
+        const scheduledInterview = await Interview.findByIdAndUpdate(
+          id,
+          { user: req.user._id },
+          { new: true }
+        );
+        await User.findByIdAndUpdate(req.user._id, {
+          interview: scheduledInterview._id,
+          canScheduleInterview: false
+        });
+        const { startTime, endTime } = scheduledInterview;
+        res.status(201).json({
+          status: true,
+          message: "Interview Scheduled",
+          slotDetails: {
+            startTime,
+            endTime
+          }
+        });
+      } else {
+        // Slot is already been booked by other user
+        return res.status(403).json({
+          status: "failed",
+          error: "Slot is already booked."
+        });
+      }
+    } else {
+      return res.status(403).json({
+        status: "failed",
+        error: "Could not found the selected Interview slot."
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ status: false, error });
+  }
 });
 
 // Admin list all slot
@@ -71,16 +176,31 @@ Router.post("/", auth.verifyAdminToken, async (req, res) => {
     );
     console.log(date, startTime, endTime, possibleSlot);
     for (let i = 0; i < possibleSlot; i++) {
+      const count = await Interview.find({
+        startTime: {
+          $gt: new Date(
+            startTime.valueOf() + i * timeSlotDuration * 1000 - 10
+          ).valueOf(),
+          $lt: new Date(
+            startTime.valueOf() + (i + 1) * timeSlotDuration * 1000
+          ).valueOf()
+        }
+      });
       console.log(
         new Date(startTime.valueOf() + i * timeSlotDuration * 1000),
-        new Date(startTime.valueOf() + (i + 1) * timeSlotDuration * 1000)
+        new Date(startTime.valueOf() + (i + 1) * timeSlotDuration * 1000),
+        count
       );
-      const interview = Interview.create({
-        startTime: new Date(startTime.valueOf() + i * timeSlotDuration * 1000),
-        endTime: new Date(
-          startTime.valueOf() + (i + 1) * timeSlotDuration * 1000
-        )
-      });
+      if (count.length === 0) {
+        const interview = Interview.create({
+          startTime: new Date(
+            startTime.valueOf() + i * timeSlotDuration * 1000
+          ),
+          endTime: new Date(
+            startTime.valueOf() + (i + 1) * timeSlotDuration * 1000
+          )
+        });
+      }
     }
     res.status(201).json({
       sucess: true,
@@ -92,6 +212,7 @@ Router.post("/", auth.verifyAdminToken, async (req, res) => {
   }
 });
 Router.delete("/:id", auth.verifyAdminToken, async (req, res) => {
+  // Admin route for deleting interview slot
   try {
     const interview = await Interview.findById(req.params.id);
     if (interview.user == null) {
@@ -104,28 +225,6 @@ Router.delete("/:id", auth.verifyAdminToken, async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ status: false, error: "Some Error Occured" });
-  }
-});
-
-Router.put("/:id", auth.verifyToken, async (req, res) => {
-  try {
-    const { id } = req.params.id;
-    const ScheduledInterview = await Interview.findByIdAndUpdate(
-      id,
-      { user: req.user._id },
-      { new: true }
-    );
-    await user.findOneAndUpdate(
-      { _id: req.user._id },
-      { interview: ScheduledInterview._id }
-    );
-    res.status(201).json({
-      status: true,
-      message: "Interview Scheduled"
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ status: false, error });
   }
 });
 
