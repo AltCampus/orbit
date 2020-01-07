@@ -83,9 +83,7 @@ function AdminWrapper(props) {
               padding: '16px',
             }}
           />
-          <p className="profile-name">
-            Howdy, <Link to="/profile">{props.user.name}</Link>
-          </p>
+          <p className="profile-name">Howdy, {props.user.name}</p>
 
           <Button
             className="button-logout"
