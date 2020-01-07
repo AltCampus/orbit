@@ -20,9 +20,16 @@ class TaskOne extends Component {
   handleSubmit = async e => {
     e.preventDefault();
     this.setState({ loading: true });
+    const url = this.state.url;
+    const csbRegex = /https?:\/\/([a-z0-9]+[.])*csb[.]app/;
+
+    if (url.indexOf("https://codesandbox.io/s") !== 0 && !csbRegex.test(url)) {
+      return message.error("Invalid Sandbox Url!");
+    }
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/tasks/one/save",
+        "http://localhost:3000/api/v1/tasks/1/save",
+
         {
           url: this.state.url
         },
@@ -37,8 +44,6 @@ class TaskOne extends Component {
 
       this.props.userStageUpgrade();
     } catch (error) {
-      console.log(error);
-
       this.setState({ loading: false });
 
       if (error.response) {
@@ -112,17 +117,26 @@ class TaskOne extends Component {
                           <h2>Resources</h2>
                           <ul>
                             <li>
-                              <a href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72">
+                              <a
+                                href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72"
+                                target="_blank"
+                              >
                                 <mark>freecodecamp</mark>
                               </a>
                             </li>
                             <li>
-                              <a href="https://learn.shayhowe.com/html-css/building-your-first-web-page/">
+                              <a
+                                href="https://learn.shayhowe.com/html-css/building-your-first-web-page/"
+                                target="_blank"
+                              >
                                 <mark>shayhowe</mark>
                               </a>
                             </li>
                             <li>
-                              <a href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css">
+                              <a
+                                href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css"
+                                target="_blank"
+                              >
                                 <mark>abeautifulsite</mark>
                               </a>
                             </li>
@@ -152,7 +166,7 @@ class TaskOne extends Component {
                       />
                       <Button
                         className="url-submit"
-                        onClick={this.handleSubmit}
+                        htmlType="submit"
                         type="primary"
                       >
                         Submit

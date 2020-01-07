@@ -62,7 +62,6 @@ class QuizSubmission extends React.Component {
         )
       });
     } catch (error) {
-      console.log(error);
       this.setState({ quizId: null, loading: false });
       message.error("Some error occured");
     }
@@ -74,7 +73,6 @@ class QuizSubmission extends React.Component {
 
   // EditQuestionModal
   handleChange = e => {
-    console.log(e.target);
     const { name, value } = e.target;
     this.setState({
       answers: this.state.answers.map(answer =>

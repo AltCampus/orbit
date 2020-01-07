@@ -52,6 +52,12 @@ function AdminWrapper(props) {
               <span> Question </span>
             </Link>
           </Menu.Item>
+          <Menu.Item key="2">
+            <Link to="/interviews">
+              <Icon type="code" />
+              <span> Interview </span>
+            </Link>
+          </Menu.Item>
         </Menu>
       </Sider>
       {/* Display container */}

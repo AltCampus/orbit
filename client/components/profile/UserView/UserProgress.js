@@ -6,7 +6,7 @@ import TaskTwoProgress from "./TaskProgress/TaskTwoProgress";
 import TaskThreeProgress from "./TaskProgress/TaskThreeProgress";
 import TaskFourProgress from "./TaskProgress/TaskFourProgress";
 import { connect } from "react-redux";
-import { userStageUpgrade } from "../../../actions/types";
+import { userStageUpgrade } from "../../../actions/users";
 
 const { Meta } = Card;
 
@@ -31,13 +31,11 @@ export class UserProgress extends Component {
           }
         }
       );
-      console.log(response);
       this.setState({ progress: response.data, loading: false });
       if (response.data.stageUpdated) {
         this.props.userStageUpgrade();
       }
     } catch (error) {
-      console.log(error);
       this.setState({ loading: false });
       if (error.response) {
         message.error(error.response.errror);

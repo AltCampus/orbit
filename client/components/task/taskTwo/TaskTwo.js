@@ -34,7 +34,8 @@ class TaskTwo extends Component {
     try {
       this.setState({ loading: true });
       const res = await axios.get(
-        "http://localhost:3000/api/v1/tasks/two/status",
+        "http://localhost:3000/api/v1/tasks/2/status",
+
         {
           headers: {
             authorization: JSON.parse(localStorage.getItem("authToken"))
@@ -74,6 +75,10 @@ class TaskTwo extends Component {
     }
   }
 
+  componentWillUnmount() {
+    window.clearInterval(this.intervalId);
+  }
+
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -83,7 +88,8 @@ class TaskTwo extends Component {
     this.setState({ loading: true });
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/tasks/two/save",
+        "http://localhost:3000/api/v1/tasks/2/save",
+
         {
           username: this.state.username
         },
@@ -183,17 +189,26 @@ class TaskTwo extends Component {
                               <h2>Resources</h2>
                               <ul>
                                 <li>
-                                  <a href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72">
+                                  <a
+                                    href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72"
+                                    target="_blank"
+                                  >
                                     <mark>JavaScript.info</mark>
                                   </a>
                                 </li>
                                 <li>
-                                  <a href="https://learn.shayhowe.com/html-css/building-your-first-web-page/">
+                                  <a
+                                    href="https://learn.shayhowe.com/html-css/building-your-first-web-page/"
+                                    target="_blank"
+                                  >
                                     <mark>resources 2</mark>
                                   </a>
                                 </li>
                                 <li>
-                                  <a href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css">
+                                  <a
+                                    href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css"
+                                    target="_blank"
+                                  >
                                     <mark>resources</mark>
                                   </a>
                                 </li>
@@ -214,7 +229,7 @@ class TaskTwo extends Component {
                         />
                         <Button
                           className="url-submit"
-                          onClick={this.handleSubmit}
+                          htmlType="submit"
                           type="primary"
                         >
                           Submit

@@ -697,7 +697,7 @@ function getAcceptContent(studentName) {
 }
 
 exports.mail = function(status,toAddress, studentName, hashMail) {
-  const content;
+  let content;
   if(status==='apply'){
     content = getApplyContent(studentName, hashMail);
   }
