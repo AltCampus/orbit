@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import FinalReview from "./FinalReview";
 import ScheduleSuccess from "./ScheduleSuccess";
 import UnderReview from "../../message/UnderReview";
+import RejectMessage from "../../message/RejectMessage";
 import BookSlot from "./BookSlot";
 class ScheduleInterview extends Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class ScheduleInterview extends Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <>
         <Title level={2} style={{ marginBottom: 0 }}>
@@ -51,7 +53,11 @@ class ScheduleInterview extends Component {
               this.props.isFinalReviewInProgress ? (
                 <>
                   {/* Interview has taken place. Waiting for final Review from admin. */}
-                  <FinalReview />
+                  {this.props.applicationStatus === "reject" ? (
+                    <RejectMessage />
+                  ) : (
+                    <FinalReview />
+                  )}
                 </>
               ) : (
                 <>
@@ -62,7 +68,11 @@ class ScheduleInterview extends Component {
             ) : (
               <>
                 {/*  User is currently under review before interview */}
-                <UnderReview />
+                {this.props.applicationStatus === "reject" ? (
+                  <RejectMessage />
+                ) : (
+                  <UnderReview />
+                )}
               </>
             )}
           </>
@@ -74,7 +84,8 @@ class ScheduleInterview extends Component {
 const mapStateToProps = state => {
   const { interview } = state;
   return {
-    ...interview
+    ...interview,
+    applicationStatus: state.currentUser.user.status
   };
 };
 

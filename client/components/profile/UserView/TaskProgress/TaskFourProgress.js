@@ -5,7 +5,6 @@ const { Meta } = Card;
 const { Text } = Typography;
 
 const TaskFourProgress = ({ interview, loading }) => {
-  console.log(interview);
   return (
     <Card
       cover={
@@ -43,12 +42,14 @@ const TaskFourProgress = ({ interview, loading }) => {
                   your interview
                 </Text>
               )}
+
               {interview.rejectedForInterview && (
                 <Text type="danger">
                   We're sorry to inform you that you couldn't qualify for the
                   interview.
                 </Text>
               )}
+
               {interview.isReviewInProgress &&
                 !interview.isFinalReviewInProgress && (
                   <Text>
@@ -56,6 +57,21 @@ const TaskFourProgress = ({ interview, loading }) => {
                     you can scheduled your Interview.
                   </Text>
                 )}
+
+              {interview.selectedAfterInterview && (
+                <Text style={{ color: "#52c41a" }}>
+                  Congratulations, you have been selected for AltCampus 6 month
+                  Full-Stack Program
+                </Text>
+              )}
+
+              {interview.rejectedAfterInterview && (
+                <Text type="danger">
+                  We're sorry to inform you that you couldn't qualify for the
+                  program.
+                </Text>
+              )}
+
               {interview.hasScheduledInterview ? (
                 interview.isFinalReviewInProgress ? (
                   <Text>
@@ -63,21 +79,24 @@ const TaskFourProgress = ({ interview, loading }) => {
                     inform you about your final status within few days.
                   </Text>
                 ) : (
-                  <>
-                    <Text>You've successfully scheduled your interview.</Text>
-                    <Descriptions>
-                      <Descriptions.Item label="Interview Date">
-                        {new Date(interview.startTime).toDateString()}
-                      </Descriptions.Item>
-                    </Descriptions>
-                    <Descriptions>
-                      <Descriptions.Item label="Interview Time">
-                        {new Date(interview.startTime).toLocaleTimeString()}
-                        {" - "}
-                        {new Date(interview.endTime).toLocaleTimeString()}
-                      </Descriptions.Item>
-                    </Descriptions>
-                  </>
+                  !interview.selectedAfterInterview &&
+                  !interview.rejectedAfterInterview && (
+                    <>
+                      <Text>You've successfully scheduled your interview.</Text>
+                      <Descriptions>
+                        <Descriptions.Item label="Interview Date">
+                          {new Date(interview.startTime).toDateString()}
+                        </Descriptions.Item>
+                      </Descriptions>
+                      <Descriptions>
+                        <Descriptions.Item label="Interview Time">
+                          {new Date(interview.startTime).toLocaleTimeString()}
+                          {" - "}
+                          {new Date(interview.endTime).toLocaleTimeString()}
+                        </Descriptions.Item>
+                      </Descriptions>
+                    </>
+                  )
                 )
               ) : null}
             </>

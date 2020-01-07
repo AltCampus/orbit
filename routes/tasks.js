@@ -220,21 +220,62 @@ router.get("/all/status", auth.verifyToken, async (req, res) => {
           const interview = await Interview.findById(req.user.interview);
           if (new Date(interview.endTime).valueOf() < Date.now().valueOf()) {
             // Interview has ended. Application is under final Review
-            return res.status(200).json({
-              html: htmlTaskStatus,
-              codewars: codewarsTaskStatus,
-              quiz: quizStatus,
-              interview: {
-                reachedStage: true,
-                canScheduleInterview: false,
-                hasScheduledInterview: true,
-                isReviewInProgress: true,
-                isFinalReviewInProgress: true,
-                rejectedForInterview: false,
-                startTime: interview.startTime,
-                endTime: interview.endTime
-              }
-            });
+            switch (req.user.status) {
+              case "reject":
+                return res.status(200).json({
+                  html: htmlTaskStatus,
+                  codewars: codewarsTaskStatus,
+                  quiz: quizStatus,
+                  interview: {
+                    reachedStage: true,
+                    canScheduleInterview: false,
+                    hasScheduledInterview: true,
+                    isReviewInProgress: false,
+                    isFinalReviewInProgress: false,
+                    rejectedForInterview: false,
+                    startTime: interview.startTime,
+                    endTime: interview.endTime,
+                    rejectedAfterInterview: true,
+                    selectedAfterInterview: false
+                  }
+                });
+              case "pending":
+                return res.status(200).json({
+                  html: htmlTaskStatus,
+                  codewars: codewarsTaskStatus,
+                  quiz: quizStatus,
+                  interview: {
+                    reachedStage: true,
+                    canScheduleInterview: false,
+                    hasScheduledInterview: true,
+                    isReviewInProgress: true,
+                    isFinalReviewInProgress: true,
+                    rejectedForInterview: false,
+                    startTime: interview.startTime,
+                    endTime: interview.endTime,
+                    rejectedAfterInterview: false,
+                    selectedAfterInterview: false
+                  }
+                });
+              case "accept":
+                return res.status(200).json({
+                  html: htmlTaskStatus,
+                  codewars: codewarsTaskStatus,
+                  quiz: quizStatus,
+                  interview: {
+                    reachedStage: true,
+                    canScheduleInterview: false,
+                    hasScheduledInterview: true,
+                    isReviewInProgress: false,
+                    isFinalReviewInProgress: false,
+                    rejectedForInterview: false,
+                    startTime: interview.startTime,
+                    endTime: interview.endTime,
+                    rejectedAfterInterview: false,
+                    selectedAfterInterview: true
+                  }
+                });
+            }
           } else {
             // Interview is yet to take place
             return res.status(200).json({
