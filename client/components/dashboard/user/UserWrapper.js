@@ -1,9 +1,9 @@
-import React from "react";
-import { withRouter, Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { Layout, Menu, Icon, Avatar, Button, Steps } from "antd";
+import React from 'react';
+import { withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Layout, Menu, Icon, Avatar, Button, Steps } from 'antd';
 const { Step } = Steps;
-import { userLogOut } from "../../../actions/users";
+import { userLogOut } from '../../../actions/users';
 
 const { Header, Sider, Content } = Layout;
 
@@ -16,20 +16,20 @@ function UserWrapper(props) {
   };
 
   const handleClick = () => {
-    props.userLogOut(() => props.history.push("/"));
+    props.userLogOut(() => props.history.push('/'));
   };
 
   const stepStyle = {
     marginBottom: 10,
-    boxShadow: "0px -1px 0 0 #e8e8e8 inset"
+    boxShadow: '0px -1px 0 0 #e8e8e8 inset',
   };
   const { user } = props;
   return (
     <Layout className="wrapper">
       <Sider
         style={{
-          overflow: "auto",
-          height: "100vh"
+          overflow: 'auto',
+          height: '100vh',
         }}
         breakpoint="sm"
         onBreakpoint={broken => {
@@ -37,7 +37,7 @@ function UserWrapper(props) {
         }}
         trigger={null}
         collapsible
-        collapsedWidth={broken ? "0" : "80"}
+        collapsedWidth={broken ? '0' : '80'}
         collapsed={collapsed}
       >
         <div className="logo"> AltCampus </div>
@@ -56,7 +56,7 @@ function UserWrapper(props) {
             <Link to="/task/1">
               <Icon type="html5" />
               <span>
-                <span>HTML / CSS</span>{" "}
+                <span>HTML / CSS</span>{' '}
                 {user.stage > 1 ? (
                   <Icon
                     type="check-circle"
@@ -64,7 +64,7 @@ function UserWrapper(props) {
                     className="menu-icon"
                   />
                 ) : (
-                  ""
+                  ''
                 )}
               </span>
             </Link>
@@ -80,7 +80,7 @@ function UserWrapper(props) {
                   className="menu-icon"
                 />
               ) : (
-                ""
+                ''
               )}
             </Link>
           </Menu.Item>
@@ -95,7 +95,7 @@ function UserWrapper(props) {
                   className="menu-icon"
                 />
               ) : (
-                ""
+                ''
               )}
             </Link>
           </Menu.Item>
@@ -110,7 +110,7 @@ function UserWrapper(props) {
                   className="menu-icon"
                 />
               ) : (
-                ""
+                ''
               )}
             </Link>
           </Menu.Item>
@@ -125,46 +125,37 @@ function UserWrapper(props) {
       {/* Display container */}
       <Layout
         style={{
-          borderRadius: "10px"
+          borderRadius: '10px',
         }}
       >
         {/* Header  */}
         <Header
           style={{
-            background: "#fff",
-            padding: "0",
-            display: "flex",
-            justifyContent: "space-between"
+            background: '#fff',
+            padding: '0',
+            display: 'flex',
+            justifyContent: 'space-between',
           }}
         >
           <Icon
             className="trigger"
-            type={collapsed ? "menu-unfold" : "menu-fold"}
+            type={collapsed ? 'menu-unfold' : 'menu-fold'}
             onClick={toggle}
             style={{
-              padding: "16px"
+              padding: '16px',
             }}
           />
-          <div
-            style={{
-              marginRight: "20px"
-            }}
-          >
-            <Avatar
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-              size={50}
-              style={{
-                marginRight: "6px"
-              }}
-            />
-            <Button
-              onClick={handleClick}
-              title="Logout"
-              type="danger"
-              shape="circle"
-              icon="logout"
-            />
-          </div>
+          <p className="profile-name">
+            Howdy, <Link to="/profile">{props.user.name}</Link>
+          </p>
+
+          <Button
+            className="button-logout"
+            onClick={handleClick}
+            title="Logout"
+            type="danger"
+            icon="logout"
+          />
         </Header>
         <Steps
           type="navigation"
@@ -175,55 +166,55 @@ function UserWrapper(props) {
           <Step
             status={
               Number(user.stage) === 1
-                ? "process"
+                ? 'process'
                 : Number(user.stage) < 1
-                ? "wait"
-                : "finish"
+                ? 'wait'
+                : 'finish'
             }
             title="HTML"
           />
           <Step
             status={
               Number(user.stage) === 2
-                ? "process"
+                ? 'process'
                 : Number(user.stage) < 2
-                ? "wait"
-                : "finish"
+                ? 'wait'
+                : 'finish'
             }
             title="CodeWars"
           />
           <Step
             status={
               Number(user.stage) === 3
-                ? "process"
+                ? 'process'
                 : Number(user.stage) < 3
-                ? "wait"
-                : "finish"
+                ? 'wait'
+                : 'finish'
             }
             title="Quiz"
           />
           <Step
             status={
               Number(user.stage) === 4
-                ? "process"
+                ? 'process'
                 : Number(user.stage) < 4
-                ? "wait"
-                : "finish"
+                ? 'wait'
+                : 'finish'
             }
             title="Interview"
           />
         </Steps>
         <Content
           style={{
-            margin: "24px 16px 0",
-            overflow: "initial"
+            margin: '24px 16px 0',
+            overflow: 'initial',
           }}
         >
           <div
             style={{
               padding: 24,
-              background: "#fff",
-              textAlign: "left"
+              background: '#fff',
+              textAlign: 'left',
             }}
           >
             {props.children}
@@ -237,7 +228,7 @@ function UserWrapper(props) {
 const mapStateToProps = state => {
   const { user } = state.currentUser;
   return {
-    user
+    user,
   };
 };
 
