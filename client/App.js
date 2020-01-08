@@ -22,7 +22,7 @@ import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
 import Instructions from "./components/instructions/Instructions";
 import UserView from "./components/profile/UserView/UserView";
 import RateQuiz from "./components/questionnaire/RateQuiz";
-import { message } from "antd";
+import { message, Spin, Icon } from "antd";
 class App extends Component {
   protectedRoutes = () => {
     // console.log(this.props.user);
@@ -75,17 +75,27 @@ class App extends Component {
     }
   };
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.tokenValidationInProgress && prevProps.isAuthenticated) {
-      prevProps.history.push("/");
-    }
-  }
-
   render() {
     return (
       <React.Fragment>
-        {/* Conditional Routing, Checks if user is available or not */}
-        {this.props.user ? this.protectedRoutes() : this.unprotectedRoutes()}
+        {/* Conditional Routing */}
+        {this.props.tokenValidationInProgress ? (
+          // Shows spinner untill user fatches
+          <div className="loading-div">
+            <Spin
+              indicator={
+                <Icon
+                  type="loading"
+                  style={{ fontSize: 100, margin: "3rem auto" }}
+                />
+              }
+            />
+          </div>
+        ) : this.props.user ? (
+          this.protectedRoutes()
+        ) : (
+          this.unprotectedRoutes()
+        )}
       </React.Fragment>
     );
   }
