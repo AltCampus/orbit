@@ -10,19 +10,20 @@ import { getCurrentUser } from "./actions/users";
 import Login from "./components/login/Login";
 import SetPassword from "./components/setPassword/SetPassword";
 import LandingPage from "./components/static/LandingPage";
-import UserDashboard from "./components/dashboard/user/Dashboard";
 import UserProfile from "./components/dashboard/admin/userprofile/UserProfileWrapper";
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
 import TaskThree from "./components/task/taskThree/TaskThree";
 import UserInterview from "./components/task/interview/Interview";
 import QuestionList from "./components/questionnaire/QuestionList";
-import AdminInterview from "./components/interview/Interview";
+import SlotManager from "./components/interview/Interview";
 import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
 import Instructions from "./components/instructions/Instructions";
 import UserView from "./components/profile/UserView/UserView";
 import RateQuiz from "./components/questionnaire/RateQuiz";
 import { message, Spin, Icon } from "antd";
+import InterviewsList from "./components/interview/InterviewsList";
+
 class App extends Component {
   protectedRoutes = () => {
     // console.log(this.props.user);
@@ -31,7 +32,8 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={DisplayApplicants} />
           <Route path="/questions" component={QuestionList} />
-          <Route path="/interviews" component={AdminInterview} />
+          <Route path="/interviews/slots" component={SlotManager} />
+          <Route path="/interviews/scheduled" component={InterviewsList} />
           <Route path="/user/:id" component={UserProfile} />
           <Route path="/quiz/rate/:id" component={RateQuiz} />
           {/* <Route path="/login">
@@ -47,7 +49,6 @@ class App extends Component {
           <Route exact path="/task/2" component={TaskTwo} />
           <Route exact path="/task/3" component={TaskThree} />
           <Route exact path="/task/4" component={UserInterview} />
-          <Route path="/task/:taskId" component={UserDashboard} />
           <Route exact path="/profile" component={UserView} />
         </Switch>
       );

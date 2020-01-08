@@ -89,7 +89,7 @@ class TaskOneProgress extends Component {
         taskId: this.props.user.task._id
       };
       await axios.post(
-        `http://localhost:3000/api/v1/task/review/html`,
+        `/api/v1/task/review/html`,
         { data },
         {
           headers: {

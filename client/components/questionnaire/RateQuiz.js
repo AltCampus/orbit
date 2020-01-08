@@ -22,14 +22,11 @@ class RateQuiz extends React.Component {
 
   getQuiz = async _ => {
     try {
-      const res = await axios.get(
-        `http://localhost:3000/api/v1/quiz/${this.state.quizId}`,
-        {
-          headers: {
-            Authorization: JSON.parse(localStorage.authToken)
-          }
+      const res = await axios.get(`/api/v1/quiz/${this.state.quizId}`, {
+        headers: {
+          Authorization: JSON.parse(localStorage.authToken)
         }
-      );
+      });
       this.setState({
         quizData: {
           totalScore: res.data.totalScore,
@@ -91,7 +88,7 @@ class RateQuiz extends React.Component {
       try {
         this.setState({ loading: true });
         const response = await axios.post(
-          `http://localhost:3000/api/v1/quiz/${this.state.quizId}`,
+          `/api/v1/quiz/${this.state.quizId}`,
           requestBody,
           {
             headers: {

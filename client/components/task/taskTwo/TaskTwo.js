@@ -2,7 +2,19 @@ import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import { userStageUpgrade } from "../../../actions/users";
-import { Card, Col, Row, Input, Button, message, Spin, Icon } from "antd";
+import {
+  Card,
+  Col,
+  Row,
+  Input,
+  Button,
+  message,
+  Spin,
+  Icon,
+  Divider,
+  Typography
+} from "antd";
+const { Title } = Typography;
 import UserWrapper from "../../dashboard/user/UserWrapper";
 import TaskCompleted from "../taskCompleted/TaskCompleted";
 import CodeWarsTimer from "./CodeWarsTimer";
@@ -34,7 +46,7 @@ class TaskTwo extends Component {
     try {
       this.setState({ loading: true });
       const res = await axios.get(
-        "http://localhost:3000/api/v1/tasks/2/status",
+        "/api/v1/tasks/2/status",
 
         {
           headers: {
@@ -88,7 +100,7 @@ class TaskTwo extends Component {
     this.setState({ loading: true });
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/tasks/2/save",
+        "/api/v1/tasks/2/save",
 
         {
           username: this.state.username
@@ -125,6 +137,10 @@ class TaskTwo extends Component {
   render() {
     return (
       <UserWrapper activeKey={"2"}>
+        <Title level={2} style={{ marginBottom: 0 }}>
+          Round 2: CodeWars Task
+        </Title>
+        <Divider />
         {this.state.loading ? (
           <div className="loading-div">
             <Spin
@@ -149,22 +165,25 @@ class TaskTwo extends Component {
                     <div className="task-container">
                       <Row>
                         <Col>
-                          <Card title="Task Two" bordered={false}>
+                          <Card bordered={false}>
                             <div>
                               <ul>
                                 <li>
                                   <p>
-                                    Kudos on solving your first task. Task Two
-                                    is learning based. You need to create an
-                                    account on
+                                    Create an account on{" "}
                                     <a
-                                      href="https://www.codewars.com/"
+                                      href="https://codewars.com"
                                       target="_blank"
                                     >
-                                      <mark>CodeWars</mark>
-                                    </a>
-                                    and solve the katas based on your learning
-                                    from the resources.
+                                      https://codewars.com.
+                                    </a>{" "}
+                                    It’s a problem solving platform.
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    A problem on the platform is called a
+                                    ‘Kata’.
                                   </p>
                                 </li>
                                 <li>
@@ -173,14 +192,28 @@ class TaskTwo extends Component {
                                     skills, critical thinking and ability to
                                     learn. You have to take help from the
                                     resources and solve the katas based on your
-                                    learning. This task has a deadline of three
-                                    days.
+                                    learning.
                                   </p>
                                 </li>
                                 <li>
                                   <p>
-                                    One can use the resources below to help you
-                                    with the task.
+                                    Start solving problems on{" "}
+                                    <a
+                                      href="https://codewars.com"
+                                      target="_blank"
+                                    >
+                                      https://codewars.com.
+                                    </a>{" "}
+                                    There is no such limit, or minimum
+                                    requirement, solve as many problems as you
+                                    can before the given date.
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    Send us your codewars profile via email. We
+                                    would like to see the progress you have
+                                    made.
                                   </p>
                                 </li>
                               </ul>
@@ -189,28 +222,31 @@ class TaskTwo extends Component {
                               <h2>Resources</h2>
                               <ul>
                                 <li>
-                                  <a
-                                    href="https://medium.freecodecamp.org/learn-html-in-5-minutes-ccd378d2ab72"
-                                    target="_blank"
-                                  >
-                                    <mark>JavaScript.info</mark>
-                                  </a>
+                                  <p>
+                                    You can learn basics of JS from{" "}
+                                    <a
+                                      href="http://javascript.info"
+                                      target="_blank"
+                                    >
+                                      http://javascript.info{" "}
+                                    </a>
+                                    or{" "}
+                                    <a
+                                      href="https://www.learn-js.org"
+                                      target="_blank"
+                                    >
+                                      https://www.learn-js.org/
+                                    </a>{" "}
+                                    which ever you feel comfortable with.
+                                  </p>
                                 </li>
                                 <li>
-                                  <a
-                                    href="https://learn.shayhowe.com/html-css/building-your-first-web-page/"
-                                    target="_blank"
-                                  >
-                                    <mark>resources 2</mark>
-                                  </a>
-                                </li>
-                                <li>
-                                  <a
-                                    href="https://www.abeautifulsite.net/how-to-make-rounded-images-with-css"
-                                    target="_blank"
-                                  >
-                                    <mark>resources</mark>
-                                  </a>
+                                  <p>
+                                    CodeWars, the platform, might take some time
+                                    to getting used to. Try to figure out how to
+                                    use it, Google is your friend. Again, don’t
+                                    give up. YOU CAN DO IT.
+                                  </p>
                                 </li>
                               </ul>
                             </div>

@@ -78,7 +78,7 @@ class ToggleStage extends Component {
   }
 
   async componentDidMount() {
-    const response = await axios.get("http://localhost:3000/api/v1/users/", {
+    const response = await axios.get("/api/v1/users/", {
       headers: {
         Authorization: JSON.parse(localStorage.getItem("authToken"))
       }

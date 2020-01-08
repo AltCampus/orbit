@@ -61,7 +61,7 @@ class RenderCodeWarsProgress extends Component {
   fetchKatas = async props => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/v1/tasks/two/katas`,
+        `/api/v1/tasks/two/katas`,
         { props: props.user },
         {
           headers: {
@@ -134,7 +134,7 @@ class TaskTwoProgress extends Component {
         taskId: this.props.user.task._id
       };
       await axios.post(
-        `http://localhost:3000/api/v1/task/review/codewars`,
+        `/api/v1/task/review/codewars`,
         { data },
         {
           headers: {

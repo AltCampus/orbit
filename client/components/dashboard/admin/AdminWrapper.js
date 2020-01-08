@@ -27,9 +27,9 @@ function AdminWrapper(props) {
         }}
         breakpoint="sm"
         onBreakpoint={broken => {
+          setCollapsed(broken);
           setBroken(broken);
         }}
-        trigger={null}
         collapsible
         collapsedWidth={broken ? "0" : "80"}
         collapsed={collapsed}
@@ -53,9 +53,15 @@ function AdminWrapper(props) {
             </Link>
           </Menu.Item>
           <Menu.Item key="2">
-            <Link to="/interviews">
+            <Link to="/interviews/slots">
               <Icon type="code" />
-              <span> Interview </span>
+              <span> Interview Slots </span>
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="3">
+            <Link to="/interviews/scheduled">
+              <Icon type="code" />
+              <span> Interview List </span>
             </Link>
           </Menu.Item>
         </Menu>
@@ -83,23 +89,13 @@ function AdminWrapper(props) {
               padding: "16px"
             }}
           />
-          <div
-            style={{
-              marginRight: "20px"
-            }}
-          >
-            <Avatar
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-              size={50}
-              style={{
-                marginRight: "6px"
-              }}
-            />
+          <div>
+            <span className="profile-name"> Howdy, {props.user.name}</span>
             <Button
+              className="button-logout"
               onClick={handleClick}
               title="Logout"
               type="danger"
-              shape="circle"
               icon="logout"
             />
           </div>
@@ -114,7 +110,8 @@ function AdminWrapper(props) {
             style={{
               padding: 24,
               background: "#fff",
-              textAlign: "left"
+              textAlign: "left",
+              marginBottom: "1rem"
             }}
           >
             {props.children}
@@ -125,4 +122,13 @@ function AdminWrapper(props) {
   );
 }
 
-export default withRouter(connect(null, { userLogOut })(AdminWrapper));
+const mapStateToProps = state => {
+  const { user } = state.currentUser;
+  return {
+    user
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, { userLogOut })(AdminWrapper)
+);
