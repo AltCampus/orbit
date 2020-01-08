@@ -1,54 +1,54 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const sourcePlatform = [
-  "Facebook",
-  "Reddit",
-  "Quora",
-  "Twitter",
-  "Email",
-  "Search engine",
-  "LinkedIn",
-  "Instagram",
-  "Medium",
-  "Word of mouth",
-  "Our blog",
-  "Other blog"
+  'Facebook',
+  'Reddit',
+  'Quora',
+  'Twitter',
+  'Email',
+  'Search engine',
+  'LinkedIn',
+  'Instagram',
+  'Medium',
+  'Word of mouth',
+  'Our blog',
+  'Other blog',
 ];
 
 const programmingExperience = [
-  "Newbie",
-  "Trying to learn",
-  "Learning for 3 months",
-  "Experienced"
+  'Newbie',
+  'Trying to learn',
+  'Learning for 3 months',
+  'Experienced',
 ];
 
 const screenerSchema = new Schema(
   {
     sourcePlatform: {
       type: String,
-      enum: sourcePlatform
+      enum: sourcePlatform,
     },
     screenerMotivation: { type: String },
     background: { type: String },
     programmingExperience: {
       type: String,
-      enum: programmingExperience
+      enum: programmingExperience,
     },
     location: { type: String },
     age: { type: Number },
-    graduationYear: { type: "Number" },
+    graduationYear: { type: 'Number' },
     graduationDetails: { type: String },
     isCurrentlyEmployed: { type: Boolean, default: false },
     expectedJoiningMonth: { type: String },
     expectedJoiningYear: { type: Number },
-    screenerRemarks: { type: String }
+    screenerRemarks: { type: String },
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
-const Screener = mongoose.model("Screener", screenerSchema);
+const Screener = mongoose.model('Screener', screenerSchema);
 
 module.exports = Screener;

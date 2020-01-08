@@ -1,5 +1,6 @@
 import React from 'react';
 import { Drawer, Button } from 'antd';
+import Screener from '../screener/Screener';
 
 export class DrawerInfo extends React.Component {
   state = { visible: false, childrenDrawer: false };
@@ -41,6 +42,7 @@ export class DrawerInfo extends React.Component {
           onClose={this.onClose}
           visible={this.state.visible}
         >
+          <Screener />
           <div
             style={{
               position: 'absolute',
