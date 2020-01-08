@@ -3,27 +3,28 @@ import { Link } from 'react-router-dom';
 import { Timeline, Button } from 'antd';
 
 import UserWrapper from '../dashboard/user/UserWrapper';
+import DrawerInfo from '../drawer/DrawerInfo';
 
 export default function Instructions() {
   return (
     <UserWrapper activeKey={'0'}>
-      <div className="task-introduction-container">
-        <p className="task-introduction">
+      <div className='task-introduction-container'>
+        <p className='task-introduction'>
           The tasks consists of questions carefully designed to help you
           self-assess your comprehension of the information presented on the
           topics covered in the module.
         </p>
-        <p className="task-introduction">
+        <p className='task-introduction'>
           All tasks are compulsory. One cannot attempt the further tasks unless
           the active task is completed.
         </p>
-        <p className="task-introduction">
+        <p className='task-introduction'>
           The total score for the quiz is based on your responses to all
           questions.
         </p>
       </div>
       <div>
-        <h1 className="task-heading">Task one:</h1>
+        <h1 className='task-heading'>Task one:</h1>
         <Timeline>
           <Timeline.Item>
             Read the instructions of taks one carefully.
@@ -36,7 +37,7 @@ export default function Instructions() {
         </Timeline>
       </div>
       <div>
-        <h1 className="task-heading">Task two:</h1>
+        <h1 className='task-heading'>Task two:</h1>
         <Timeline>
           <Timeline.Item>
             Read the instructions of task two carefully.
@@ -52,7 +53,7 @@ export default function Instructions() {
         </Timeline>
       </div>
       <div>
-        <h1 className="task-heading">Task three:</h1>
+        <h1 className='task-heading'>Task three:</h1>
         <Timeline>
           <Timeline.Item>
             Task three consists of objective and subjective questions.
@@ -66,7 +67,7 @@ export default function Instructions() {
         </Timeline>
       </div>
       <div>
-        <h1 className="task-heading">Interview:</h1>
+        <h1 className='task-heading'>Interview:</h1>
         <Timeline>
           <Timeline.Item>
             The interview will be scheduled on the basis of applicant's
@@ -89,8 +90,9 @@ export default function Instructions() {
           </Timeline.Item>
         </Timeline>
       </div>
-      <div className="instruction-btn">
-        <Link to="task/1">
+      <div className='instruction-btn'>
+        <DrawerInfo />
+        <Link to='task/1'>
           <Button>Next</Button>
         </Link>
       </div>
