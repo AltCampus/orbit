@@ -4,37 +4,25 @@ const { Title } = Typography;
 const { Column } = Table;
 
 function SlotList({ sortedSlots, slots, deleteSlot }) {
+  const convertStringToDate = dateString =>
+    new Date(
+      dateString
+        .split("/")
+        .reverse()
+        .join("-")
+    );
   return (
     <div>
       <Divider />
       <Title level={2}>List of slots</Title>
       {sortedSlots &&
         Object.keys(sortedSlots)
-          .sort(
-            (a, b) =>
-              new Date(
-                a
-                  .split("/")
-                  .reverse()
-                  .join("-")
-              ) -
-              new Date(
-                b
-                  .split("/")
-                  .reverse()
-                  .join("-")
-              )
-          )
+          .sort((a, b) => convertStringToDate(a) - convertStringToDate(b))
           .map(date => {
             return (
               <div className="day-wise-slot" key={date}>
                 <Title level={3}>
-                  {new Date(
-                    date
-                      .split("/")
-                      .reverse()
-                      .join("-")
-                  ).toDateString()}
+                  {convertStringToDate(date).toDateString()}
                 </Title>
                 <div className="slots-container">
                   {sortedSlots[date]

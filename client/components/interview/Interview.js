@@ -60,10 +60,9 @@ function Interview() {
   return (
     <>
       <AdminWrapper activeKey={"2"}>
-        <Title>Schedule Interviews</Title>
+        <Title level={2}>Interviews Slot Manager </Title>
         <Calender getSlots={getSlots} />
         <SlotList sortedSlots={sortedSlots} deleteSlot={deleteSlot} />
-        <InterviewsList />
       </AdminWrapper>
     </>
   );
