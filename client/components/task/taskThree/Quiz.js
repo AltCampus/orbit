@@ -210,7 +210,7 @@ class Quiz extends Component {
       this.setState({ loading: false });
     }
   };
-
+  Better;
   render() {
     const currentQuestion =
       this.state.questions &&
@@ -223,10 +223,6 @@ class Quiz extends Component {
     };
     return (
       <>
-        <Title level={2} style={{ marginBottom: 0 }}>
-          Round 3: Quiz
-        </Title>
-        <Divider />
         {this.state.loading ? (
           <div className="loading-div">
             <Spin
