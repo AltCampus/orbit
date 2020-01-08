@@ -53,9 +53,15 @@ function AdminWrapper(props) {
             </Link>
           </Menu.Item>
           <Menu.Item key="2">
-            <Link to="/interviews">
+            <Link to="/interviews/slots">
               <Icon type="code" />
-              <span> Interview </span>
+              <span> Interview Slots </span>
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="3">
+            <Link to="/interviews/scheduled">
+              <Icon type="code" />
+              <span> Interview List </span>
             </Link>
           </Menu.Item>
         </Menu>
@@ -104,7 +110,8 @@ function AdminWrapper(props) {
             style={{
               padding: 24,
               background: "#fff",
-              textAlign: "left"
+              textAlign: "left",
+              marginBottom: "1rem"
             }}
           >
             {props.children}
