@@ -14,7 +14,10 @@ import {
 import { message } from "antd";
 import config from "../config";
 
-axios.defaults.baseURL = process.env.NODE_ENV === "production" ? config.productionRootURL : "http://localhost:3000/";
+axios.defaults.baseURL =
+  process.env.NODE_ENV === "production"
+    ? config.productionRootURL
+    : "http://localhost:3000/";
 
 const rootUrl = "/api/v1/users";
 
@@ -23,11 +26,11 @@ const rootUrl = "/api/v1/users";
 //   axios.defaults.headers.Authorization = newToken;
 // };
 
-export const getCurrentUser = invalidToken => {
+export const getCurrentUser = (invalidToken, cb) => {
   if (!localStorage.authToken) {
     return;
   }
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       await dispatch({
         type: GET_USER_PENDING
@@ -41,6 +44,10 @@ export const getCurrentUser = invalidToken => {
         type: GET_USER_SUCCESS,
         data: res.data.user
       });
+      // Invoke the callback function if available
+      if (cb) {
+        cb();
+      }
     } catch (error) {
       if (error.response) {
         await invalidToken(error.response.data.message);
@@ -51,8 +58,8 @@ export const getCurrentUser = invalidToken => {
   };
 };
 
-export const userLogin = data => {
-  return async dispatch => {
+export const userLogin = (data) => {
+  return async (dispatch) => {
     try {
       await dispatch({ type: USER_LOGIN_PENDING });
 
@@ -80,7 +87,7 @@ export const userStageUpgrade = () => {
   };
 };
 
-export const userLogOut = callback => {
+export const userLogOut = (callback) => {
   // Clear the localStorage
   localStorage.clear();
   // Invoke the callback function
