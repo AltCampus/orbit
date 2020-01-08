@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Timeline, Button } from 'antd';
 
 import UserWrapper from '../dashboard/user/UserWrapper';
-import DrawerInfo from '../drawer/DrawerInfo';
 
 export default function Instructions() {
   return (
@@ -91,7 +90,6 @@ export default function Instructions() {
         </Timeline>
       </div>
       <div className='instruction-btn'>
-        <DrawerInfo />
         <Link to='task/1'>
           <Button>Next</Button>
         </Link>

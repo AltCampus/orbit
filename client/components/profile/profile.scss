@@ -11,6 +11,7 @@
 
 .userprofile-container {
     margin-bottom: 25px;
+    margin-top: 10px;
 }
 
 .progress-container {
@@ -19,13 +20,15 @@
     align-items: flex-start;
     flex-wrap: wrap;
     margin: 0 auto;
+
     .ant-card {
         width: 23%;
         margin: 1rem 0;
     }
 }
+
 @media all and (max-width:900px) {
-    .progress-container{
+    .progress-container {
         .ant-card {
             width: 46%;
         }
