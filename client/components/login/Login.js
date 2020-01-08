@@ -10,23 +10,27 @@ class Login extends React.Component {
     password: ""
   };
 
-  handleSubmit = async e => {
+  handleSubmit = async (e) => {
     e.preventDefault();
     // Makes fetch post request
     if (!this.state.email || !this.state.password) {
       message.error("Please fill both fields");
     } else if (this.state.password.length <= 5) {
       message.error("Password must contain 6 letter!");
+    } else if (!window.navigator.onLine) {
+      message.error("Please ensure that you have active internet connection");
     } else {
       await this.props.userLogin(this.state);
       if (localStorage.authToken) {
-        // Makes fetch current user
-        this.props.getCurrentUser();
+        // Fetch current user
+        this.props.getCurrentUser(null, () => {
+          this.props.history.push("/");
+        });
       }
     }
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -65,7 +69,7 @@ class Login extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { isAuthenticated, isError, isLoginInProgress } = state.currentUser;
   return {
     isAuthenticated,
