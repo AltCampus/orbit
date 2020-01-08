@@ -10,7 +10,6 @@ import { getCurrentUser } from "./actions/users";
 import Login from "./components/login/Login";
 import SetPassword from "./components/setPassword/SetPassword";
 import LandingPage from "./components/static/LandingPage";
-import UserDashboard from "./components/dashboard/user/Dashboard";
 import UserProfile from "./components/dashboard/admin/userprofile/UserProfileWrapper";
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
@@ -49,7 +48,6 @@ class App extends Component {
           <Route exact path="/task/2" component={TaskTwo} />
           <Route exact path="/task/3" component={TaskThree} />
           <Route exact path="/task/4" component={UserInterview} />
-          <Route path="/task/:taskId" component={UserDashboard} />
           <Route exact path="/profile" component={UserView} />
           {/* Redirects the user to login if user attempts to login */}
           <Route path="/login">
