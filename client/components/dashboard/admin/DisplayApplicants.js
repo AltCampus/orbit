@@ -50,6 +50,10 @@ class DisplayApplicants extends React.Component {
             <Icon type="video-camera" />
             Stage Four
           </Menu.Item>
+          <Menu.Item key="Accepted/Rejected">
+            <Icon type="team" />
+            Accepted/Rejected
+          </Menu.Item>
         </Menu>
         <div className="content">
           <ToggleStage name={this.state.current} />
