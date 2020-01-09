@@ -3,7 +3,7 @@
     width: 80%;
     display: flex;
     justify-content: center;
-    margin-top: 10rem;
+    margin-top: 3rem;
 }
 
 .image-wrapper {
@@ -26,11 +26,20 @@
     }
 }
 
-.header-container {
+.header__container {
     display: flex;
     justify-content: space-between;
-    width: 90%;
     margin: 0 auto;
-    margin-top: 2rem;
-    justify-content: flex-end;
+    width: 80%;
+    padding: 2rem;
+    border-bottom: 0.03px solid lightgray;
+}
+
+.footer__container {
+    text-align: center;
+    padding: 2rem;
+    border-top: 0.03px solid lightgray;
+    width: 80%;
+    margin: 0 auto;
+
 }
