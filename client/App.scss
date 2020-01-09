@@ -1,10 +1,13 @@
 @import url("https://fonts.googleapis.com/css?family=ABeeZee:400,400i&display=swap");
+@import "./css-reset.scss";
 @import "./components/dashboard/dashboard.scss";
 @import "./components/task/taskOne/taskOne.scss";
 @import "./components/static/landing-page.scss";
 @import "./components/task/taskThree/quiz.scss";
 @import "./components/profile/profile.scss";
 @import "./components/instructions/instructions.scss";
+@import "./components/login/Login.scss";
+@import "./components/questionnaire/RateQuiz.scss";
 
 body {
   font-family: "ABeeZee", sans-serif;

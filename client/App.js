@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Route, Switch, withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import "./css-reset.scss";
 import "./App.scss";
 
 import { getCurrentUser } from "./actions/users";

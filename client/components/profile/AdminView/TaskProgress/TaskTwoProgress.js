@@ -17,8 +17,7 @@ const { Meta } = Card;
 
 const { TextArea } = Input;
 
-const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
-  // eslint-disable-next-line
+const CodewarsReviewForm = Form.create({ name: "form_in_modal" })(
   class extends React.Component {
     render() {
       const { visible, onCancel, onCreate, form } = this.props;
@@ -39,7 +38,8 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
                     required: true,
                     message: "Please enter a score"
                   }
-                ]
+                ],
+                initialValue: this.props.initialValue
               })(<InputNumber min={0} max={10} />)}
             </Form.Item>
           </Form>
@@ -183,11 +183,12 @@ class TaskTwoProgress extends Component {
           </div>
           {codewars.codewarsUsername ? (
             <div>
-              <CollectionCreateForm
+              <CodewarsReviewForm
                 wrappedComponentRef={this.saveFormRef}
                 visible={this.state.visible}
                 onCancel={this.handleCancel}
                 onCreate={this.handleCreate}
+                initialValue={codewars.score}
               />
               <Descriptions>
                 <Descriptions.Item label="Submission Date">
@@ -209,7 +210,7 @@ class TaskTwoProgress extends Component {
                   {new Date(codewars.endTime).toLocaleString().split(",")[1]}
                 </Descriptions.Item>
               </Descriptions>
-              {codewars.katasSolved ? (
+              {codewars.katasSolved != null ? (
                 <div>
                   <Descriptions>
                     <Descriptions.Item label="Kata's Solved">

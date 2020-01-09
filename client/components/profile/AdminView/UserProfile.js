@@ -43,11 +43,10 @@ class UserProfile extends Component {
       this.setState({ user: res.data.user, interviewloading: false });
       message.success(res.data.message);
     } catch (error) {
+      this.setState({ interviewloading: false });
       if (error.response) {
-        this.setState({ interviewloading: false });
         message.error(error.response.data.message);
       }
-      console.error(error);
     }
   };
 
@@ -120,7 +119,7 @@ class UserProfile extends Component {
             marginRight: 32
           }}
         >
-          {user.stage > 3 && !user.canScheduleInterview ? (
+          {user.stage > 3 && !user.canScheduleInterview && !user.interview ? (
             <Button
               type="primary"
               loading={this.state.interviewloading}
@@ -170,7 +169,6 @@ class UserProfile extends Component {
   };
 
   render() {
-    console.log(this.props.user);
     return (
       <>
         {this.state.user && (
