@@ -7,12 +7,17 @@ export default function Header() {
     <>
       <header>
         <div className='header__container'>
-          <div>
-            <h1>AltCampus</h1>
+          <div className='logo__container'>
+            <img
+              className='image-wrapper'
+              src='https://i.ibb.co/jhKgKgP/logo.png'
+              alt='logo'
+              border='0'
+            />
           </div>
           <nav>
             <Link to='/login'>
-              <Button>Login</Button>
+              <Button type='primary'>Login</Button>
             </Link>
           </nav>
         </div>
