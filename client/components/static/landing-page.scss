@@ -3,6 +3,17 @@
     width: 80%;
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 11rem;
+}
+
+.banner-heading {
+    font-size: 5rem;
+}
+
+.banner-description {
+    font-size: 3rem;
 }
 
 .logo__container {

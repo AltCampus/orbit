@@ -8,12 +8,14 @@ export default function Header() {
       <header>
         <div className='header__container'>
           <div className='logo__container'>
-            <img
-              className='image-wrapper'
-              src='https://i.ibb.co/jhKgKgP/logo.png'
-              alt='logo'
-              border='0'
-            />
+            <Link to='/'>
+              <img
+                className='image-wrapper'
+                src='https://i.ibb.co/jhKgKgP/logo.png'
+                alt='logo'
+                border='0'
+              />
+            </Link>
           </div>
           <nav>
             <Link to='/login'>

@@ -7,7 +7,12 @@ const LandingPage = () => {
   return (
     <>
       <Header />
-      <div className='banner-container'></div>
+      <div className='banner-container'>
+        <h1 className='banner-heading'>ORBIT</h1>
+        <p className='banner-description'>
+          AltCampus' apllication process management system
+        </p>
+      </div>
       <Footer />
     </>
   );
