@@ -2,7 +2,6 @@ import React from "react";
 import { message, Button } from "antd";
 import { connect } from "react-redux";
 import { userLogin, getCurrentUser } from "../../actions/users";
-import "./Login.scss";
 
 class Login extends React.Component {
   state = {
