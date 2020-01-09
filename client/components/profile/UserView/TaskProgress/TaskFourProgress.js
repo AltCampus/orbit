@@ -30,6 +30,7 @@ const TaskFourProgress = ({ interview, loading }) => {
             <Progress
               percent={interview.hasScheduledInterview ? 100 : 0}
               size="small"
+              status={interview.rejectedForInterview ? "" : "exception"}
             />
           </div>
           {!interview.reachedStage ? (
