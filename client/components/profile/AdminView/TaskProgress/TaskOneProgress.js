@@ -17,8 +17,7 @@ const { Meta } = Card;
 
 const { TextArea } = Input;
 
-const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
-  // eslint-disable-next-line
+const HtmlReviewForm = Form.create({ name: "form_in_modal" })(
   class extends React.Component {
     render() {
       const { visible, onCancel, onCreate, form } = this.props;
@@ -39,7 +38,8 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
                     required: true,
                     message: "Please enter a score"
                   }
-                ]
+                ],
+                initialValue: this.props.score
               })(<InputNumber min={0} max={10} />)}
             </Form.Item>
             <Form.Item label="Review">
@@ -49,7 +49,8 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
                     required: true,
                     message: "Please write a review"
                   }
-                ]
+                ],
+                initialValue: this.props.review
               })(<TextArea type="textarea" />)}
             </Form.Item>
           </Form>
@@ -133,11 +134,13 @@ class TaskOneProgress extends Component {
         </div>
         {htmlTask.taskUrl ? (
           <div>
-            <CollectionCreateForm
+            <HtmlReviewForm
               wrappedComponentRef={this.saveFormRef}
               visible={this.state.visible}
               onCancel={this.handleCancel}
               onCreate={this.handleCreate}
+              score={htmlTask.score}
+              review={htmlTask.review}
             />
             <Descriptions>
               <Descriptions.Item label="Submission Date">

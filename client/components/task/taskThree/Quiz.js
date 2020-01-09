@@ -11,7 +11,6 @@ import {
   Typography,
   Spin
 } from "antd";
-import "./quiz.scss";
 import { connect } from "react-redux";
 import { userStageUpgrade } from "../../../actions/users";
 import QuizTimer from "./QuizTimer";

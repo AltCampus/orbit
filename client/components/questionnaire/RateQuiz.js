@@ -2,8 +2,6 @@ import React from "react";
 import axios from "axios";
 import ReviewQuizForm from "./ReviewQuizForm";
 import AdminWrapper from "../dashboard/admin/AdminWrapper";
-import "./RateQuiz.scss";
-
 import { Table, Typography, Button, message, Spin, Icon } from "antd";
 const { Column } = Table;
 const { Text, Paragraph } = Typography;
