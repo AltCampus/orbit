@@ -27,10 +27,6 @@ class ScheduleInterview extends Component {
     console.log(this.props);
     return (
       <>
-        <Title level={2} style={{ marginBottom: 0 }}>
-          Round 4: Interview
-        </Title>
-        <Divider />
         {this.props.isFetchingInterviewStatus ? (
           <div className="loading-div">
             <Spin

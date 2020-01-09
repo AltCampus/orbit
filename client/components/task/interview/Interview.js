@@ -1,5 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Divider, Typography } from "antd";
+const { Title } = Typography;
 
 import UserWrapper from "../../dashboard/user/UserWrapper";
 import ScheduleInterview from "./ScheduleInterview";
@@ -11,7 +13,11 @@ class Interview extends React.Component {
     const { user } = this.props;
     return (
       <UserWrapper activeKey={"4"}>
-        <ScheduleInterview />
+        <Title level={2} style={{ marginBottom: 0 }}>
+          Round 4: Interview
+        </Title>
+        <Divider />
+        {user.stage === 4 ? <ScheduleInterview /> : <PendingTask />}
       </UserWrapper>
     );
   }
