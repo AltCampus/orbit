@@ -33,6 +33,7 @@
     width: 80%;
     padding: 2rem;
     border-bottom: 0.03px solid lightgray;
+    top: 0;
 }
 
 .footer__container {
@@ -40,6 +41,10 @@
     padding: 2rem;
     border-top: 0.03px solid lightgray;
     width: 80%;
-    margin: 0 auto;
-
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    bottom: 0;
 }
