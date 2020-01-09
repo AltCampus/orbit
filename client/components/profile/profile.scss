@@ -1,33 +1,41 @@
 .btn-back {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .profile-container {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
 }
 
 .userprofile-container {
-    margin-bottom: 25px;
+  margin-bottom: 25px;
 }
 
 .progress-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    margin: 0 auto;
-    .ant-card {
-        width: 23%;
-        margin: 1rem 0;
-    }
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  .ant-card {
+    width: 23%;
+    margin: 1rem 0;
+  }
 }
-@media all and (max-width:900px) {
-    .progress-container{
-        .ant-card {
-            width: 46%;
-        }
+@media all and (max-width: 1100px) {
+  .progress-container {
+    .ant-card {
+      width: 46%;
     }
+  }
+}
+@media all and (max-width: 800px) {
+  .progress-container {
+    justify-content: center;
+    .ant-card {
+      width: 90%;
+    }
+  }
 }
