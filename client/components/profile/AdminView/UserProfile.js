@@ -7,7 +7,8 @@ import {
   Button,
   message,
   Alert,
-  Icon
+  Icon,
+  Tag
 } from "antd";
 
 const Content = ({ children, extra }) => {
@@ -130,7 +131,7 @@ class UserProfile extends Component {
           ) : (
             ""
           )}
-          {user.interview ? (
+          {user.interview && user.status === "pending" ? (
             <Button
               type="primary"
               loading={this.state.acceptloading}
@@ -148,7 +149,7 @@ class UserProfile extends Component {
           ) : (
             ""
           )}
-          {user.stage > 3 ? (
+          {user.stage > 3 && user.status === "pending" ? (
             <Button
               type="danger"
               loading={this.state.loading}
@@ -163,12 +164,32 @@ class UserProfile extends Component {
       </div>
     );
   };
+  getStatus = status => {
+    switch (status) {
+      case "pending":
+        return <span className="orange-text">Pending</span>;
+      case "accept":
+        return <span className="green-text">Accepted</span>;
+      case "reject":
+        return <span className="red-text">Rejected</span>;
+      default:
+        return status;
+    }
+  };
 
   componentDidMount = async () => {
     this.setState({ user: this.props.user });
   };
 
   render() {
+    const {
+      task = {},
+      quiz,
+      interview,
+      canScheduleInterview,
+      canTakeQuiz
+    } = this.props.user;
+    const { html, codewars } = task;
     return (
       <>
         {this.state.user && (
@@ -194,26 +215,6 @@ class UserProfile extends Component {
                       {this.props.user.socialProfile}
                     </a>
                   </Descriptions.Item>
-                  <Descriptions.Item label="Task One">
-                    {this.props.user.task.html &&
-                    this.props.user.task.html.taskUrl ? (
-                      <div>
-                        <Icon
-                          type="check-circle"
-                          style={{ fontSize: 20, width: "100%" }}
-                          theme="twoTone"
-                        />
-                      </div>
-                    ) : (
-                      <div>
-                        <Icon
-                          type="clock-circle"
-                          style={{ fontSize: 20, width: "100%" }}
-                          theme="twoTone"
-                        />
-                      </div>
-                    )}
-                  </Descriptions.Item>
                   <Descriptions.Item label="Phone number">
                     <a href={`mailto:${this.props.user.phoneNo}`}>
                       {this.props.user.phoneNo}
@@ -224,50 +225,62 @@ class UserProfile extends Component {
                       {this.props.user.email}
                     </a>
                   </Descriptions.Item>
-                  <Descriptions.Item label="Task Two">
-                    {this.props.user.task.codewars &&
-                    this.props.user.task.codewars.endTime <
-                      new Date().toISOString() ? (
-                      <div>
-                        <Icon
-                          type="check-circle"
-                          style={{ fontSize: 20, width: "100%" }}
-                          theme="twoTone"
-                        />
-                      </div>
-                    ) : (
-                      <div>
-                        <Icon
-                          type="clock-circle"
-                          style={{ fontSize: 20, width: "100%" }}
-                          theme="twoTone"
-                        />
-                      </div>
-                    )}
-                  </Descriptions.Item>
                   <Descriptions.Item label="Motivation">
                     {this.props.user.motivation}
                   </Descriptions.Item>
                   <Descriptions.Item label="Status">
-                    {this.props.user.status}
+                    {this.getStatus(this.props.user.status)}
                   </Descriptions.Item>
-                  <Descriptions.Item label="Task Three">
-                    {this.props.user && this.props.user.quiz ? (
-                      <div>
-                        <Icon
-                          type="check-circle"
-                          style={{ fontSize: 20, width: "100%" }}
-                          theme="twoTone"
-                        />
-                      </div>
+                  <Descriptions.Item label="HTML Task">
+                    {html.submitTime ? (
+                      html.score == null ? (
+                        <Tag color="orange">To Be Reviewed</Tag>
+                      ) : (
+                        <Tag color="green">Reviewed</Tag>
+                      )
                     ) : (
-                      <div>
-                        <Icon
-                          type="clock-circle"
-                          style={{ fontSize: 20, width: "100%" }}
-                          theme="twoTone"
-                        />
-                      </div>
+                      <Tag color="volcano">Not submitted yet</Tag>
+                    )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Codewars Task">
+                    {codewars ? (
+                      new Date(codewars.endTime) < new Date() ? (
+                        codewars.score == null ? (
+                          <Tag color="orange">To Be Reviewed</Tag>
+                        ) : (
+                          <Tag color="green">Reviewed</Tag>
+                        )
+                      ) : (
+                        <Tag color="gold">Timer OnGoing</Tag>
+                      )
+                    ) : (
+                      <Tag color="volcano">Not submitted yet</Tag>
+                    )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Quiz">
+                    {canTakeQuiz ? (
+                      <Tag color="volcano">Not taken quiz yet</Tag>
+                    ) : quiz.submittedTime ? (
+                      quiz.totalScore == null ? (
+                        <Tag color="green">Reviewed</Tag>
+                      ) : (
+                        <Tag color="orange">To Be Reviewed</Tag>
+                      )
+                    ) : (
+                      <Tag color="gold">Quiz not submitted</Tag>
+                    )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Interview">
+                    {interview ? (
+                      new Date(interview.startTime) < new Date() ? (
+                        <Tag color="green">Interview Took Placed</Tag>
+                      ) : (
+                        <Tag color="lime">Interview Scheduled</Tag>
+                      )
+                    ) : canScheduleInterview ? (
+                      <Tag color="gold">Can Schedule Interview</Tag>
+                    ) : (
+                      <Tag color="volcano">Not Accepted for Interview</Tag>
                     )}
                   </Descriptions.Item>
                 </Descriptions>
