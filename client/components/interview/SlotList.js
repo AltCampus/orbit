@@ -32,21 +32,17 @@ function SlotList({ sortedSlots, slots, deleteSlot }) {
                         new Date(b.startTime).valueOf()
                     )
                     .map(slot => (
-                      <span
-                        key={slot._id}
-                        className={slot.user ? "booked" : ""}
+                      <Tag
+                        closable
+                        color={slot.user ? "green" : ""}
+                        onClose={e => {
+                          e.preventDefault();
+                          deleteSlot(slot._id);
+                        }}
                       >
-                        <Tag
-                          closable
-                          onClose={e => {
-                            e.preventDefault();
-                            deleteSlot(slot._id);
-                          }}
-                        >
-                          {new Date(slot.startTime).toLocaleTimeString()} -{" "}
-                          {new Date(slot.endTime).toLocaleTimeString()}
-                        </Tag>
-                      </span>
+                        {new Date(slot.startTime).toLocaleTimeString()} -{" "}
+                        {new Date(slot.endTime).toLocaleTimeString()}
+                      </Tag>
                     ))}
                 </div>
                 <Divider />
