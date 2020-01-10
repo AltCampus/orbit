@@ -15,7 +15,8 @@ router.get("/", auth.verifyAdminToken, async (req, res) => {
       .sort({ createdAt: -1 })
       .select("-password")
       .populate("task")
-      .populate("quiz");
+      .populate("quiz")
+      .populate("interview");
 
     if (!users) res.status(200).json({ message: "No users yet", status: true });
     res.status(200).json({ users, status: true });
@@ -156,7 +157,10 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
     let user = await User.findById(
       { _id: userId },
       "-password -hashMail -__v -isAdmin -isProfileClaimed"
-    ).populate("task");
+    )
+      .populate("task")
+      .populate("interview")
+      .populate("quiz");
 
     let totalScore = 0;
     if (user.task) {
@@ -171,11 +175,11 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
       }
     }
     if (user.quiz) {
-      const quiz = await Quiz.findById(user.quiz);
-      if (quiz.totalScore != null) {
+      if (user.quiz.totalScore != null) {
         totalScore =
           totalScore +
-          (quiz.totalScore / quiz.maximumScore) * config.SCORE_FOR_QUIZ;
+          (user.quiz.totalScore / user.quiz.maximumScore) *
+            config.SCORE_FOR_QUIZ;
       }
     }
     res.status(200).json({ user, totalScore, status: true });
