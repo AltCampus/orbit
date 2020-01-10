@@ -3,7 +3,22 @@
     width: 80%;
     display: flex;
     justify-content: center;
-    margin-top: 10rem;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 11rem;
+}
+
+.banner-heading {
+    font-size: 5rem;
+}
+
+.banner-description {
+    font-size: 3rem;
+}
+
+.logo__container {
+    height: 4rem;
+    width: 6rem;
 }
 
 .image-wrapper {
@@ -26,11 +41,39 @@
     }
 }
 
-.header-container {
+.header__container {
     display: flex;
     justify-content: space-between;
-    width: 90%;
     margin: 0 auto;
-    margin-top: 2rem;
-    justify-content: flex-end;
+    width: 80%;
+    padding: 0.4rem;
+    border-bottom: 0.03px solid lightgray;
+    top: 0;
+    background-color: #F5F5F5;
+    padding-top: 1.8rem;
+}
+
+header {
+    background-color: #F5F5F5;
+    border-bottom: 0.03px solid lightgray;
+}
+
+footer {
+    background-color: #F5F5F5;
+    border-top: 0.03px solid lightgray;
+
+}
+
+.footer__container {
+    text-align: center;
+    padding: 2rem;
+    border-top: 0.03px solid lightgray;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    bottom: 0;
+    background-color: #F5F5F5
 }
