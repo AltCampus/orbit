@@ -1,10 +1,10 @@
 var express = require("express");
 var router = express.Router();
 
-const mailer = require('../utils/mailer');
-const User = require('../models/User');
-const Task = require('../models/Task');
-const auth = require('../utils/auth');
+const mailer = require("../utils/mailer");
+const User = require("../models/User");
+const Task = require("../models/Task");
+const auth = require("../utils/auth");
 
 // Get All Users
 router.get("/", auth.verifyAdminToken, async (req, res) => {
@@ -54,21 +54,20 @@ router.post("/", async (req, res) => {
       phoneNo,
       socialProfile,
       motivation,
-      hashMail,
+      hashMail
     });
 
     res.status(201).json({ status: true, user });
 
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === "production") {
       setTimeout(() => {
         mailer.mail(
-          '40_MINS_AFTER_APPLYING',
+          "40_MINS_AFTER_APPLYING",
           user.email,
           user.name,
-          user.hashMail,
+          user.hashMail
         );
       }, 1000 * 60 * 40);
-
     }
   } catch (error) {
     return res.status(400).json({ status: false, error });
@@ -92,7 +91,7 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ status: false, message: 'Account does not exist' });
+        .json({ status: false, message: "Account does not exist" });
     }
 
     if (!user.verifyPassword(password)) {
@@ -123,7 +122,7 @@ router.post("/:hashMail", async (req, res) => {
       if (!user) {
         return res
           .status(400)
-          .json({ status: true, message: 'Invaild login link' });
+          .json({ status: true, message: "Invaild login link" });
       } else if (!user.isProfileClaimed) {
         user.password = password;
 
@@ -131,8 +130,8 @@ router.post("/:hashMail", async (req, res) => {
         const task = await Task.create({
           user: user.id,
           html: {
-            startTime: Date.now(),
-          },
+            startTime: Date.now()
+          }
         });
         user.task = task.id;
 
@@ -166,14 +165,16 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     let user = await User.findById(
       { _id: userId },
-    "-password -hashMail -__v -isAdmin -isProfileClaimed"
-    ).populate('task')
-    .populate("interview")
-      .populate("quiz");
-    // .populate("screener");
+      "-password -hashMail -__v -isAdmin -isProfileClaimed"
+    )
+      .populate("task")
+      .populate("interview")
+      .populate("quiz")
+      .populate("screener");
 
     res.status(200).json({ user, status: true });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: "Something went wrong", status: false });
   }
 });
@@ -191,15 +192,15 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
       res.status(200).json({
         status: true,
         message: `${user.name} now can schedule their interview.`,
-        user,
+        user
       });
-      if (process.env.NODE_ENV === 'production') {
-        mailer.mail('SCHEDULE_INTERVIEW_MAIL_ALERT', user.email, user.name);
+      if (process.env.NODE_ENV === "production") {
+        mailer.mail("SCHEDULE_INTERVIEW_MAIL_ALERT", user.email, user.name);
       }
     } else {
       return res.status(400).json({
         status: false,
-        message: `Previous stages are not completed by ${user.name}`,
+        message: `Previous stages are not completed by ${user.name}`
       });
     }
   } catch (error) {
@@ -216,7 +217,7 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
     const { id } = req.params;
     let user = await User.findOne({ _id: id });
     if (user.interview) {
-      user.status = 'accept';
+      user.status = "accept";
       user.selectedForBatch = req.body.selectedForBatch;
 
       user = await user.save();
@@ -226,21 +227,21 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
       res.status(200).json({
         status: true,
         message: `${user.name} now eligible for joining AltCampus`,
-        user,
+        user
       });
 
-      if (process.env.NODE_ENV === 'production') {
+      if (process.env.NODE_ENV === "production") {
         mailer.mail(
-          'ACCEPTANCE_MAIL_AFTER_INTERVIEW',
+          "ACCEPTANCE_MAIL_AFTER_INTERVIEW",
           user.email,
           user.name,
-          user.selectedForBatch,
+          user.selectedForBatch
         );
       }
     } else {
       return res.status(400).json({
         status: false,
-        message: `${user.name}, not been through the interview process.`,
+        message: `${user.name}, not been through the interview process.`
       });
     }
   } catch (error) {
@@ -265,28 +266,28 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
       res.status(200).json({
         status: true,
         message: `${user.name} not eligible for joining AltCampus!`,
-        user,
+        user
       });
 
-      if (process.env.NODE_ENV === 'production') {
+      if (process.env.NODE_ENV === "production") {
         if (user.interview) {
           await mailer.mail(
-            'ACCEPTANCE_MAIL_AFTER_INTERVIEW',
+            "ACCEPTANCE_MAIL_AFTER_INTERVIEW",
             user.email,
-            user.name,
+            user.name
           );
         } else {
           await mailer.mail(
-            'REJECTION_MAIL_BEFORE_INTERVIEW',
+            "REJECTION_MAIL_BEFORE_INTERVIEW",
             user.email,
-            user.name,
+            user.name
           );
         }
       }
     } else {
       return res.status(400).json({
         status: false,
-        message: `Previous stages are not completed by ${user.name}`,
+        message: `Previous stages are not completed by ${user.name}`
       });
     }
   } catch (error) {
