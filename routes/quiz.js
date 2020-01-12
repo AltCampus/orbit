@@ -4,7 +4,8 @@ const auth = require("../utils/auth");
 const User = require("../models/User");
 const Question = require("../models/Question");
 const Quiz = require("../models/Quiz");
-const config = require("../utils/config")
+const config = require("../utils/config");
+const calculateScore = require("../utils/calculateScore");
 
 router.get("/status", auth.verifyToken, async (req, res, next) => {
   // Route for getting status of stage 3
@@ -84,49 +85,31 @@ router.get("/generate", auth.verifyToken, async (req, res, next) => {
       .json({ error: "You're not eligible for taking quiz yet." });
   }
 
-  // User is eligible to take quiz. We can generate quiz with random questions
+  // User is eligible to take quiz. We can generate quiz with questions in random order
 
-  const TOTAL_QUESTION_IN_QUIZ = 2;
   let quizQuestions = [];
   try {
     const fixedQuestions = await Question.find(
       {
-        isActive: true,
-        isRandom: false
+        isActive: true
       },
       "_id type options questionTitle"
-    );
-    quizQuestions = quizQuestions.concat(
-      ...fixedQuestions.slice(0, TOTAL_QUESTION_IN_QUIZ)
     );
 
-    const randomQuestions = await Question.find(
-      {
-        isActive: true,
-        isRandom: true
-      },
-      "_id type options questionTitle"
-    );
     const getRandomIndex = array => Math.floor(Math.random() * array.length);
-    while (
-      quizQuestions.length !== TOTAL_QUESTION_IN_QUIZ &&
-      randomQuestions.length !== 0
-    ) {
-      const randomIndex = getRandomIndex(randomQuestions); // Get a random index
-      quizQuestions.push(randomQuestions[randomIndex]); // Push random question to quiz
-      randomQuestions.splice(randomIndex, 1); // Delete that random question from array of random questions
-    }
-    if (quizQuestions.length !== TOTAL_QUESTION_IN_QUIZ) {
-      return res
-        .status(403)
-        .send({ error: "Some error occured. Please try again." });
+    while (fixedQuestions.length !== 0) {
+      const randomIndex = getRandomIndex(fixedQuestions); // Get a random index
+      quizQuestions.push(fixedQuestions[randomIndex]); // Push random question to quiz
+      fixedQuestions.splice(randomIndex, 1); // Delete that random question from array of random questions
     }
     // Add validation that number of questions required are been sent
     const newQuiz = await Quiz.create({
       user: req.user.id,
       questions: quizQuestions.map(question => question.id),
       startTime: Date.now(),
-      endTime: new Date(Date.now() + config.TIME_FOR_QUIZ_ASSIGNMENT * 60 * 1000)
+      endTime: new Date(
+        Date.now() + config.TIME_FOR_QUIZ_ASSIGNMENT * 60 * 1000
+      )
     });
     await User.findByIdAndUpdate(req.user.id, {
       quiz: newQuiz.id,
@@ -325,9 +308,13 @@ router.get("/all", auth.verifyAdminToken, async (req, res) => {
 });
 
 router.get("/:id", auth.verifyAdminToken, async (req, res) => {
+  // Route for getting any quiz submission
   try {
     const quizId = req.params.id;
     let quiz = await Quiz.findById(quizId);
+    if (!quiz) {
+      return res.status(404).json({ error: "Quiz not found." });
+    }
     if (quiz.answers) {
       quiz = await Quiz.findById(quizId).populate("answers.question");
     } else {
@@ -339,9 +326,6 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
         }
       });
     }
-    if (!quiz) {
-      return res.status(404).json({ error: "Quiz not found." });
-    }
     if (quiz.submittedTime) {
       return res.status(200).json({
         status: {
@@ -349,6 +333,7 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
           timeOut: false,
           submitted: true
         },
+        user: quiz.user,
         totalScore: quiz.totalScore,
         maximumScore: quiz.maximumScore,
         submittedTime: quiz.submittedTime,
@@ -383,6 +368,7 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
 });
 
 router.post("/:id", auth.verifyAdminToken, async (req, res) => {
+  // Route for rating quiz submission
   try {
     const quizId = req.params.id;
     let quiz = await Quiz.findById(quizId).populate("questions");
@@ -391,7 +377,7 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
     }
     if (!quiz.answers) {
       return res.status(403).json({
-        error: "Quiz has no answers to rate."
+        error: "Quiz has no answers to rate this quiz submission."
       });
     }
     if (!quiz.submittedTime) {
@@ -407,7 +393,8 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
       0
     );
     quiz.maximumScore = quiz.questions.reduce((acc, val) => acc + val.point, 0);
-    quiz.save();
+    await quiz.save();
+    await calculateScore(quiz.user);
     res.status(200).json({ success: true });
   } catch (error) {
     console.log(error);

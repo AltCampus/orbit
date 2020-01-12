@@ -19,11 +19,14 @@ function Interview() {
       setSlots(res.data.slots);
       setSortedSlots(
         res.data.slots.reduce((acc, val) => {
-          const slotDate = new Date(val.startTime).toLocaleDateString();
-          if (acc[slotDate]) {
-            acc[slotDate].push(val);
-          } else {
-            acc[slotDate] = [val];
+          if (new Date(val.startTime) > new Date()) {
+            // Filter upcoming slots
+            const slotDate = new Date(val.startTime).toLocaleDateString();
+            if (acc[slotDate]) {
+              acc[slotDate].push(val);
+            } else {
+              acc[slotDate] = [val];
+            }
           }
           return acc;
         }, {})
@@ -43,7 +46,6 @@ function Interview() {
       message.info("Slot has been deleted");
       await getSlots();
     } catch (error) {
-      console.log(error);
       if (error.response) {
         return message.error(error.response.data.error);
       }
@@ -58,10 +60,9 @@ function Interview() {
   return (
     <>
       <AdminWrapper activeKey={"2"}>
-        <Title>Schedule Interviews</Title>
+        <Title level={2}>Interviews Slot Manager </Title>
         <Calender getSlots={getSlots} />
         <SlotList sortedSlots={sortedSlots} deleteSlot={deleteSlot} />
-        <InterviewsList />
       </AdminWrapper>
     </>
   );

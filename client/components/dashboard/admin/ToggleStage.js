@@ -2,31 +2,44 @@ import React, { Component, Fragment } from "react";
 import axios from "axios";
 import { Table } from "antd";
 import { Link } from "react-router-dom";
-import { Icon } from "antd";
+import { Icon, Tag, Typography } from "antd";
 
 const columns = [
+  {
+    title: "Name",
+    dataIndex: "name",
+    fixed: "left",
+    sorter: (objA, objB) => objA.name.localeCompare(objB.name),
+    sortDirections: ["ascend", "descend"],
+    render: (id, data) => <Link to={`/user/${data._id}`}> {id}</Link>
+  },
   {
     title: "Email",
     dataIndex: "email",
     key: "_id"
   },
   {
-    title: "Name",
-    dataIndex: "name",
-    sorter: (objA, objB) => objA.name.localeCompare(objB.name),
-    sortDirections: ['ascend', 'descend'],
-    render: (id, data) => <Link to={`/user/${data._id}`}> {id}</Link>
-  },
-  {
     title: "Status",
     dataIndex: "status",
     filters: [
-      { text: "accept", value: "accept" },
-      { text: "pending", value: "pending" },
-      { text: "reject", value: "reject" }
+      { text: "Accepted", value: "accept" },
+      { text: "Pending", value: "pending" },
+      { text: "Rejected", value: "reject" }
     ],
 
-    onFilter: (value, record) => record.status === value
+    onFilter: (value, record) => record.status === value,
+    render: status => {
+      switch (status) {
+        case "pending":
+          return <span className="orange-text">Pending</span>;
+        case "accept":
+          return <span className="green-text">Accepted</span>;
+        case "reject":
+          return <span className="red-text">Rejected</span>;
+        default:
+          return status;
+      }
+    }
   },
   {
     title: "PhoneNumber",
@@ -45,7 +58,14 @@ const columns = [
 
     onFilter: (value, record) => record.stage === value,
     sorter: (objA, objB) => objA.stage - objB.stage,
-    sortDirections: ['ascend', 'descend'],
+    sortDirections: ["ascend", "descend"]
+  },
+  {
+    title: "Score",
+    dataIndex: "totalScore",
+    key: "_id",
+    sorter: (objA, objB) => objA.totalScore - objB.totalScore,
+    sortDirections: ["ascend", "descend"]
   },
   {
     title: "Social Profile",
@@ -65,7 +85,163 @@ const columns = [
     sorter: (objA, objB) =>
       Number(new Date(objB.createdAt)) - Number(new Date(objA.createdAt)),
     sortDirections: ["descend"],
-    render: time => new Date(time).toLocaleString()
+    render: time => (
+      <div
+        style={{
+          wordWrap: "break-word",
+          wordBreak: "break-word",
+          width: "max-content"
+        }}
+      >
+        {new Date(time).toDateString() +
+          " " +
+          new Date(time).toLocaleTimeString()}
+      </div>
+    )
+  },
+  {
+    title: "Task 1 Status",
+    dataIndex: "task.html",
+    filters: [
+      { text: "Not Submitted yet", value: 0 },
+      { text: "To Be Reviewed", value: 1 },
+      { text: "Reviewed", value: 2 }
+    ],
+    onFilter: (value, user) => {
+      const { html } = user.task;
+      return (html.submitTime ? (html.score == null ? 1 : 2) : 0) === value;
+    },
+    render: html => {
+      if (html.submitTime) {
+        if (html.score == null) {
+          return <Tag color="orange">To Be Reviewed</Tag>;
+        } else {
+          return <Tag color="green">Reviewed</Tag>;
+        }
+      } else {
+        return <Tag color="volcano">Not submitted yet</Tag>;
+      }
+    }
+  },
+  {
+    title: "Task 2 Status",
+    dataIndex: "task.codewars",
+    filters: [
+      { text: "Not Submitted yet", value: 0 },
+      { text: "Timer OnGoing", value: 1 },
+      { text: "To Be Reviewed", value: 2 },
+      { text: "Reviewed", value: 3 }
+    ],
+    onFilter: (value, user) => {
+      const { codewars } = user.task;
+      return (
+        (codewars
+          ? new Date(codewars.endTime) < new Date()
+            ? codewars.score == null
+              ? 2
+              : 3
+            : 1
+          : 0) === value
+      );
+    },
+    render: codewars => {
+      if (codewars) {
+        if (new Date(codewars.endTime) < new Date()) {
+          if (codewars.score == null) {
+            return <Tag color="orange">To Be Reviewed</Tag>;
+          } else {
+            return <Tag color="green">Reviewed</Tag>;
+          }
+        } else {
+          return <Tag color="gold">Timer OnGoing</Tag>;
+        }
+      } else {
+        return <Tag color="volcano">Not submitted yet</Tag>;
+      }
+    }
+  },
+  {
+    title: "Quiz Status",
+    dataIndex: "quiz",
+    filters: [
+      { text: "Not taken quiz yet", value: 0 },
+      { text: "Quiz not submitted", value: 1 },
+      { text: "To Be Reviewed", value: 2 },
+      { text: "Reviewed", value: 3 }
+    ],
+    onFilter: (value, user) => {
+      const { quiz, canTakeQuiz } = user;
+
+      return (
+        (canTakeQuiz
+          ? 0
+          : quiz.submittedTime
+          ? quiz.totalScore == null
+            ? 3
+            : 2
+          : 1) === value
+      );
+    },
+    render: (quiz, user) => {
+      if (user.canTakeQuiz) {
+        return <Tag color="volcano">Not taken quiz yet</Tag>;
+      } else {
+        if (quiz.submittedTime) {
+          if (quiz.totalScore == null) {
+            return <Tag color="green">Reviewed</Tag>;
+          } else {
+            return <Tag color="orange">To Be Reviewed</Tag>;
+          }
+        } else {
+          return <Tag color="gold">Quiz not submitted</Tag>;
+        }
+      }
+    }
+  },
+  {
+    title: "Interview Status",
+    dataIndex: "interview",
+    filters: [
+      { text: "Not Accepted for Interview", value: 0 },
+      { text: "Can Schedule Interview", value: 1 },
+      { text: "Interview Scheduled", value: 2 },
+      { text: "Interview To Be Reviewed", value: 3 },
+      { text: "Interview Reviewed", value: 4 }
+    ],
+    onFilter: (value, user) => {
+      const { interview, canScheduleInterview } = user;
+
+      return (
+        (interview
+          ? new Date(interview.startTime) < new Date()
+            ? interview.review
+              ? 4
+              : 3
+            : 2
+          : canScheduleInterview
+          ? 1
+          : 0) === value
+      );
+    },
+    render: (interview, user) => {
+      if (interview) {
+        if (new Date(interview.startTime) < new Date()) {
+          return interview.review ? (
+            <Tag color="green">Interview Reviewed</Tag>
+          ) : (
+            <Tag color="lime">Interview To Be Reviewed</Tag>
+          );
+        } else {
+          return <Tag color="lime">Interview Scheduled</Tag>;
+        }
+      } else {
+        if (user.canScheduleInterview) {
+          return <Tag color="gold">Can Schedule Interview</Tag>;
+        } else {
+          return <Tag color="volcano">Not Accepted for Interview</Tag>;
+        }
+      }
+    }
   }
 ];
 
@@ -78,7 +254,7 @@ class ToggleStage extends Component {
   }
 
   async componentDidMount() {
-    const response = await axios.get("http://localhost:3000/api/v1/users/", {
+    const response = await axios.get("/api/v1/users/", {
       headers: {
         Authorization: JSON.parse(localStorage.getItem("authToken"))
       }
@@ -86,7 +262,6 @@ class ToggleStage extends Component {
     this.setState({
       users: response.data.users
     });
-    console.log(response.data)
   }
 
   getItemId = props => {
@@ -109,20 +284,28 @@ class ToggleStage extends Component {
       case "stageThree":
         dataSource = dataSource.filter(user => user.stage === 3);
         break;
-        case "toBeReviewed":
-        dataSource = dataSource.filter(user => user.stage === 4 || user.stage === 3 || user.stage === 2);
-        dataSource = dataSource.filter(user => !user.task.html.score)
-        dataSource = dataSource.filter(user=> user.task.codewars)
-        dataSource = dataSource.filter(user=> !user.task.codewars.score)
-        dataSource = dataSource.filter(user=> user.quiz)
-        dataSource = dataSource.filter(user=> !user.quiz.score)         
+      case "toBeReviewed":
+        dataSource = dataSource.filter(
+          user =>
+            user.stage === 4 &&
+            user.status === "pending" &&
+            !user.canScheduleInterview &&
+            !user.interview
+        );
         // dataSource = dataSource.filter(user => console.log("user"))
         break;
       case "stageFour":
-        dataSource = dataSource.filter(user => user.stage === 4);
+        dataSource = dataSource.filter(
+          user =>
+            user.stage === 4 &&
+            user.status === "pending" &&
+            (user.interview || user.canScheduleInterview)
+        );
+        break;
+      case "Accepted/Rejected":
+        dataSource = dataSource.filter(user => user.status !== "pending");
         break;
       default:
-        dataSource = dataSource.filter(user => user.stage === 0);
         break;
     }
     return (

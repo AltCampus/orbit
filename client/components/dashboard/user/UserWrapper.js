@@ -33,6 +33,7 @@ function UserWrapper(props) {
         }}
         breakpoint="sm"
         onBreakpoint={broken => {
+          setCollapsed(broken);
           setBroken(broken);
         }}
         trigger={null}
@@ -145,23 +146,16 @@ function UserWrapper(props) {
               padding: "16px"
             }}
           />
-          <div
-            style={{
-              marginRight: "20px"
-            }}
-          >
-            <Avatar
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-              size={50}
-              style={{
-                marginRight: "6px"
-              }}
-            />
+          <div>
+            <span className="profile-name">
+              Howdy, <Link to="/profile">{props.user.name}</Link>
+            </span>
+
             <Button
+              className="button-logout"
               onClick={handleClick}
               title="Logout"
               type="danger"
-              shape="circle"
               icon="logout"
             />
           </div>
@@ -170,9 +164,7 @@ function UserWrapper(props) {
           type="navigation"
           current={Number(props.activeKey) - 1}
           style={stepStyle}
-          onChange={index =>
-            console.log(index) || props.history.push(`/task/${index + 1}`)
-          }
+          onChange={index => props.history.push(`/task/${index + 1}`)}
         >
           <Step
             status={
@@ -225,7 +217,8 @@ function UserWrapper(props) {
             style={{
               padding: 24,
               background: "#fff",
-              textAlign: "left"
+              textAlign: "left",
+              marginBottom: "1rem"
             }}
           >
             {props.children}

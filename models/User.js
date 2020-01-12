@@ -55,6 +55,7 @@ const userSchema = new Schema(
     isAdmin: { type: Boolean, default: false },
     stage: { type: Number, default: 0 },
     selectedForBatch: { type: String },
+    totalScore: { type: Number, default: 0 },
     status: {
       type: String,
       enum: ["pending", "reject", "accept"],

@@ -14,7 +14,6 @@ import {
   message
 } from "antd";
 
-
 const EditQuestionModal = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
@@ -23,7 +22,6 @@ const EditQuestionModal = Form.create({ name: "form_in_modal" })(
     }
 
     render() {
-      console.log(this.props)
       const radioStyle = {
         display: "block",
         height: "30px",

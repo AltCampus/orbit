@@ -19,7 +19,7 @@ module.exports = {
         }
         User.findById(
           userToken.userId,
-          "-password -createdAt -updatedAt -isProfileClaimed",
+          "-password -createdAt -totalScore -updatedAt -isProfileClaimed",
           (err, user) => {
             if (err)
               return res

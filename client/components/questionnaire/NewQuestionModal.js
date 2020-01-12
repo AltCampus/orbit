@@ -25,7 +25,6 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
 
     onCreate = {};
     handleChange = e => {
-      console.log(e.target);
       const { name, value } = e.target;
       this.setState({
         [name]: value
@@ -33,7 +32,6 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
     };
 
     handleCheckbox = e => {
-      console.log(e);
       const { name, checked } = e.target;
       this.setState({
         [name]: checked
@@ -176,7 +174,7 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
   }
 );
 
-class Questionnaire extends React.Component {
+class NewQuestionModal extends React.Component {
   state = {
     visible: false
   };
@@ -194,7 +192,6 @@ class Questionnaire extends React.Component {
       if (err) {
         return;
       }
-      if (values) console.log("Received values of form: ", values);
       const requestBody = {
         questionTitle: values.questionTitle,
         type: values.questionType,
@@ -247,17 +244,14 @@ class Questionnaire extends React.Component {
         requestBody.options = options;
       }
       try {
-        const response = await axios.post(
-          "http://localhost:3000/api/v1/questions/",
-          requestBody,
-          {
-            headers: {
-              authorization: JSON.parse(localStorage.authToken)
-            }
+        const response = await axios.post("/api/v1/questions/", requestBody, {
+          headers: {
+            authorization: JSON.parse(localStorage.authToken)
           }
-        );
+        });
 
         message.success("Your question has been added");
+        this.props.getQuestion();
         form.resetFields();
         this.setState({ visible: false });
       } catch (error) {
@@ -280,7 +274,7 @@ class Questionnaire extends React.Component {
     return (
       <div>
         <Button type="primary" onClick={this.showModal}>
-          New Collection
+          New Question
         </Button>
         <CollectionCreateForm
           wrappedComponentRef={this.saveFormRef}
@@ -293,4 +287,4 @@ class Questionnaire extends React.Component {
   }
 }
 
-export default Questionnaire;
+export default NewQuestionModal;

@@ -38,7 +38,6 @@ export default function Calendar(props) {
       props.getSlots();
       message.success("Scheduled Interview");
     } catch (error) {
-      console.log(error);
       if (error.response) {
         return message.error(error.response.error);
       }
