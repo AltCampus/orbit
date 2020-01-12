@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import UserProfile from "./UserProfile";
 import UserProgress from "./UserProgress";
 import axios from "axios";
-import { Icon } from "antd";
+import { Icon, message } from "antd";
 import AdminWrapper from "../../dashboard/admin/AdminWrapper";
 
 export class AdminView extends Component {
