@@ -1,35 +1,19 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Row, Col, Button } from 'antd';
+import Header from '../header/Header';
+import Footer from '../footer/Footer';
 
 const LandingPage = () => {
   return (
     <>
-      <header>
-        <nav className="header-container">
-          <Link to="/login">
-            <Button>Login</Button>
-          </Link>
-        </nav>
-      </header>
-      <div className="banner-container wrapper">
-        <Row>
-          <Col span={15}>
-            <img
-              className="image-wrapper"
-              src="https://i.ibb.co/crHbt2j/undraw-code-thinking-1jeh-2.png"
-              alt="undraw-code-thinking-1jeh-2"
-              border="0"
-            />
-          </Col>
-          <Col span={7} className="content-container">
-            <div>
-              <strong>Welcome</strong>
-              <p>to Orbit</p>
-            </div>
-          </Col>
-        </Row>
+      <Header />
+      <div className='banner-container'>
+        <h1 className='banner-heading'>ORBIT</h1>
+        <p className='banner-description'>
+          AltCampus' apllication process management system
+        </p>
       </div>
+      <Footer />
     </>
   );
 };
