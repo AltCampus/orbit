@@ -33,7 +33,6 @@ class RateQuiz extends React.Component {
         user: { ...response.data.user, totalScore: response.data.totalScore },
         loading: false
       });
-      console.log(this.state.user);
     } catch (error) {
       this.setState({ loading: false });
 
