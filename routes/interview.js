@@ -146,6 +146,34 @@ Router.get("/scheduled", auth.verifyAdminToken, async (req, res) => {
   }
 });
 
+// Admin review Interview
+Router.put("/review/:id", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const interview = await Interview.findById(id);
+
+    if (interview) {
+      // Interview slot with particular id exists
+      await Interview.findByIdAndUpdate(interview._id, {
+        review: req.body.review,
+        score: req.body.score
+      });
+      return res.json({
+        success: true,
+        message: "Review Updated."
+      });
+    } else {
+      return res.status(403).json({
+        status: "failed",
+        error: "Could not found the selected Interview slot."
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ status: false, error: "Some error occured" });
+  }
+});
+
 //Admin create Interview
 Router.post("/", auth.verifyAdminToken, async (req, res) => {
   let { date, startTime, endTime } = req.body;
