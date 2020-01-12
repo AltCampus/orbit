@@ -61,6 +61,13 @@ const columns = [
     sortDirections: ["ascend", "descend"]
   },
   {
+    title: "Score",
+    dataIndex: "totalScore",
+    key: "_id",
+    sorter: (objA, objB) => objA.totalScore - objB.totalScore,
+    sortDirections: ["ascend", "descend"]
+  },
+  {
     title: "Social Profile",
     dataIndex: "socialProfile",
     key: "socialProfile",

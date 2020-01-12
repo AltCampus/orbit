@@ -4,6 +4,7 @@ const Router = express.Router();
 const auth = require("./../utils/auth");
 const User = require("./../models/User");
 const Interview = require("../models/Interview");
+const calculateScore = require("../utils/calculateScore");
 
 Router.get("/status", auth.verifyToken, async (req, res) => {
   // User route for getting status of interview stage
@@ -158,6 +159,7 @@ Router.put("/review/:id", auth.verifyAdminToken, async (req, res) => {
         review: req.body.review,
         score: req.body.score
       });
+      await calculateScore(interview.user);
       return res.json({
         success: true,
         message: "Review Updated."

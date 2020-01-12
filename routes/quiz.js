@@ -5,6 +5,7 @@ const User = require("../models/User");
 const Question = require("../models/Question");
 const Quiz = require("../models/Quiz");
 const config = require("../utils/config");
+const calculateScore = require("../utils/calculateScore");
 
 router.get("/status", auth.verifyToken, async (req, res, next) => {
   // Route for getting status of stage 3
@@ -307,6 +308,7 @@ router.get("/all", auth.verifyAdminToken, async (req, res) => {
 });
 
 router.get("/:id", auth.verifyAdminToken, async (req, res) => {
+  // Route for getting any quiz submission
   try {
     const quizId = req.params.id;
     let quiz = await Quiz.findById(quizId);
@@ -366,6 +368,7 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
 });
 
 router.post("/:id", auth.verifyAdminToken, async (req, res) => {
+  // Route for rating quiz submission
   try {
     const quizId = req.params.id;
     let quiz = await Quiz.findById(quizId).populate("questions");
@@ -390,7 +393,8 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
       0
     );
     quiz.maximumScore = quiz.questions.reduce((acc, val) => acc + val.point, 0);
-    quiz.save();
+    await quiz.save();
+    await calculateScore(quiz.user);
     res.status(200).json({ success: true });
   } catch (error) {
     console.log(error);

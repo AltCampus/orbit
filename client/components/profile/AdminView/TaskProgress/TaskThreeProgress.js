@@ -54,7 +54,7 @@ const TaskThreeProgress = props => {
       </Descriptions>
       <Descriptions>
         <Descriptions.Item label="Rating">
-          {quiz.totalScore && quiz.maximumScore
+          {quiz.totalScore != null && quiz.maximumScore != null
             ? `You have rated this user ${quiz.totalScore} out of ${quiz.maximumScore}`
             : "You've not rated this user yet"}
         </Descriptions.Item>
