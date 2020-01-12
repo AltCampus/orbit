@@ -272,7 +272,7 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
       if (process.env.NODE_ENV === "production") {
         if (user.interview) {
           await mailer.mail(
-            "ACCEPTANCE_MAIL_AFTER_INTERVIEW",
+            "REJECTION_MAIL_AFTER_INTERVIEW",
             user.email,
             user.name
           );
