@@ -2,10 +2,8 @@ var express = require("express");
 var router = express.Router();
 
 const Mailer = require("../utils/Mailer");
-const config = require("../utils/config");
 const User = require("../models/User");
 const Task = require("../models/Task");
-const Quiz = require("../models/Quiz");
 const auth = require("../utils/auth");
 
 // Get All Users
@@ -132,9 +130,10 @@ router.post("/:hashMail", async (req, res) => {
 
         // Set user profile to be claimed.
         user.isProfileClaimed = true;
-        const updatedUser = await user.save();
-        updatedUser.password = "";
-        return res.status(201).json({ status: true, user: updatedUser });
+        await user.save();
+        return res
+          .status(201)
+          .json({ status: true, message: "Account successfully claimed!" });
       } else {
         return res.status(401).json({
           success: false,
@@ -161,28 +160,7 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
       .populate("task")
       .populate("interview")
       .populate("quiz");
-
-    let totalScore = 0;
-    if (user.task) {
-      if (user.task.html && user.task.html.score != null) {
-        totalScore =
-          totalScore + (user.task.html.score / 10) * config.SCORE_FOR_HTML;
-      }
-      if (user.task.codewars && user.task.codewars.score != null) {
-        totalScore =
-          totalScore +
-          (user.task.codewars.score / 10) * config.SCORE_FOR_CODEWARS;
-      }
-    }
-    if (user.quiz) {
-      if (user.quiz.totalScore != null) {
-        totalScore =
-          totalScore +
-          (user.quiz.totalScore / user.quiz.maximumScore) *
-            config.SCORE_FOR_QUIZ;
-      }
-    }
-    res.status(200).json({ user, totalScore, status: true });
+    res.status(200).json({ user, status: true });
   } catch (error) {
     res.status(400).json({ message: "Something went wrong", status: false });
   }

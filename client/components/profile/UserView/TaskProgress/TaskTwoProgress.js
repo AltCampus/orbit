@@ -46,7 +46,7 @@ const TaskTwoProgress = ({ codewarsTask, loading }) => {
               <Descriptions>
                 <Descriptions.Item label="Codewars Username">
                   <a
-                    href={`https://codewars.com/profile/${codewarsTask.username}`}
+                    href={`https://codewars.com/users/${codewarsTask.username}`}
                     target="_blank"
                   >
                     {codewarsTask.username}

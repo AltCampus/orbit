@@ -8,6 +8,7 @@ const interviewSchema = Schema({
   },
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: true },
+  score: { type: Number },
   review: { type: String }
 });
 

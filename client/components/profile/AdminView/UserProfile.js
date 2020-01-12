@@ -205,7 +205,7 @@ class UserProfile extends Component {
               }}
               title={this.props.user.name}
             >
-              <Content extra={this.extraContent(this.state)}>
+              <Content extra={this.extraContent(this.props)}>
                 <Descriptions size="small" column={3}>
                   <Descriptions.Item label="Name">
                     {this.props.user.name}
