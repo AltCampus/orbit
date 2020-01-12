@@ -10,6 +10,7 @@ import Login from "./components/login/Login";
 import SetPassword from "./components/setPassword/SetPassword";
 import LandingPage from "./components/static/LandingPage";
 import UserProfile from "./components/profile/AdminView/AdminView";
+import Error404 from "./components/message/Error";
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
 import TaskThree from "./components/task/taskThree/TaskThree";
@@ -37,6 +38,7 @@ class App extends Component {
           <Route path="/login">
             <Redirect to="/" />
           </Route>
+          <Route path="/" component={Error404}></Route>
         </Switch>
       );
     } else {
@@ -52,6 +54,7 @@ class App extends Component {
           <Route path="/login">
             <Redirect to="/" />
           </Route>
+          <Route path="/" component={Error404}></Route>
         </Switch>
       );
     }
@@ -66,6 +69,7 @@ class App extends Component {
         <Route exact path="/" component={LandingPage} />
         <Route path="/account/claim/:hashmail" component={SetPassword} />
         <Route path="/login" component={Login} />
+        <Route path="/" component={Error404}></Route>
       </Switch>
     );
   };
