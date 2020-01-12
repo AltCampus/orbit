@@ -210,6 +210,9 @@ class UserProfile extends Component {
                   <Descriptions.Item label="Name">
                     {this.props.user.name}
                   </Descriptions.Item>
+                  <Descriptions.Item label="Status">
+                    {this.getStatus(this.props.user.status)}
+                  </Descriptions.Item>
                   <Descriptions.Item label="Social Profile">
                     <a href={this.props.user.socialProfile} target="_blank">
                       {this.props.user.socialProfile}
@@ -227,9 +230,6 @@ class UserProfile extends Component {
                   </Descriptions.Item>
                   <Descriptions.Item label="Motivation">
                     {this.props.user.motivation}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Status">
-                    {this.getStatus(this.props.user.status)}
                   </Descriptions.Item>
                   <Descriptions.Item label="HTML Task">
                     {html.submitTime ? (
@@ -262,9 +262,9 @@ class UserProfile extends Component {
                       <Tag color="volcano">Not taken quiz yet</Tag>
                     ) : quiz.submittedTime ? (
                       quiz.totalScore == null ? (
-                        <Tag color="green">Reviewed</Tag>
-                      ) : (
                         <Tag color="orange">To Be Reviewed</Tag>
+                      ) : (
+                        <Tag color="green">Reviewed</Tag>
                       )
                     ) : (
                       <Tag color="gold">Quiz not submitted</Tag>
@@ -273,12 +273,16 @@ class UserProfile extends Component {
                   <Descriptions.Item label="Interview">
                     {interview ? (
                       new Date(interview.startTime) < new Date() ? (
-                        <Tag color="green">Interview Took Placed</Tag>
+                        interview.review ? (
+                          <Tag color="green">Interview Reviewed</Tag>
+                        ) : (
+                          <Tag color="lime">Interview To be Reviewed</Tag>
+                        )
                       ) : (
-                        <Tag color="lime">Interview Scheduled</Tag>
+                        <Tag color="gold">Interview Scheduled</Tag>
                       )
                     ) : canScheduleInterview ? (
-                      <Tag color="gold">Can Schedule Interview</Tag>
+                      <Tag color="blue">Can Schedule Interview</Tag>
                     ) : (
                       <Tag color="volcano">Not Accepted for Interview</Tag>
                     )}
