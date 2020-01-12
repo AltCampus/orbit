@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
-
+import React, { Component } from "react";
 
 import UserProfile from "./UserProfile";
 import UserProgress from "./UserProgress";
 import axios from "axios";
-import DrawerInfo from '../../drawer/DrawerInfo';
+import DrawerInfo from "../../drawer/DrawerInfo";
 import { Icon, message } from "antd";
 import AdminWrapper from "../../dashboard/admin/AdminWrapper";
 
@@ -54,6 +53,7 @@ export class AdminView extends Component {
           />
         ) : (
           <section>
+            <DrawerInfo />
             <div className="userprofile-container">
               <UserProfile user={this.state.user} />
             </div>

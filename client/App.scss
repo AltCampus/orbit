@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=ABeeZee:400,400i&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro%7CCrimson+Text");
 @import "./css-reset.scss";
 @import "./components/dashboard/dashboard.scss";
 @import "./components/task/taskOne/taskOne.scss";
@@ -10,7 +10,22 @@
 @import "./components/questionnaire/RateQuiz.scss";
 
 body {
-  font-family: "ABeeZee", sans-serif;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol" !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Crimson Text", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol" !important;
 }
 
 .loading-div {
