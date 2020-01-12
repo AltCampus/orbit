@@ -10,6 +10,7 @@
 }
 
 .userprofile-container {
+  margin-top: 10px;
   margin-bottom: 25px;
 }
 
@@ -31,6 +32,7 @@
     }
   }
 }
+
 @media all and (max-width: 800px) {
   .progress-container {
     justify-content: center;

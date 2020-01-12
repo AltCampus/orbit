@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+
 
 import UserProfile from "./UserProfile";
 import UserProgress from "./UserProgress";
 import axios from "axios";
+import DrawerInfo from '../../drawer/DrawerInfo';
 import { Icon, message } from "antd";
 import AdminWrapper from "../../dashboard/admin/AdminWrapper";
 

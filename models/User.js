@@ -45,11 +45,16 @@ const userSchema = new Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Interview"
     },
+    screener: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Screener"
+    },
     isProfileClaimed: { type: Boolean, default: false },
     canTakeQuiz: { type: Boolean, default: true },
     canScheduleInterview: { type: Boolean, default: false },
     isAdmin: { type: Boolean, default: false },
     stage: { type: Number, default: 0 },
+    selectedForBatch: { type: String },
     totalScore: { type: Number, default: 0 },
     status: {
       type: String,

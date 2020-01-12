@@ -1,10 +1,10 @@
 var express = require("express");
 var router = express.Router();
 
-const Mailer = require("../utils/Mailer");
-const User = require("../models/User");
-const Task = require("../models/Task");
-const auth = require("../utils/auth");
+const mailer = require('../utils/mailer');
+const User = require('../models/User');
+const Task = require('../models/Task');
+const auth = require('../utils/auth');
 
 // Get All Users
 router.get("/", auth.verifyAdminToken, async (req, res) => {
@@ -54,14 +54,21 @@ router.post("/", async (req, res) => {
       phoneNo,
       socialProfile,
       motivation,
-      hashMail
+      hashMail,
     });
 
     res.status(201).json({ status: true, user });
 
-    // TODO: UnComment to sending mail once user Register
-    if (process.env.NODE_ENV === "production") {
-      const mail = Mailer.mail("apply", user.email, user.name, user.hashMail);
+    if (process.env.NODE_ENV === 'production') {
+      setTimeout(() => {
+        mailer.mail(
+          '40_MINS_AFTER_APPLYING',
+          user.email,
+          user.name,
+          user.hashMail,
+        );
+      }, 1000 * 60 * 40);
+
     }
   } catch (error) {
     return res.status(400).json({ status: false, error });
@@ -85,7 +92,7 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ status: false, message: "User not found!!!" });
+        .json({ status: false, message: 'Account does not exist' });
     }
 
     if (!user.verifyPassword(password)) {
@@ -113,15 +120,19 @@ router.post("/:hashMail", async (req, res) => {
     try {
       let { hashMail } = req.params;
       const user = await User.findOne({ hashMail });
-      if (!user.isProfileClaimed) {
+      if (!user) {
+        return res
+          .status(400)
+          .json({ status: true, message: 'Invaild login link' });
+      } else if (!user.isProfileClaimed) {
         user.password = password;
 
         // Start the timer for HTML task and link it to user model.
         const task = await Task.create({
           user: user.id,
           html: {
-            startTime: Date.now()
-          }
+            startTime: Date.now(),
+          },
         });
         user.task = task.id;
 
@@ -155,11 +166,12 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     let user = await User.findById(
       { _id: userId },
-      "-password -hashMail -__v -isAdmin -isProfileClaimed"
-    )
-      .populate("task")
-      .populate("interview")
+    "-password -hashMail -__v -isAdmin -isProfileClaimed"
+    ).populate('task')
+    .populate("interview")
       .populate("quiz");
+    // .populate("screener");
+
     res.status(200).json({ user, status: true });
   } catch (error) {
     res.status(400).json({ message: "Something went wrong", status: false });
@@ -176,15 +188,18 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
       user = await user.save();
       user.password = undefined;
       user.hashMail = undefined;
-      return res.status(200).json({
+      res.status(200).json({
         status: true,
         message: `${user.name} now can schedule their interview.`,
-        user
+        user,
       });
+      if (process.env.NODE_ENV === 'production') {
+        mailer.mail('SCHEDULE_INTERVIEW_MAIL_ALERT', user.email, user.name);
+      }
     } else {
       return res.status(400).json({
         status: false,
-        message: `Previous stages are not completed by ${user.name}`
+        message: `Previous stages are not completed by ${user.name}`,
       });
     }
   } catch (error) {
@@ -201,21 +216,31 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
     const { id } = req.params;
     let user = await User.findOne({ _id: id });
     if (user.interview) {
-      user.status = "accept";
+      user.status = 'accept';
+      user.selectedForBatch = req.body.selectedForBatch;
+
       user = await user.save();
       user.password = undefined;
       user.hashMail = undefined;
-      // TODO: UnComment to sending mail once user accept
-      // const mail = await Mailer.mail('accept',user.email, user.name);
-      return res.status(200).json({
+
+      res.status(200).json({
         status: true,
         message: `${user.name} now eligible for joining AltCampus`,
-        user
+        user,
       });
+
+      if (process.env.NODE_ENV === 'production') {
+        mailer.mail(
+          'ACCEPTANCE_MAIL_AFTER_INTERVIEW',
+          user.email,
+          user.name,
+          user.selectedForBatch,
+        );
+      }
     } else {
       return res.status(400).json({
         status: false,
-        message: `${user.name}, not been through the interview process.`
+        message: `${user.name}, not been through the interview process.`,
       });
     }
   } catch (error) {
@@ -236,17 +261,32 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
       user = await user.save();
       user.password = undefined;
       user.hashMail = undefined;
-      // TODO: UnComment to sending mail once user accept
-      // const mail = await Mailer.mail('reject',user.email, user.name);
-      return res.status(200).json({
+
+      res.status(200).json({
         status: true,
         message: `${user.name} not eligible for joining AltCampus!`,
-        user
+        user,
       });
+
+      if (process.env.NODE_ENV === 'production') {
+        if (user.interview) {
+          await mailer.mail(
+            'ACCEPTANCE_MAIL_AFTER_INTERVIEW',
+            user.email,
+            user.name,
+          );
+        } else {
+          await mailer.mail(
+            'REJECTION_MAIL_BEFORE_INTERVIEW',
+            user.email,
+            user.name,
+          );
+        }
+      }
     } else {
       return res.status(400).json({
         status: false,
-        message: `Previous stages are not completed by ${user.name}`
+        message: `Previous stages are not completed by ${user.name}`,
       });
     }
   } catch (error) {
