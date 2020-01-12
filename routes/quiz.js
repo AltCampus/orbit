@@ -310,6 +310,9 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const quizId = req.params.id;
     let quiz = await Quiz.findById(quizId);
+    if (!quiz) {
+      return res.status(404).json({ error: "Quiz not found." });
+    }
     if (quiz.answers) {
       quiz = await Quiz.findById(quizId).populate("answers.question");
     } else {
@@ -321,9 +324,6 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
         }
       });
     }
-    if (!quiz) {
-      return res.status(404).json({ error: "Quiz not found." });
-    }
     if (quiz.submittedTime) {
       return res.status(200).json({
         status: {
@@ -331,6 +331,7 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
           timeOut: false,
           submitted: true
         },
+        user: quiz.user,
         totalScore: quiz.totalScore,
         maximumScore: quiz.maximumScore,
         submittedTime: quiz.submittedTime,
@@ -373,7 +374,7 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
     }
     if (!quiz.answers) {
       return res.status(403).json({
-        error: "Quiz has no answers to rate."
+        error: "Quiz has no answers to rate this quiz submission."
       });
     }
     if (!quiz.submittedTime) {

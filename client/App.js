@@ -9,7 +9,7 @@ import { getCurrentUser } from "./actions/users";
 import Login from "./components/login/Login";
 import SetPassword from "./components/setPassword/SetPassword";
 import LandingPage from "./components/static/LandingPage";
-import UserProfile from "./components/dashboard/admin/userprofile/UserProfileWrapper";
+import UserProfile from "./components/profile/AdminView/AdminView";
 import Error404 from "./components/message/Error";
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";

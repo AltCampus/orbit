@@ -31,13 +31,22 @@ button + button {
 }
 
 .ant-pagination-item.question-answered {
-  background:  rgb(85, 158, 85);
-  color: #fff;
-  border: rgb(94, 255, 94);
+  background-color: #1890ff;
+  border: #1850ff;
+  a {
+    color: #fff;
+  }
+  &:hover a {
+    color: #fff;
+  }
 }
-.ant-pagination-item.question-answered.ant-pagination-item-active{
-  background: rgb(55, 199, 55);
-  color: #fff;
+
+.ant-pagination-item.question-answered.ant-pagination-item-active {
+  background: #1870ff;
+
+  a {
+    color: #fff;
+  }
 }
 .quiz-info {
   display: flex;

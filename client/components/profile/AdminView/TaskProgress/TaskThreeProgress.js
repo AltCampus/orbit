@@ -21,7 +21,7 @@ const { TextArea } = Input;
 class TaskThreeProgress extends React.Component {
   constructor(props) {
     super();
-    this.state = { loading: true, quizId: props.user.quiz, quizData: {} };
+    this.state = { loading: false, quizId: props.user.quiz, quizData: {} };
   }
   getQuiz = async _ => {
     try {
@@ -45,10 +45,11 @@ class TaskThreeProgress extends React.Component {
   };
 
   componentDidMount = async () => {
-    await this.getQuiz();
+    // await this.getQuiz();
   };
 
   render() {
+    const { quiz } = this.props.user;
     return (
       <Card
         style={{ width: 300 }}
@@ -59,7 +60,7 @@ class TaskThreeProgress extends React.Component {
           />
         }
         actions={[
-          <Link to={`/quiz/rate/${this.state.quizId}`}>
+          <Link to={`/quiz/rate/${quiz._id}`}>
             <Icon type="start" key="rate" />
             Rate
           </Link>
@@ -84,18 +85,18 @@ class TaskThreeProgress extends React.Component {
             </div>
             <Descriptions>
               <Descriptions.Item label="Start Time">
-                {new Date(this.state.startTime).toLocaleString()}
+                {new Date(quiz.startTime).toLocaleString()}
               </Descriptions.Item>
             </Descriptions>
             <Descriptions>
               <Descriptions.Item label="Submission Time">
-                {new Date(this.state.submittedTime).toLocaleString()}
+                {new Date(quiz.submittedTime).toLocaleString()}
               </Descriptions.Item>
             </Descriptions>
             <Descriptions>
               <Descriptions.Item label="Rating">
-                {this.state.totalScore && this.state.maximumScore
-                  ? `You have rated this user ${this.state.totalScore} out of ${this.state.maximumScore}`
+                {quiz.totalScore && quiz.maximumScore
+                  ? `You have rated this user ${quiz.totalScore} out of ${quiz.maximumScore}`
                   : "You've not rated this user yet"}
               </Descriptions.Item>
             </Descriptions>

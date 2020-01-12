@@ -77,7 +77,14 @@ Router.put("/book/:id", auth.verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     const interview = await Interview.findById(id);
-    console.log(interview);
+
+    if (!req.user.canScheduleInterview) {
+      return res.status(403).json({
+        status: "failed",
+        error: "You are not authorized to book this Interview slot."
+      });
+    }
+
     if (interview) {
       // Interview slot with particular id exists
       if (!interview.user) {

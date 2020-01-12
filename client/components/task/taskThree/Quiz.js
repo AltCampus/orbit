@@ -344,7 +344,6 @@ class Quiz extends Component {
           </div>
         ) : this.state.onGoing ? (
           <div class="quiz-info">
-            <Divider />
             <Text strong>You still have time to resume quiz.</Text>
             <Text type="danger">Timer is running.</Text>
             <Button onClick={() => this.resumeQuiz()}>Resume Quiz</Button>

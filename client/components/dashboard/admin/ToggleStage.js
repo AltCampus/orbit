@@ -169,7 +169,7 @@ const columns = [
         (canTakeQuiz
           ? 0
           : quiz.submittedTime
-          ? quiz.totalScore
+          ? quiz.totalScore == null
             ? 3
             : 2
           : 1) === value
@@ -180,7 +180,7 @@ const columns = [
         return <Tag color="volcano">Not taken quiz yet</Tag>;
       } else {
         if (quiz.submittedTime) {
-          if (quiz.totalScore) {
+          if (quiz.totalScore == null) {
             return <Tag color="green">Reviewed</Tag>;
           } else {
             return <Tag color="orange">To Be Reviewed</Tag>;
@@ -198,15 +198,18 @@ const columns = [
       { text: "Not Accepted for Interview", value: 0 },
       { text: "Can Schedule Interview", value: 1 },
       { text: "Interview Scheduled", value: 2 },
-      { text: "Interview Took Placed", value: 3 }
+      { text: "Interview To Be Reviewed", value: 3 },
+      { text: "Interview Reviewed", value: 4 }
     ],
     onFilter: (value, user) => {
       const { interview, canScheduleInterview } = user;
 
       return (
         (interview
-          ? new Date(interview.startTime) > new Date()
-            ? 3
+          ? new Date(interview.startTime) < new Date()
+            ? interview.review
+              ? 4
+              : 3
             : 2
           : canScheduleInterview
           ? 1
@@ -215,8 +218,12 @@ const columns = [
     },
     render: (interview, user) => {
       if (interview) {
-        if (new Date(interview.startTime) > new Date()) {
-          return <Tag color="green">Interview Took Placed</Tag>;
+        if (new Date(interview.startTime) < new Date()) {
+          return interview.review ? (
+            <Tag color="green">Interview Reviewed</Tag>
+          ) : (
+            <Tag color="lime">Interview To Be Reviewed</Tag>
+          );
         } else {
           return <Tag color="lime">Interview Scheduled</Tag>;
         }
