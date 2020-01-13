@@ -7,12 +7,8 @@ const { Text } = Typography;
 const TaskOneProgress = ({ htmlTask, loading }) => {
   return (
     <Card
-      cover={
-        <img
-          alt="example"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ_KK8u4YJawDr4MLwxsrB71MHU7XT3J31mJWU_CxuSYBS4tt_K"
-        />
-      }
+      className="ant-card-html"
+      cover={<div></div>}
       actions={
         htmlTask.completed
           ? undefined

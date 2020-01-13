@@ -17,8 +17,7 @@ const { Meta } = Card;
 
 const { TextArea } = Input;
 
-const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
-  // eslint-disable-next-line
+const HtmlReviewForm = Form.create({ name: "form_in_modal" })(
   class extends React.Component {
     render() {
       const { visible, onCancel, onCreate, form } = this.props;
@@ -39,7 +38,8 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
                     required: true,
                     message: "Please enter a score"
                   }
-                ]
+                ],
+                initialValue: this.props.score
               })(<InputNumber min={0} max={10} />)}
             </Form.Item>
             <Form.Item label="Review">
@@ -49,7 +49,8 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
                     required: true,
                     message: "Please write a review"
                   }
-                ]
+                ],
+                initialValue: this.props.review
               })(<TextArea type="textarea" />)}
             </Form.Item>
           </Form>
@@ -111,13 +112,9 @@ class TaskOneProgress extends Component {
     const { visible, loading } = this.state;
     return (
       <Card
+        className="ant-card-html"
         style={{ width: 300 }}
-        cover={
-          <img
-            alt="example"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ_KK8u4YJawDr4MLwxsrB71MHU7XT3J31mJWU_CxuSYBS4tt_K"
-          />
-        }
+        cover={<div></div>}
         actions={[
           <Button href={`${htmlTask.taskUrl}`} target="_blank" type="link">
             <Icon type="code-sandbox" key="setting" />
@@ -127,17 +124,15 @@ class TaskOneProgress extends Component {
           </Button>
         ]}
       >
-        <div style={{ marginBottom: "20px" }}>
-          <Meta title="Progress" />
-          <Progress percent={100} size="small" />
-        </div>
         {htmlTask.taskUrl ? (
           <div>
-            <CollectionCreateForm
+            <HtmlReviewForm
               wrappedComponentRef={this.saveFormRef}
               visible={this.state.visible}
               onCancel={this.handleCancel}
               onCreate={this.handleCreate}
+              score={htmlTask.score}
+              review={htmlTask.review}
             />
             <Descriptions>
               <Descriptions.Item label="Submission Date">

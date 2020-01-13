@@ -11,6 +11,7 @@ const reviewRouter = require("./routes/review");
 const questionsRouter = require("./routes/questions");
 const quizRouter = require("./routes/quiz");
 const interviewRouter = require("./routes/interview");
+const screenerRouter = require("./routes/screener");
 
 require("dotenv").config();
 
@@ -24,7 +25,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use('/', express.static(path.join(__dirname, "dist")));
+app.use("/", express.static(path.join(__dirname, "dist")));
 
 if (process.env.NODE_ENV === "development") {
   const webpack = require("webpack");
@@ -65,6 +66,7 @@ app.use("/api/v1/task/review", reviewRouter);
 app.use("/api/v1/questions", questionsRouter);
 app.use("/api/v1/quiz", quizRouter);
 app.use("/api/v1/interviews", interviewRouter);
+app.use("/api/v1/screener", screenerRouter);
 app.use("/", indexRouter);
 
 // catch 404 and forward to error handler

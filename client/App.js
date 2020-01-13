@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
-import "./css-reset.scss";
 import "./App.scss";
 
 import { getCurrentUser } from "./actions/users";
@@ -10,7 +9,8 @@ import { getCurrentUser } from "./actions/users";
 import Login from "./components/login/Login";
 import SetPassword from "./components/setPassword/SetPassword";
 import LandingPage from "./components/static/LandingPage";
-import UserProfile from "./components/dashboard/admin/userprofile/UserProfileWrapper";
+import UserProfile from "./components/profile/AdminView/AdminView";
+import Error404 from "./components/message/Error";
 import TaskOne from "./components/task/taskOne/TaskOne";
 import TaskTwo from "./components/task/taskTwo/TaskTwo";
 import TaskThree from "./components/task/taskThree/TaskThree";
@@ -26,7 +26,6 @@ import InterviewsList from "./components/interview/InterviewsList";
 
 class App extends Component {
   protectedRoutes = () => {
-    // console.log(this.props.user);
     if (this.props.user.isAdmin) {
       return (
         <Switch>
@@ -39,6 +38,7 @@ class App extends Component {
           {/* <Route path="/login">
             <Redirect to="/" />
           </Route> */}
+          <Route path="/" component={Error404}></Route>
         </Switch>
       );
     } else {
@@ -50,6 +50,7 @@ class App extends Component {
           <Route exact path="/task/3" component={TaskThree} />
           <Route exact path="/task/4" component={UserInterview} />
           <Route exact path="/profile" component={UserView} />
+          <Route path="/" component={Error404}></Route>
         </Switch>
       );
     }
@@ -61,6 +62,7 @@ class App extends Component {
         <Route exact path="/" component={LandingPage} />
         <Route path="/account/claim/:hashmail" component={SetPassword} />
         <Route path="/login" component={Login} />
+        <Route path="/" component={Error404}></Route>
       </Switch>
     );
   };

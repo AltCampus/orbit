@@ -5,6 +5,7 @@ const User = require("../models/User");
 const Question = require("../models/Question");
 const Quiz = require("../models/Quiz");
 const config = require("../utils/config");
+const calculateScore = require("../utils/calculateScore");
 
 router.get("/status", auth.verifyToken, async (req, res, next) => {
   // Route for getting status of stage 3
@@ -59,11 +60,7 @@ router.get("/status", auth.verifyToken, async (req, res, next) => {
         message: "You still have time to submit quiz."
       });
     }
-    // console.log(
-    //   user.canTakeQuiz,
-    //   quiz.submittedTime,
-    //   quiz.endTime.valueOf() > Date.now()
-    // );
+
     return res
       .status(403)
       .json({ error: "Some Error occured. Please try again." });
@@ -165,9 +162,7 @@ router.get("/current", auth.verifyToken, async (req, res, next) => {
       quiz: { questions: questionsToSend },
       timeLeft: quiz.endTime.valueOf() - Date.now()
     });
-    // console.log(user);
   } catch (error) {
-    console.log(error);
     return res
       .status(403)
       .json({ error: "Some Error occured. Please try again." });
@@ -226,7 +221,6 @@ router.put("/current", auth.verifyToken, async (req, res, next) => {
     res
       .status(200)
       .json({ success: true, message: "Your answers has been submitted" });
-    // console.log(user);
   } catch (error) {
     return res
       .status(403)
@@ -293,9 +287,7 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
     res
       .status(200)
       .json({ success: true, message: "Your answers has been submitted" });
-    // console.log(user);
   } catch (error) {
-    console.log(error);
     return res
       .status(403)
       .json({ error: "Some Error occured. Please try again." });
@@ -307,9 +299,13 @@ router.get("/all", auth.verifyAdminToken, async (req, res) => {
 });
 
 router.get("/:id", auth.verifyAdminToken, async (req, res) => {
+  // Route for getting any quiz submission
   try {
     const quizId = req.params.id;
     let quiz = await Quiz.findById(quizId);
+    if (!quiz) {
+      return res.status(404).json({ error: "Quiz not found." });
+    }
     if (quiz.answers) {
       quiz = await Quiz.findById(quizId).populate("answers.question");
     } else {
@@ -321,9 +317,6 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
         }
       });
     }
-    if (!quiz) {
-      return res.status(404).json({ error: "Quiz not found." });
-    }
     if (quiz.submittedTime) {
       return res.status(200).json({
         status: {
@@ -331,6 +324,7 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
           timeOut: false,
           submitted: true
         },
+        user: quiz.user,
         totalScore: quiz.totalScore,
         maximumScore: quiz.maximumScore,
         submittedTime: quiz.submittedTime,
@@ -359,12 +353,12 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error);
     return res.status(403).json({ error: "Some Error occured" });
   }
 });
 
 router.post("/:id", auth.verifyAdminToken, async (req, res) => {
+  // Route for rating quiz submission
   try {
     const quizId = req.params.id;
     let quiz = await Quiz.findById(quizId).populate("questions");
@@ -373,7 +367,7 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
     }
     if (!quiz.answers) {
       return res.status(403).json({
-        error: "Quiz has no answers to rate."
+        error: "Quiz has no answers to rate this quiz submission."
       });
     }
     if (!quiz.submittedTime) {
@@ -389,10 +383,10 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
       0
     );
     quiz.maximumScore = quiz.questions.reduce((acc, val) => acc + val.point, 0);
-    quiz.save();
+    await quiz.save();
+    await calculateScore(quiz.user);
     res.status(200).json({ success: true });
   } catch (error) {
-    console.log(error);
     return res.status(403).json({ error: "Some Error occured" });
   }
 });

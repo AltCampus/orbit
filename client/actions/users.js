@@ -53,7 +53,6 @@ export const getCurrentUser = (invalidToken, cb) => {
         await invalidToken(error.response.data.message);
       }
       dispatch({ type: NO_TOKEN });
-      console.error(error);
     }
   };
 };
@@ -75,8 +74,9 @@ export const userLogin = (data) => {
       dispatch({ type: USER_LOGIN_FAILED });
       if (error.response) {
         dispatch({ type: SET_ERROR });
-        message.error(error.response.data.message);
-      } else console.error(error);
+        return message.error(error.response.data.message);
+      }
+      message.error("An error occurred");
     }
   };
 };

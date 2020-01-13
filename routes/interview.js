@@ -4,6 +4,7 @@ const Router = express.Router();
 const auth = require("./../utils/auth");
 const User = require("./../models/User");
 const Interview = require("../models/Interview");
+const calculateScore = require("../utils/calculateScore");
 
 Router.get("/status", auth.verifyToken, async (req, res) => {
   // User route for getting status of interview stage
@@ -77,7 +78,14 @@ Router.put("/book/:id", auth.verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     const interview = await Interview.findById(id);
-    console.log(interview);
+
+    if (!req.user.canScheduleInterview) {
+      return res.status(403).json({
+        status: "failed",
+        error: "You are not authorized to book this Interview slot."
+      });
+    }
+
     if (interview) {
       // Interview slot with particular id exists
       if (!interview.user) {
@@ -95,6 +103,7 @@ Router.put("/book/:id", auth.verifyToken, async (req, res) => {
           status: true,
           message: "Interview Scheduled",
           slotDetails: {
+            id,
             startTime,
             endTime
           }
@@ -113,7 +122,6 @@ Router.put("/book/:id", auth.verifyToken, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(400).json({ status: false, error });
   }
 });
@@ -136,6 +144,34 @@ Router.get("/scheduled", auth.verifyAdminToken, async (req, res) => {
     return res.status(200).json({ status: true, scheduledInterviews });
   } catch (error) {
     return res.status(400).json({ status: "failed", error });
+  }
+});
+
+// Admin review Interview
+Router.put("/review/:id", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const interview = await Interview.findById(id);
+
+    if (interview) {
+      // Interview slot with particular id exists
+      await Interview.findByIdAndUpdate(interview._id, {
+        review: req.body.review,
+        score: req.body.score
+      });
+      await calculateScore(interview.user);
+      return res.json({
+        success: true,
+        message: "Review Updated."
+      });
+    } else {
+      return res.status(403).json({
+        status: "failed",
+        error: "Could not found the selected Interview slot."
+      });
+    }
+  } catch (error) {
+    res.status(400).json({ status: false, error: "Some error occured" });
   }
 });
 
@@ -174,7 +210,6 @@ Router.post("/", auth.verifyAdminToken, async (req, res) => {
     const possibleSlot = parseInt(
       (endTime - startTime) / (1000 * timeSlotDuration)
     );
-    console.log(date, startTime, endTime, possibleSlot);
     for (let i = 0; i < possibleSlot; i++) {
       const count = await Interview.find({
         startTime: {
@@ -186,11 +221,6 @@ Router.post("/", auth.verifyAdminToken, async (req, res) => {
           ).valueOf()
         }
       });
-      console.log(
-        new Date(startTime.valueOf() + i * timeSlotDuration * 1000),
-        new Date(startTime.valueOf() + (i + 1) * timeSlotDuration * 1000),
-        count
-      );
       if (count.length === 0) {
         const interview = Interview.create({
           startTime: new Date(
@@ -207,7 +237,6 @@ Router.post("/", auth.verifyAdminToken, async (req, res) => {
       message: "Interview created"
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ status: false, error });
   }
 });

@@ -104,12 +104,37 @@ function UserWrapper(props) {
             <Link to="/task/4">
               <Icon type="video-camera" />
               <span> Interview </span>
-              {user.stage > 4 ? (
-                <Icon
-                  type="check-circle"
-                  theme="filled"
-                  className="menu-icon"
-                />
+              {user.stage === 4 ? (
+                <>
+                  {user.status === "accept" && (
+                    <Icon
+                      type="check-circle"
+                      theme="filled"
+                      className="menu-icon"
+                    />
+                  )}
+                  {user.status === "reject" && (
+                    <Icon
+                      type="close-circle"
+                      theme="filled"
+                      className="menu-icon"
+                    />
+                  )}
+                  {user.status === "pending" &&
+                    (user.interview ? (
+                      <Icon
+                        type="carry-out"
+                        theme="filled"
+                        className="menu-icon"
+                      />
+                    ) : !user.canScheduleInterview ? (
+                      <Icon
+                        type="clock-circle"
+                        theme="filled"
+                        className="menu-icon"
+                      />
+                    ) : null)}
+                </>
               ) : (
                 ""
               )}
@@ -164,7 +189,10 @@ function UserWrapper(props) {
           type="navigation"
           current={Number(props.activeKey) - 1}
           style={stepStyle}
-          onChange={index => props.history.push(`/task/${index + 1}`)}
+          onChange={index => {
+            index <= 3 && props.history.push(`/task/${index + 1}`);
+            index > 3 && props.history.push("/profile");
+          }}
         >
           <Step
             status={
@@ -196,16 +224,34 @@ function UserWrapper(props) {
             }
             title="Quiz"
           />
+          {user.status === "reject" && !user.interview && (
+            <Step status={"error"} title="Rejected" />
+          )}
           <Step
+            icon={
+              user.status == "reject" && !user.interview ? (
+                <Icon type="video-camera" />
+              ) : null
+            }
             status={
               Number(user.stage) === 4
-                ? "process"
+                ? user.status === "pending"
+                  ? "process"
+                  : user.interview
+                  ? "finish"
+                  : "wait"
                 : Number(user.stage) < 4
                 ? "wait"
                 : "finish"
             }
             title="Interview"
           />
+          {user.status === "reject" && user.interview && (
+            <Step status={"error"} title="Rejected" />
+          )}
+          {user.status === "accept" && user.interview && (
+            <Step status={"finish"} title="Accepted" />
+          )}
         </Steps>
         <Content
           style={{
