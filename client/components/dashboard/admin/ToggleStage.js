@@ -292,7 +292,6 @@ class ToggleStage extends Component {
             !user.canScheduleInterview &&
             !user.interview
         );
-        // dataSource = dataSource.filter(user => console.log("user"))
         break;
       case "stageFour":
         dataSource = dataSource.filter(

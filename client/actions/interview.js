@@ -81,7 +81,6 @@ export const bookAvailableSlot = id => {
         payload: res.data.slotDetails
       });
     } catch (error) {
-      console.log(error);
       await dispatch({
         type: BOOKING_INTERVIEW_SLOT_FAILED,
         payload: error.response && error.response.data.error

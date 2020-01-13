@@ -122,7 +122,6 @@ Router.put("/book/:id", auth.verifyToken, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(400).json({ status: false, error });
   }
 });
@@ -172,7 +171,6 @@ Router.put("/review/:id", auth.verifyAdminToken, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(400).json({ status: false, error: "Some error occured" });
   }
 });
@@ -212,7 +210,6 @@ Router.post("/", auth.verifyAdminToken, async (req, res) => {
     const possibleSlot = parseInt(
       (endTime - startTime) / (1000 * timeSlotDuration)
     );
-    console.log(date, startTime, endTime, possibleSlot);
     for (let i = 0; i < possibleSlot; i++) {
       const count = await Interview.find({
         startTime: {
@@ -224,11 +221,6 @@ Router.post("/", auth.verifyAdminToken, async (req, res) => {
           ).valueOf()
         }
       });
-      console.log(
-        new Date(startTime.valueOf() + i * timeSlotDuration * 1000),
-        new Date(startTime.valueOf() + (i + 1) * timeSlotDuration * 1000),
-        count
-      );
       if (count.length === 0) {
         const interview = Interview.create({
           startTime: new Date(
@@ -245,7 +237,6 @@ Router.post("/", auth.verifyAdminToken, async (req, res) => {
       message: "Interview created"
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ status: false, error });
   }
 });

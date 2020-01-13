@@ -151,7 +151,6 @@ router.post("/:hashMail", async (req, res) => {
         });
       }
     } catch (error) {
-      console.log(error);
       return res
         .status(400)
         .json({ success: false, message: "Some error from server!" });
@@ -174,7 +173,6 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
 
     res.status(200).json({ user, status: true });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ message: "Something went wrong", status: false });
   }
 });
@@ -204,7 +202,6 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res
       .status(400)
       .json({ status: false, message: "some error occurs from Server" });
@@ -258,7 +255,6 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     return res
       .status(400)
       .json({ status: false, message: "some error occurs from Server" });
@@ -304,7 +300,6 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     return res
       .status(400)
       .json({ status: false, message: "some error occurs from Server" });

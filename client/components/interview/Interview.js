@@ -32,7 +32,6 @@ function Interview() {
         }, {})
       );
     } catch (error) {
-      console.error(error);
       message.error("Failed to load slots");
     }
   };

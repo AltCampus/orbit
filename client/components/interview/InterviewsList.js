@@ -69,7 +69,6 @@ class InterviewsList extends Component {
       });
       this.setActiveTab(this.state.activeKey);
     } catch (error) {
-      console.error(error);
       message.error("Failed to load interviews list");
     }
   }

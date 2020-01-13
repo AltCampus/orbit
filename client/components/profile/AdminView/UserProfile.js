@@ -52,8 +52,9 @@ class UserProfile extends Component {
     } catch (error) {
       this.setState({ interviewloading: false });
       if (error.response) {
-        message.error(error.response.data.message);
+        return message.error(error.response.data.message);
       }
+      message.error("An error occurred");
     }
   };
 
@@ -79,9 +80,9 @@ class UserProfile extends Component {
     } catch (error) {
       this.setState({ acceptloading: false });
       if (error.response) {
-        message.error(error.response.data.message);
+        return message.error(error.response.data.message);
       }
-      console.error(error);
+      message.error("An error occurred");
     }
   };
 
@@ -100,9 +101,9 @@ class UserProfile extends Component {
     } catch (error) {
       this.setState({ loading: false });
       if (error.response) {
-        message.error(error.response.data.message);
+        return message.error(error.response.data.message);
       }
-      console.error(error);
+      message.error("An error occurred");
     }
   };
 

@@ -37,11 +37,8 @@ const calculateScore = async userId => {
           totalScore + (user.interview.score / 10) * config.SCORE_FOR_INTERVIEW;
       }
     }
-    console.log(totalScore);
     await User.findByIdAndUpdate(userId, { totalScore: totalScore });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 module.exports = calculateScore;
