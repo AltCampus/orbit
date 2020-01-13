@@ -22,6 +22,7 @@ const TaskThreeProgress = props => {
   const { quiz } = props.user;
   return (
     <Card
+      className="ant-card-quiz"
       style={{ width: 300 }}
       cover={
         <img
@@ -38,10 +39,6 @@ const TaskThreeProgress = props => {
         </Link>
       ]}
     >
-      <div style={{ marginBottom: "20px" }}>
-        <Meta title="Progress" />
-        <Progress percent={100} size="small" />
-      </div>
       <Descriptions>
         <Descriptions.Item label="Start Time">
           {new Date(quiz.startTime).toLocaleString()}
