@@ -103,6 +103,7 @@ Router.put("/book/:id", auth.verifyToken, async (req, res) => {
           status: true,
           message: "Interview Scheduled",
           slotDetails: {
+            id,
             startTime,
             endTime
           }

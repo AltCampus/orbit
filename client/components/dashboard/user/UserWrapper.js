@@ -104,12 +104,37 @@ function UserWrapper(props) {
             <Link to="/task/4">
               <Icon type="video-camera" />
               <span> Interview </span>
-              {user.stage > 4 ? (
-                <Icon
-                  type="check-circle"
-                  theme="filled"
-                  className="menu-icon"
-                />
+              {user.stage === 4 ? (
+                <>
+                  {user.status === "accept" && (
+                    <Icon
+                      type="check-circle"
+                      theme="filled"
+                      className="menu-icon"
+                    />
+                  )}
+                  {user.status === "reject" && (
+                    <Icon
+                      type="close-circle"
+                      theme="filled"
+                      className="menu-icon"
+                    />
+                  )}
+                  {user.status === "pending" &&
+                    (user.interview ? (
+                      <Icon
+                        type="carry-out"
+                        theme="filled"
+                        className="menu-icon"
+                      />
+                    ) : !user.canScheduleInterview ? (
+                      <Icon
+                        type="clock-circle"
+                        theme="filled"
+                        className="menu-icon"
+                      />
+                    ) : null)}
+                </>
               ) : (
                 ""
               )}

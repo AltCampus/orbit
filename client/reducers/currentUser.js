@@ -7,7 +7,8 @@ import {
   SET_ERROR,
   USER_STAGE_UPGRADE,
   USER_LOGIN_PENDING,
-  USER_LOGIN_FAILED
+  USER_LOGIN_FAILED,
+  BOOKING_INTERVIEW_SLOT_SUCCESS
 } from "./../actions/types";
 
 const initialState = {
@@ -71,6 +72,15 @@ const currentUser = (state = initialState, action) => {
         }
       };
     }
+    case BOOKING_INTERVIEW_SLOT_SUCCESS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          canScheduleInterview: false,
+          interview: action.payload.id
+        }
+      };
     case LOG_OUT:
     case NO_TOKEN:
       return {
