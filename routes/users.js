@@ -215,10 +215,23 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
 router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
-    let user = await User.findOne({ _id: id });
+    let user = await User.findById(id);
     if (user.interview) {
+      let { dateOfJoining, selectedForBatch } = req.body;
+      dateOfJoining = new Date(dateOfJoining);
       user.status = "accept";
-      user.selectedForBatch = req.body.selectedForBatch;
+      const selectionDetails = {
+        batch: selectedForBatch,
+        dateOfJoining: new Date(
+          dateOfJoining.getFullYear(),
+          dateOfJoining.getMonth(),
+          dateOfJoining.getDate(),
+          12,
+          0,
+          0
+        )
+      };
+      user.selectionDetails = selectionDetails;
 
       user = await user.save();
       user.password = undefined;
@@ -235,7 +248,7 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
           "ACCEPTANCE_MAIL_AFTER_INTERVIEW",
           user.email,
           user.name,
-          user.selectedForBatch
+          selectionDetails.dateOfJoining.toDateString()
         );
       }
     } else {

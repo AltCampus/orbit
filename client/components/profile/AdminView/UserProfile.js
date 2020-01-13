@@ -8,8 +8,10 @@ import {
   message,
   Alert,
   Icon,
-  Tag
+  Tag,
+  Modal
 } from "antd";
+import AcceptModal from "./AcceptModal";
 
 const Content = ({ children, extra }) => {
   return (
@@ -25,10 +27,13 @@ class UserProfile extends Component {
     super(props);
 
     this.state = {
-      user: "",
       acceptloading: false,
       interviewloading: false,
-      loading: false
+      loading: false,
+      selectionDetails: {
+        batch: null,
+        dateOfJoining: null
+      }
     };
   }
 
@@ -42,6 +47,7 @@ class UserProfile extends Component {
         }
       });
       this.setState({ user: res.data.user, interviewloading: false });
+      await this.props.fetchUser();
       message.success(res.data.message);
     } catch (error) {
       this.setState({ interviewloading: false });
@@ -51,16 +57,24 @@ class UserProfile extends Component {
     }
   };
 
-  handleUserAccept = async id => {
+  handleUserAccept = async data => {
     try {
       this.setState({ acceptloading: true });
       const token = JSON.parse(localStorage.getItem("authToken"));
-      const res = await axios.patch(`/api/v1/users/status/${id}`, null, {
-        headers: {
-          authorization: token
+      const res = await axios.patch(
+        `/api/v1/users/status/${this.props.user._id}`,
+        {
+          selectedForBatch: data.batchNumber,
+          dateOfJoining: new Date(data.joiningDate)
+        },
+        {
+          headers: {
+            authorization: token
+          }
         }
-      });
+      );
       this.setState({ user: res.data.user, acceptloading: false });
+      await this.props.fetchUser();
       message.success(res.data.message);
     } catch (error) {
       this.setState({ acceptloading: false });
@@ -82,6 +96,7 @@ class UserProfile extends Component {
       });
       this.setState({ user: res.data.user, loading: false });
       message.error(res.data.message);
+      await this.props.fetchUser();
     } catch (error) {
       this.setState({ loading: false });
       if (error.response) {
@@ -120,7 +135,7 @@ class UserProfile extends Component {
             marginRight: 32
           }}
         >
-          {user.stage > 3 && !user.canScheduleInterview && !user.interview ? (
+          {user.stage === 4 && !user.canScheduleInterview && !user.interview ? (
             <Button
               type="primary"
               loading={this.state.interviewloading}
@@ -132,13 +147,19 @@ class UserProfile extends Component {
             ""
           )}
           {user.interview && user.status === "pending" ? (
-            <Button
-              type="primary"
-              loading={this.state.acceptloading}
-              onClick={() => this.handleUserAccept(user._id)}
-            >
-              Accept
-            </Button>
+            <>
+              {/* <Button
+                type="primary"
+                loading={this.state.acceptloading}
+                onClick={() => this.handleUserAccept(user._id)}
+              >
+                Accept
+              </Button> */}
+              <AcceptModal
+                loading={this.state.acceptloading}
+                acceptUser={values => this.handleUserAccept(values)}
+              />
+            </>
           ) : user.canScheduleInterview ? (
             <Alert
               style={{ display: "inline-block", marginRight: "10px" }}
@@ -177,10 +198,6 @@ class UserProfile extends Component {
     }
   };
 
-  componentDidMount = async () => {
-    this.setState({ user: this.props.user });
-  };
-
   render() {
     const {
       task = {},
@@ -192,7 +209,7 @@ class UserProfile extends Component {
     const { html, codewars } = task;
     return (
       <>
-        {this.state.user && (
+        {this.props.user && (
           <section>
             <PageHeader
               style={{
