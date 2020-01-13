@@ -69,3 +69,22 @@ a {
 .red-text {
   color: #fa541c;
 }
+.grey-text {
+  color: rgba(0, 0, 0, 0.65);
+}
+.accept-page {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h2.green-text {
+    color: #52c41a;
+  }
+  .accept-img {
+    width: 100%;
+    max-width: 500px;
+    margin: 1rem 0;
+  }
+}
