@@ -63,7 +63,9 @@ export class DrawerInfo extends React.Component {
           </Button>
         ) : (
           <Button type="primary" onClick={this.showForm}>
-            Fill Information
+            {this.props.user.screener
+              ? "Edit Screener Information"
+              : "Add Screener Information"}
           </Button>
         )}
         <ScreenerInfoForm

@@ -207,15 +207,12 @@ class UserProfile extends Component {
             >
               <Content extra={this.extraContent(this.props)}>
                 <Descriptions size="small" column={3}>
-                  <Descriptions.Item label="Name">
-                    {this.props.user.name}
-                  </Descriptions.Item>
                   <Descriptions.Item label="Status">
                     {this.getStatus(this.props.user.status)}
                   </Descriptions.Item>
-                  <Descriptions.Item label="Social Profile">
-                    <a href={this.props.user.socialProfile} target="_blank">
-                      {this.props.user.socialProfile}
+                  <Descriptions.Item label="Email">
+                    <a href={`mailto:${this.props.user.email}`}>
+                      {this.props.user.email}
                     </a>
                   </Descriptions.Item>
                   <Descriptions.Item label="Phone number">
@@ -223,13 +220,20 @@ class UserProfile extends Component {
                       {this.props.user.phoneNo}
                     </a>
                   </Descriptions.Item>
-                  <Descriptions.Item label="Email">
-                    <a href={`mailto:${this.props.user.email}`}>
-                      {this.props.user.email}
+                  <Descriptions.Item label="Social Profile">
+                    <a href={this.props.user.socialProfile} target="_blank">
+                      {this.props.user.socialProfile}
                     </a>
                   </Descriptions.Item>
                   <Descriptions.Item label="Motivation">
                     {this.props.user.motivation}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Screener Information Added">
+                    {this.props.user.screener ? (
+                      <span className="green-text">Yes</span>
+                    ) : (
+                      <span className="red-text">No</span>
+                    )}
                   </Descriptions.Item>
                   <Descriptions.Item label="HTML Task">
                     {html.submitTime ? (

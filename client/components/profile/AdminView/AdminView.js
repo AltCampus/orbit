@@ -54,17 +54,13 @@ export class AdminView extends Component {
           />
         ) : (
           <section>
-            <ScreenerInfoEditor
-              user={this.state.user}
-              fetchUser={this.getUser}
-            />
             <div className="userprofile-container">
               <UserProfile user={this.state.user} />
             </div>
-            <ScreenerInfo user={this.state.user} />
             <div className="userprogress-container">
               <UserProgress user={this.state.user} fetchUsers={this.getUser} />
             </div>
+            <ScreenerInfo user={this.state.user} fetchUser={this.getUser} />
           </section>
         )}
       </AdminWrapper>
