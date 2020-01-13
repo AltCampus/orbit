@@ -1,8 +1,6 @@
 import axios from "axios";
 
 import {
-  SCHEDULE_INTERVIEW_SUCCESS,
-  SCHEDULE_INTERVIEW_FAILED,
   FETCHING_INTERVIEW_STATUS_STARTED,
   FETCHING_INTERVIEW_STATUS_SUCCESS,
   FETCHING_INTERVIEW_STATUS_FAILED,
@@ -83,7 +81,6 @@ export const bookAvailableSlot = id => {
         payload: res.data.slotDetails
       });
     } catch (error) {
-      console.log(error);
       await dispatch({
         type: BOOKING_INTERVIEW_SLOT_FAILED,
         payload: error.response && error.response.data.error

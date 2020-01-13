@@ -112,13 +112,9 @@ class TaskOneProgress extends Component {
     const { visible, loading } = this.state;
     return (
       <Card
+        className="ant-card-html"
         style={{ width: 300 }}
-        cover={
-          <img
-            alt="example"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ_KK8u4YJawDr4MLwxsrB71MHU7XT3J31mJWU_CxuSYBS4tt_K"
-          />
-        }
+        cover={<div></div>}
         actions={[
           <Button href={`${htmlTask.taskUrl}`} target="_blank" type="link">
             <Icon type="code-sandbox" key="setting" />
@@ -128,10 +124,6 @@ class TaskOneProgress extends Component {
           </Button>
         ]}
       >
-        <div style={{ marginBottom: "20px" }}>
-          <Meta title="Progress" />
-          <Progress percent={100} size="small" />
-        </div>
         {htmlTask.taskUrl ? (
           <div>
             <HtmlReviewForm

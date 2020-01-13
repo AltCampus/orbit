@@ -54,7 +54,10 @@ const userSchema = new Schema(
     canScheduleInterview: { type: Boolean, default: false },
     isAdmin: { type: Boolean, default: false },
     stage: { type: Number, default: 0 },
-    selectedForBatch: { type: String },
+    selectionDetails: {
+      batch: { type: Number },
+      dateOfJoining: { type: Date }
+    },
     totalScore: { type: Number, default: 0 },
     status: {
       type: String,

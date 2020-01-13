@@ -381,7 +381,6 @@ router.post("/1/save", auth.verifyToken, async (req, res) => {
     await User.findByIdAndUpdate(req.user.id, { stage: 2 });
     return res.status(201).json({ status: true, success: true });
   } catch (error) {
-    console.log(error);
     return res.status(400).json({ status: false, error: "Some Error Occured" });
   }
 });
@@ -440,14 +439,12 @@ router.post("/2/save", auth.verifyToken, (req, res) => {
     .get(
       `https://www.codewars.com/api/v1/users/${username}`,
       async apiResponse => {
-        console.log(apiResponse.statusCode);
         if (apiResponse.statusCode === 200) {
           // Username is valid
           // const endTime = new Date(Date.now() + 259200 * 1000);
           const endTime = new Date(
             Date.now() + config.TIME_FOR_CODEWARS_ASSIGNMENT * 86400 * 1000
           );
-          console.log(endTime);
           const codewarsTask = {
             codewarsUsername: username,
             startTime: Date.now(),
@@ -470,14 +467,12 @@ router.post("/2/save", auth.verifyToken, (req, res) => {
               timeLeft: endTime - Date.now()
             });
           } catch (error) {
-            console.log(error);
             return res
               .status(400)
               .json({ status: false, error: "Some Error Occured" });
           }
         } else {
           // Username is invalid
-          console.log("invalid");
           return res
             .status(400)
             .json({ status: false, error: "Invalid Codewars Username" });
@@ -485,7 +480,6 @@ router.post("/2/save", auth.verifyToken, (req, res) => {
       }
     )
     .on("error", e => {
-      console.error(e);
       return res
         .status(400)
         .json({ status: false, error: "Some Error Occurred" });
@@ -502,7 +496,6 @@ router.post("/two/katas", auth.verifyAdminToken, (req, res) => {
       const response = await axios.get(
         `https://www.codewars.com/api/v1/users/${codewars.codewarsUsername}/code-challenges/completed?page=0`
       );
-      // console.log(response.data.data);
       const filteredArray = response.data.data.filter(
         kata => kata.completedAt > codewars.startTime
       );
@@ -523,15 +516,12 @@ router.post("/two/katas", auth.verifyAdminToken, (req, res) => {
           ...updatedTask
         };
         await newTask.save();
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
 
       return res
         .status(200)
         .json({ data: { katasSolved }, status: true, message: "success" });
     } catch (error) {
-      console.log(error);
       return res.status(400).json({ status: false });
     }
   };

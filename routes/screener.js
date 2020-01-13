@@ -21,7 +21,6 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
     }
     res.status(201).json({ status: true, message: "User data recorded" });
   } catch (error) {
-    console.log(error);
     res.json({ status: false, message: "Some error from console" });
   }
 });

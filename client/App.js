@@ -25,7 +25,6 @@ import { message } from "antd";
 import InterviewsList from "./components/interview/InterviewsList";
 class App extends Component {
   protectedRoutes = () => {
-    // console.log(this.props.user);
     if (this.props.user.isAdmin) {
       return (
         <Switch>

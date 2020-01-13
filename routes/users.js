@@ -151,7 +151,6 @@ router.post("/:hashMail", async (req, res) => {
         });
       }
     } catch (error) {
-      console.log(error);
       return res
         .status(400)
         .json({ success: false, message: "Some error from server!" });
@@ -174,7 +173,6 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
 
     res.status(200).json({ user, status: true });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ message: "Something went wrong", status: false });
   }
 });
@@ -204,7 +202,6 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res
       .status(400)
       .json({ status: false, message: "some error occurs from Server" });
@@ -215,10 +212,23 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
 router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
-    let user = await User.findOne({ _id: id });
+    let user = await User.findById(id);
     if (user.interview) {
+      let { dateOfJoining, selectedForBatch } = req.body;
+      dateOfJoining = new Date(dateOfJoining);
       user.status = "accept";
-      user.selectedForBatch = req.body.selectedForBatch;
+      const selectionDetails = {
+        batch: selectedForBatch,
+        dateOfJoining: new Date(
+          dateOfJoining.getFullYear(),
+          dateOfJoining.getMonth(),
+          dateOfJoining.getDate(),
+          12,
+          0,
+          0
+        )
+      };
+      user.selectionDetails = selectionDetails;
 
       user = await user.save();
       user.password = undefined;
@@ -235,7 +245,7 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
           "ACCEPTANCE_MAIL_AFTER_INTERVIEW",
           user.email,
           user.name,
-          user.selectedForBatch
+          selectionDetails.dateOfJoining.toDateString()
         );
       }
     } else {
@@ -245,7 +255,6 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     return res
       .status(400)
       .json({ status: false, message: "some error occurs from Server" });
@@ -291,7 +300,6 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     return res
       .status(400)
       .json({ status: false, message: "some error occurs from Server" });

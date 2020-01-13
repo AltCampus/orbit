@@ -9,6 +9,7 @@ import ScheduleSuccess from "./ScheduleSuccess";
 import UnderReview from "../../message/UnderReview";
 import RejectMessage from "../../message/RejectMessage";
 import BookSlot from "./BookSlot";
+import AcceptMessage from "../../message/AcceptMessage";
 class ScheduleInterview extends Component {
   constructor(props) {
     super();
@@ -24,7 +25,6 @@ class ScheduleInterview extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <>
         {this.props.isFetchingInterviewStatus ? (
@@ -51,6 +51,10 @@ class ScheduleInterview extends Component {
                   {/* Interview has taken place. Waiting for final Review from admin. */}
                   {this.props.applicationStatus === "reject" ? (
                     <RejectMessage />
+                  ) : this.props.applicationStatus === "accept" ? (
+                    <AcceptMessage
+                      selectionDetails={this.props.selectionDetails}
+                    />
                   ) : (
                     <FinalReview />
                   )}
@@ -81,7 +85,8 @@ const mapStateToProps = state => {
   const { interview } = state;
   return {
     ...interview,
-    applicationStatus: state.currentUser.user.status
+    applicationStatus: state.currentUser.user.status,
+    selectionDetails: state.currentUser.user.selectionDetails
   };
 };
 

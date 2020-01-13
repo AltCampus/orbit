@@ -60,11 +60,7 @@ router.get("/status", auth.verifyToken, async (req, res, next) => {
         message: "You still have time to submit quiz."
       });
     }
-    // console.log(
-    //   user.canTakeQuiz,
-    //   quiz.submittedTime,
-    //   quiz.endTime.valueOf() > Date.now()
-    // );
+
     return res
       .status(403)
       .json({ error: "Some Error occured. Please try again." });
@@ -166,9 +162,7 @@ router.get("/current", auth.verifyToken, async (req, res, next) => {
       quiz: { questions: questionsToSend },
       timeLeft: quiz.endTime.valueOf() - Date.now()
     });
-    // console.log(user);
   } catch (error) {
-    console.log(error);
     return res
       .status(403)
       .json({ error: "Some Error occured. Please try again." });
@@ -227,7 +221,6 @@ router.put("/current", auth.verifyToken, async (req, res, next) => {
     res
       .status(200)
       .json({ success: true, message: "Your answers has been submitted" });
-    // console.log(user);
   } catch (error) {
     return res
       .status(403)
@@ -294,9 +287,7 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
     res
       .status(200)
       .json({ success: true, message: "Your answers has been submitted" });
-    // console.log(user);
   } catch (error) {
-    console.log(error);
     return res
       .status(403)
       .json({ error: "Some Error occured. Please try again." });
@@ -362,7 +353,6 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error);
     return res.status(403).json({ error: "Some Error occured" });
   }
 });
@@ -397,7 +387,6 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
     await calculateScore(quiz.user);
     res.status(200).json({ success: true });
   } catch (error) {
-    console.log(error);
     return res.status(403).json({ error: "Some Error occured" });
   }
 });

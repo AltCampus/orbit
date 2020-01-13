@@ -55,7 +55,7 @@ export class AdminView extends Component {
         ) : (
           <section>
             <div className="userprofile-container">
-              <UserProfile user={this.state.user} />
+              <UserProfile user={this.state.user} fetchUser={this.getUser} />
             </div>
             <div className="userprogress-container">
               <UserProgress user={this.state.user} fetchUsers={this.getUser} />

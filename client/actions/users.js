@@ -14,7 +14,10 @@ import {
 import { message } from "antd";
 import config from "../config";
 
-axios.defaults.baseURL = process.env.NODE_ENV === "production" ? config.productionRootURL : "http://localhost:3000/";
+axios.defaults.baseURL =
+  process.env.NODE_ENV === "production"
+    ? config.productionRootURL
+    : "http://localhost:3000/";
 
 const rootUrl = "/api/v1/users";
 
@@ -46,7 +49,6 @@ export const getCurrentUser = invalidToken => {
         await invalidToken(error.response.data.message);
       }
       dispatch({ type: NO_TOKEN });
-      console.error(error);
     }
   };
 };
@@ -68,8 +70,9 @@ export const userLogin = data => {
       dispatch({ type: USER_LOGIN_FAILED });
       if (error.response) {
         dispatch({ type: SET_ERROR });
-        message.error(error.response.data.message);
-      } else console.error(error);
+        return message.error(error.response.data.message);
+      }
+      message.error("An error occurred");
     }
   };
 };

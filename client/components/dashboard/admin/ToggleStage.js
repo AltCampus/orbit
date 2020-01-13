@@ -177,8 +177,8 @@ const columns = [
           ? 0
           : quiz.submittedTime
           ? quiz.totalScore == null
-            ? 3
-            : 2
+            ? 2
+            : 3
           : 1) === value
       );
     },
@@ -188,9 +188,9 @@ const columns = [
       } else {
         if (quiz.submittedTime) {
           if (quiz.totalScore == null) {
-            return <Tag color="green">Reviewed</Tag>;
-          } else {
             return <Tag color="orange">To Be Reviewed</Tag>;
+          } else {
+            return <Tag color="green">Reviewed</Tag>;
           }
         } else {
           return <Tag color="gold">Quiz not submitted</Tag>;
@@ -292,7 +292,6 @@ class ToggleStage extends Component {
             !user.canScheduleInterview &&
             !user.interview
         );
-        // dataSource = dataSource.filter(user => console.log("user"))
         break;
       case "stageFour":
         dataSource = dataSource.filter(
