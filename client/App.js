@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Switch, withRouter, Redirect } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 import "./App.scss";
@@ -21,8 +21,9 @@ import DisplayApplicants from "./components/dashboard/admin/DisplayApplicants";
 import Instructions from "./components/instructions/Instructions";
 import UserView from "./components/profile/UserView/UserView";
 import RateQuiz from "./components/questionnaire/RateQuiz";
-import { message } from "antd";
+import { message, Spin, Icon } from "antd";
 import InterviewsList from "./components/interview/InterviewsList";
+
 class App extends Component {
   protectedRoutes = () => {
     if (this.props.user.isAdmin) {
@@ -34,9 +35,9 @@ class App extends Component {
           <Route path="/interviews/scheduled" component={InterviewsList} />
           <Route path="/user/:id" component={UserProfile} />
           <Route path="/quiz/rate/:id" component={RateQuiz} />
-          <Route path="/login">
+          {/* <Route path="/login">
             <Redirect to="/" />
-          </Route>
+          </Route> */}
           <Route path="/" component={Error404}></Route>
         </Switch>
       );
@@ -49,10 +50,6 @@ class App extends Component {
           <Route exact path="/task/3" component={TaskThree} />
           <Route exact path="/task/4" component={UserInterview} />
           <Route exact path="/profile" component={UserView} />
-          {/* Redirects the user to login if user attempts to login */}
-          <Route path="/login">
-            <Redirect to="/" />
-          </Route>
           <Route path="/" component={Error404}></Route>
         </Switch>
       );
@@ -62,9 +59,6 @@ class App extends Component {
   unprotectedRoutes = () => {
     return (
       <Switch>
-        <Route exact path="/dashboard">
-          <Redirect to="/login" />
-        </Route>
         <Route exact path="/" component={LandingPage} />
         <Route path="/account/claim/:hashmail" component={SetPassword} />
         <Route path="/login" component={Login} />
@@ -75,7 +69,7 @@ class App extends Component {
 
   componentDidMount = () => {
     if (localStorage.getItem("authToken")) {
-      const invalidToken = async msg => {
+      const invalidToken = async (msg) => {
         message.error(`${msg}, Redirect to Login please wait!`);
         await localStorage.clear();
         setTimeout(() => this.props.history.push("/login"), 1000);
@@ -87,23 +81,39 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        {/* Conditional Routing, Checks if tokenValidationInProgress true or false, Checks
-        if user is available or not */}
-        {this.props.tokenValidationInProgress
-          ? null
-          : this.props.user
-          ? this.protectedRoutes()
-          : this.unprotectedRoutes()}
+        {/* Conditional Routing */}
+        {this.props.tokenValidationInProgress ? (
+          // Shows spinner untill user fatches
+          <div className="loading-div">
+            <Spin
+              indicator={
+                <Icon
+                  type="loading"
+                  style={{ fontSize: 100, margin: "3rem auto" }}
+                />
+              }
+            />
+          </div>
+        ) : this.props.user ? (
+          this.protectedRoutes()
+        ) : (
+          this.unprotectedRoutes()
+        )}
       </React.Fragment>
     );
   }
 }
 
-const mapStateToProps = state => {
-  const { user, tokenValidationInProgress } = state.currentUser;
+const mapStateToProps = (state) => {
+  const {
+    user,
+    tokenValidationInProgress,
+    isAuthenticated
+  } = state.currentUser;
   return {
     user,
-    tokenValidationInProgress
+    tokenValidationInProgress,
+    isAuthenticated
   };
 };
 
