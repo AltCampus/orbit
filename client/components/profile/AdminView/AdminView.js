@@ -3,9 +3,10 @@ import React, { Component } from "react";
 import UserProfile from "./UserProfile";
 import UserProgress from "./UserProgress";
 import axios from "axios";
-import DrawerInfo from "../../drawer/DrawerInfo";
+import ScreenerInfoEditor from "../../screener/ScreenerInfoEditor";
 import { Icon, message } from "antd";
 import AdminWrapper from "../../dashboard/admin/AdminWrapper";
+import ScreenerInfo from "../../screener/ScreenerInfo";
 
 export class AdminView extends Component {
   constructor(props) {
@@ -53,10 +54,14 @@ export class AdminView extends Component {
           />
         ) : (
           <section>
-            <DrawerInfo />
+            <ScreenerInfoEditor
+              user={this.state.user}
+              fetchUser={this.getUser}
+            />
             <div className="userprofile-container">
               <UserProfile user={this.state.user} />
             </div>
+            <ScreenerInfo user={this.state.user} />
             <div className="userprogress-container">
               <UserProgress user={this.state.user} fetchUsers={this.getUser} />
             </div>

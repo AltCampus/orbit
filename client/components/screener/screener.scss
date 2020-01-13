@@ -1,0 +1,14 @@
+.screener-form-container {
+  border: 1px solid lightgrey;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  overflow: hidden;
+  height: auto;
+
+  &.invisible {
+    height: 0;
+    padding: 0;
+    border: 0;
+  }
+}
