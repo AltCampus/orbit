@@ -189,7 +189,10 @@ function UserWrapper(props) {
           type="navigation"
           current={Number(props.activeKey) - 1}
           style={stepStyle}
-          onChange={index => props.history.push(`/task/${index + 1}`)}
+          onChange={index => {
+            index <= 3 && props.history.push(`/task/${index + 1}`);
+            index > 3 && props.history.push("/profile");
+          }}
         >
           <Step
             status={
@@ -221,16 +224,34 @@ function UserWrapper(props) {
             }
             title="Quiz"
           />
+          {user.status === "reject" && !user.interview && (
+            <Step status={"error"} title="Rejected" />
+          )}
           <Step
+            icon={
+              user.status == "reject" && !user.interview ? (
+                <Icon type="video-camera" />
+              ) : null
+            }
             status={
               Number(user.stage) === 4
-                ? "process"
+                ? user.status === "pending"
+                  ? "process"
+                  : user.interview
+                  ? "finish"
+                  : "wait"
                 : Number(user.stage) < 4
                 ? "wait"
                 : "finish"
             }
             title="Interview"
           />
+          {user.status === "reject" && user.interview && (
+            <Step status={"error"} title="Rejected" />
+          )}
+          {user.status === "accept" && user.interview && (
+            <Step status={"finish"} title="Accepted" />
+          )}
         </Steps>
         <Content
           style={{
