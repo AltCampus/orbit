@@ -7,7 +7,9 @@ const interviewSchema = Schema({
     ref: "User"
   },
   startTime: { type: Date, required: true },
-  endTime: { type: Date, required: true }
+  endTime: { type: Date, required: true },
+  score: { type: Number },
+  review: { type: String }
 });
 
 const interview = mongoose.model("Interview", interviewSchema);

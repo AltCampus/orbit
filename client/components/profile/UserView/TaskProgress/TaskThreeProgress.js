@@ -7,6 +7,7 @@ const { Text } = Typography;
 const TaskThreeProgress = ({ quiz, loading }) => {
   return (
     <Card
+      className="ant-card-quiz"
       cover={
         <img
           alt="example"

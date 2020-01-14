@@ -1,13 +1,18 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Timeline, Button, Card } from 'antd';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Timeline, Button, Card, Typography, Divider } from "antd";
+const { Title } = Typography;
 
-import UserWrapper from '../dashboard/user/UserWrapper';
+import UserWrapper from "../dashboard/user/UserWrapper";
 
 export default function Instructions() {
   return (
-    <UserWrapper activeKey={'0'}>
-      <Card title="Instructions" bordered={false}>
+    <UserWrapper activeKey={"0"}>
+      <Title level={2} style={{ marginBottom: 0 }}>
+        Instructions
+      </Title>
+      <Divider />
+      <div className="task-introduction-page">
         <div className="task-introduction-container">
           <p className="task-introduction">
             <ul>
@@ -16,7 +21,7 @@ export default function Instructions() {
                 resources are provided below for each task.
               </li>
               <li>
-                {' '}
+                {" "}
                 The tasks consists of questions carefully designed to help you
                 self-assess your comprehension of the information presented on
                 the topics covered in the module.
@@ -108,7 +113,7 @@ export default function Instructions() {
                   available slots.
                 </Timeline.Item>
                 <Timeline.Item>
-                  The interviewer will inform the appllicant via email.{' '}
+                  The interviewer will inform the appllicant via email.{" "}
                 </Timeline.Item>
                 <Timeline.Item>
                   After the interview is done, the result of the application
@@ -123,7 +128,7 @@ export default function Instructions() {
             <Button type="primary">Next</Button>
           </Link>
         </div>
-      </Card>
+      </div>
     </UserWrapper>
   );
 }

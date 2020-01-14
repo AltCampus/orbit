@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 import {
   PageHeader,
   Statistic,
@@ -7,8 +7,11 @@ import {
   Button,
   message,
   Alert,
-  Icon
-} from 'antd';
+  Icon,
+  Tag,
+  Modal
+} from "antd";
+import AcceptModal from "./AcceptModal";
 
 const Content = ({ children, extra }) => {
   return (
@@ -24,44 +27,47 @@ class UserProfile extends Component {
     super(props);
 
     this.state = {
-      user: '',
       acceptloading: false,
       interviewloading: false,
-      loading: false
+      loading: false,
+      selectionDetails: {
+        batch: null,
+        dateOfJoining: null
+      }
     };
   }
 
   acceptUserInterview = async id => {
     try {
       this.setState({ interviewloading: true });
-      const token = JSON.parse(localStorage.getItem('authToken'));
-      const res = await axios.patch(
-        `http://localhost:3000/api/v1/users/interview/${id}`,
-        null,
-        {
-          headers: {
-            authorization: token
-          }
+      const token = JSON.parse(localStorage.getItem("authToken"));
+      const res = await axios.patch(`/api/v1/users/interview/${id}`, null, {
+        headers: {
+          authorization: token
         }
-      );
+      });
       this.setState({ user: res.data.user, interviewloading: false });
+      await this.props.fetchUser();
       message.success(res.data.message);
     } catch (error) {
+      this.setState({ interviewloading: false });
       if (error.response) {
-        this.setState({ interviewloading: false });
-        message.error(error.response.data.message);
+        return message.error(error.response.data.message);
       }
-      console.error(error);
+      message.error("An error occurred");
     }
   };
 
-  handleUserAccept = async id => {
+  handleUserAccept = async data => {
     try {
       this.setState({ acceptloading: true });
-      const token = JSON.parse(localStorage.getItem('authToken'));
+      const token = JSON.parse(localStorage.getItem("authToken"));
       const res = await axios.patch(
-        `http://localhost:3000/api/v1/users/status/${id}`,
-        null,
+        `/api/v1/users/status/${this.props.user._id}`,
+        {
+          selectedForBatch: data.batchNumber,
+          dateOfJoining: new Date(data.joiningDate)
+        },
         {
           headers: {
             authorization: token
@@ -69,47 +75,46 @@ class UserProfile extends Component {
         }
       );
       this.setState({ user: res.data.user, acceptloading: false });
+      await this.props.fetchUser();
       message.success(res.data.message);
     } catch (error) {
       this.setState({ acceptloading: false });
       if (error.response) {
-        message.error(error.response.data.message);
+        return message.error(error.response.data.message);
       }
-      console.error(error);
+      message.error("An error occurred");
     }
   };
 
   handleUserReject = async id => {
     try {
       this.setState({ loading: true });
-      const token = JSON.parse(localStorage.getItem('authToken'));
-      const res = await axios.delete(
-        `http://localhost:3000/api/v1/users/status/${id}`,
-        {
-          headers: {
-            authorization: token
-          }
+      const token = JSON.parse(localStorage.getItem("authToken"));
+      const res = await axios.delete(`/api/v1/users/status/${id}`, {
+        headers: {
+          authorization: token
         }
-      );
+      });
       this.setState({ user: res.data.user, loading: false });
       message.error(res.data.message);
+      await this.props.fetchUser();
     } catch (error) {
       this.setState({ loading: false });
       if (error.response) {
-        message.error(error.response.data.message);
+        return message.error(error.response.data.message);
       }
-      console.error(error);
+      message.error("An error occurred");
     }
   };
 
   extraContent = ({ user }) => {
-    if (user.status === 'reject') return;
+    if (user.status === "reject") return;
     return (
       <div
         style={{
-          display: 'flex',
-          width: 'max-content',
-          justifyContent: 'flex-end'
+          display: "flex",
+          width: "max-content",
+          justifyContent: "flex-end"
         }}
       >
         <Statistic
@@ -121,7 +126,7 @@ class UserProfile extends Component {
         />
         <Statistic
           title="Score"
-          value={10}
+          value={user.totalScore}
           style={{
             marginRight: 32
           }}
@@ -131,7 +136,7 @@ class UserProfile extends Component {
             marginRight: 32
           }}
         >
-          {user.stage > 3 && !user.canScheduleInterview ? (
+          {user.stage === 4 && !user.canScheduleInterview && !user.interview ? (
             <Button
               type="primary"
               loading={this.state.interviewloading}
@@ -140,27 +145,33 @@ class UserProfile extends Component {
               Accept for Interview
             </Button>
           ) : (
-            ''
+            ""
           )}
-          {user.interview ? (
-            <Button
-              type="primary"
-              loading={this.state.acceptloading}
-              onClick={() => this.handleUserAccept(user._id)}
-            >
-              Accept
-            </Button>
+          {user.interview && user.status === "pending" ? (
+            <>
+              {/* <Button
+                type="primary"
+                loading={this.state.acceptloading}
+                onClick={() => this.handleUserAccept(user._id)}
+              >
+                Accept
+              </Button> */}
+              <AcceptModal
+                loading={this.state.acceptloading}
+                acceptUser={values => this.handleUserAccept(values)}
+              />
+            </>
           ) : user.canScheduleInterview ? (
             <Alert
-              style={{ display: 'inline-block', marginRight: '10px' }}
+              style={{ display: "inline-block", marginRight: "10px" }}
               message="Interview is not scheduled yet "
               type="info"
               showIcon
             />
           ) : (
-            ''
+            ""
           )}
-          {user.stage > 3 ? (
+          {user.stage > 3 && user.status === "pending" ? (
             <Button
               type="danger"
               loading={this.state.loading}
@@ -169,118 +180,133 @@ class UserProfile extends Component {
               Reject
             </Button>
           ) : (
-            ''
+            ""
           )}
         </div>
       </div>
     );
   };
-
-  componentDidMount = async () => {
-    this.setState({ user: this.props.user });
+  getStatus = status => {
+    switch (status) {
+      case "pending":
+        return <span className="orange-text">Pending</span>;
+      case "accept":
+        return <span className="green-text">Accepted</span>;
+      case "reject":
+        return <span className="red-text">Rejected</span>;
+      default:
+        return status;
+    }
   };
 
   render() {
-    // console.log(this.props.user.task.html.htmlUrl)
+    const {
+      task = {},
+      quiz,
+      interview,
+      canScheduleInterview,
+      canTakeQuiz
+    } = this.props.user;
+    const { html, codewars } = task;
     return (
       <>
-        {this.state.user && (
+        {this.props.user && (
           <section>
             <PageHeader
               style={{
-                border: '1px solid rgb(235, 237, 240)'
+                border: "1px solid rgb(235, 237, 240)"
               }}
               onBack={() => window.history.back()}
               avatar={{
                 src:
-                  'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4'
+                  "https://avatars1.githubusercontent.com/u/8186664?s=460&v=4"
               }}
               title={this.props.user.name}
             >
-              <Content extra={this.extraContent(this.state)}>
+              <Content extra={this.extraContent(this.props)}>
                 <Descriptions size="small" column={3}>
-                  <Descriptions.Item label="Name">
-                    {this.props.user.name}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Social Profile">
-                    <a href={this.props.user.socialProfile} target="_blank">
-                      {this.props.user.socialProfile}
-                    </a>
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Task One">
-                    {this.props.user.task.html &&
-                    this.props.user.task.html.taskUrl ? (
-                      <div>
-                        <Icon
-                          type="check-circle"
-                          style={{ fontSize: 20, width: '100%' }}
-                          theme="twoTone"
-                        />
-                      </div>
-                    ) : (
-                      <div>
-                        <Icon
-                          type="clock-circle"
-                          style={{ fontSize: 20, width: '100%' }}
-                          theme="twoTone"
-                        />
-                      </div>
-                    )}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Phone number">
-                    <a href={`mailto:${this.props.user.phoneNo}`}>
-                      {this.props.user.phoneNo}
-                    </a>
+                  <Descriptions.Item label="Status">
+                    {this.getStatus(this.props.user.status)}
                   </Descriptions.Item>
                   <Descriptions.Item label="Email">
                     <a href={`mailto:${this.props.user.email}`}>
                       {this.props.user.email}
                     </a>
                   </Descriptions.Item>
-                  <Descriptions.Item label="Task Two">
-                    {this.props.user.task.codewars &&
-                    this.props.user.task.codewars.endTime <
-                      new Date().toISOString() ? (
-                      <div>
-                        <Icon
-                          type="check-circle"
-                          style={{ fontSize: 20, width: '100%' }}
-                          theme="twoTone"
-                        />
-                      </div>
-                    ) : (
-                      <div>
-                        <Icon
-                          type="clock-circle"
-                          style={{ fontSize: 20, width: '100%' }}
-                          theme="twoTone"
-                        />
-                      </div>
-                    )}
+                  <Descriptions.Item label="Phone number">
+                    <a href={`mailto:${this.props.user.phoneNo}`}>
+                      {this.props.user.phoneNo}
+                    </a>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Social Profile">
+                    <a href={this.props.user.socialProfile} target="_blank">
+                      {this.props.user.socialProfile}
+                    </a>
                   </Descriptions.Item>
                   <Descriptions.Item label="Motivation">
                     {this.props.user.motivation}
                   </Descriptions.Item>
-                  <Descriptions.Item label="Status">
-                    {this.props.user.status}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Task Three">
-                    {this.props.user && this.props.user.quiz ? (
-                      <div>
-                        <Icon
-                          type="check-circle"
-                          style={{ fontSize: 20, width: '100%' }}
-                          theme="twoTone"
-                        />
-                      </div>
+                  <Descriptions.Item label="Screener Information Added">
+                    {this.props.user.screener ? (
+                      <span className="green-text">Yes</span>
                     ) : (
-                      <div>
-                        <Icon
-                          type="clock-circle"
-                          style={{ fontSize: 20, width: '100%' }}
-                          theme="twoTone"
-                        />
-                      </div>
+                      <span className="red-text">No</span>
+                    )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="HTML Task">
+                    {html.submitTime ? (
+                      html.score == null ? (
+                        <Tag color="orange">To Be Reviewed</Tag>
+                      ) : (
+                        <Tag color="green">Reviewed</Tag>
+                      )
+                    ) : (
+                      <Tag color="volcano">Not submitted yet</Tag>
+                    )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Codewars Task">
+                    {codewars ? (
+                      new Date(codewars.endTime) < new Date() ? (
+                        codewars.score == null ? (
+                          <Tag color="orange">To Be Reviewed</Tag>
+                        ) : (
+                          <Tag color="green">Reviewed</Tag>
+                        )
+                      ) : (
+                        <Tag color="gold">Timer OnGoing</Tag>
+                      )
+                    ) : (
+                      <Tag color="volcano">Not submitted yet</Tag>
+                    )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Quiz">
+                    {canTakeQuiz ? (
+                      <Tag color="volcano">Not taken quiz yet</Tag>
+                    ) : quiz.submittedTime ? (
+                      quiz.totalScore == null ? (
+                        <Tag color="orange">To Be Reviewed</Tag>
+                      ) : (
+                        <Tag color="green">Reviewed</Tag>
+                      )
+                    ) : (
+                      <Tag color="gold">Quiz not submitted</Tag>
+                    )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Interview">
+                    {interview ? (
+                      new Date(interview.startTime) < new Date() ? (
+                        interview.review ? (
+                          <Tag color="green">Interview Reviewed</Tag>
+                        ) : (
+                          <Tag color="lime">Interview To be Reviewed</Tag>
+                        )
+                      ) : (
+                        <Tag color="gold">Interview Scheduled</Tag>
+                      )
+                    ) : canScheduleInterview ? (
+                      <Tag color="blue">Can Schedule Interview</Tag>
+                    ) : (
+                      <Tag color="volcano">Not Accepted for Interview</Tag>
                     )}
                   </Descriptions.Item>
                 </Descriptions>

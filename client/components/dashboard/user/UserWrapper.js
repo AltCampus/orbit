@@ -33,6 +33,7 @@ function UserWrapper(props) {
         }}
         breakpoint="sm"
         onBreakpoint={broken => {
+          setCollapsed(broken);
           setBroken(broken);
         }}
         trigger={null}
@@ -103,12 +104,37 @@ function UserWrapper(props) {
             <Link to="/task/4">
               <Icon type="video-camera" />
               <span> Interview </span>
-              {user.stage > 4 ? (
-                <Icon
-                  type="check-circle"
-                  theme="filled"
-                  className="menu-icon"
-                />
+              {user.stage === 4 ? (
+                <>
+                  {user.status === "accept" && (
+                    <Icon
+                      type="check-circle"
+                      theme="filled"
+                      className="menu-icon"
+                    />
+                  )}
+                  {user.status === "reject" && (
+                    <Icon
+                      type="close-circle"
+                      theme="filled"
+                      className="menu-icon"
+                    />
+                  )}
+                  {user.status === "pending" &&
+                    (user.interview ? (
+                      <Icon
+                        type="carry-out"
+                        theme="filled"
+                        className="menu-icon"
+                      />
+                    ) : !user.canScheduleInterview ? (
+                      <Icon
+                        type="clock-circle"
+                        theme="filled"
+                        className="menu-icon"
+                      />
+                    ) : null)}
+                </>
               ) : (
                 ""
               )}
@@ -145,23 +171,16 @@ function UserWrapper(props) {
               padding: "16px"
             }}
           />
-          <div
-            style={{
-              marginRight: "20px"
-            }}
-          >
-            <Avatar
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-              size={50}
-              style={{
-                marginRight: "6px"
-              }}
-            />
+          <div>
+            <span className="profile-name">
+              Howdy, <Link to="/profile">{props.user.name}</Link>
+            </span>
+
             <Button
+              className="button-logout"
               onClick={handleClick}
               title="Logout"
               type="danger"
-              shape="circle"
               icon="logout"
             />
           </div>
@@ -170,7 +189,10 @@ function UserWrapper(props) {
           type="navigation"
           current={Number(props.activeKey) - 1}
           style={stepStyle}
-          onChange={index => props.history.push(`/task/${index + 1}`)}
+          onChange={index => {
+            index <= 3 && props.history.push(`/task/${index + 1}`);
+            index > 3 && props.history.push("/profile");
+          }}
         >
           <Step
             status={
@@ -202,16 +224,34 @@ function UserWrapper(props) {
             }
             title="Quiz"
           />
+          {user.status === "reject" && !user.interview && (
+            <Step status={"error"} title="Rejected" />
+          )}
           <Step
+            icon={
+              user.status == "reject" && !user.interview ? (
+                <Icon type="video-camera" />
+              ) : null
+            }
             status={
               Number(user.stage) === 4
-                ? "process"
+                ? user.status === "pending"
+                  ? "process"
+                  : user.interview
+                  ? "finish"
+                  : "wait"
                 : Number(user.stage) < 4
                 ? "wait"
                 : "finish"
             }
             title="Interview"
           />
+          {user.status === "reject" && user.interview && (
+            <Step status={"error"} title="Rejected" />
+          )}
+          {user.status === "accept" && user.interview && (
+            <Step status={"finish"} title="Accepted" />
+          )}
         </Steps>
         <Content
           style={{
@@ -223,7 +263,8 @@ function UserWrapper(props) {
             style={{
               padding: 24,
               background: "#fff",
-              textAlign: "left"
+              textAlign: "left",
+              marginBottom: "1rem"
             }}
           >
             {props.children}

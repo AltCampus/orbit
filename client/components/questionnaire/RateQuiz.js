@@ -2,9 +2,8 @@ import React from "react";
 import axios from "axios";
 import ReviewQuizForm from "./ReviewQuizForm";
 import AdminWrapper from "../dashboard/admin/AdminWrapper";
-import "./RateQuiz.scss";
-
 import { Table, Typography, Button, message, Spin, Icon } from "antd";
+import UserProfile from "../profile/AdminView/UserProfile";
 const { Column } = Table;
 const { Text, Paragraph } = Typography;
 
@@ -15,27 +14,47 @@ class RateQuiz extends React.Component {
       quizId: props.match.params.id,
       quizData: {},
       answers: {},
+      user: null,
+      userId: null,
       loading: true,
       status: {}
     };
   }
 
+  getUser = async _ => {
+    try {
+      this.setState({ loading: true });
+      const response = await axios.get(`/api/v1/users/${this.state.userId}`, {
+        headers: {
+          authorization: JSON.parse(localStorage.authToken)
+        }
+      });
+      this.setState({
+        user: response.data.user,
+        loading: false
+      });
+    } catch (error) {
+      this.setState({ loading: false });
+
+      if (error.response) {
+        return message.error(error.response.data.error);
+      }
+      message.error("An error occurred.");
+    }
+  };
   getQuiz = async _ => {
     try {
-      const res = await axios.get(
-        `http://localhost:3000/api/v1/quiz/${this.state.quizId}`,
-        {
-          headers: {
-            Authorization: JSON.parse(localStorage.authToken)
-          }
+      const res = await axios.get(`/api/v1/quiz/${this.state.quizId}`, {
+        headers: {
+          Authorization: JSON.parse(localStorage.authToken)
         }
-      );
+      });
       this.setState({
         quizData: {
           totalScore: res.data.totalScore,
           maximumScore: res.data.maximumScore
         },
-
+        userId: res.data.user,
         loading: false,
         status: res.data.status,
         answers: res.data.answers.reduce(
@@ -70,6 +89,7 @@ class RateQuiz extends React.Component {
 
   componentDidMount = async () => {
     await this.getQuiz();
+    await this.getUser();
   };
 
   // EditQuestionModal
@@ -91,7 +111,7 @@ class RateQuiz extends React.Component {
       try {
         this.setState({ loading: true });
         const response = await axios.post(
-          `http://localhost:3000/api/v1/quiz/${this.state.quizId}`,
+          `/api/v1/quiz/${this.state.quizId}`,
           requestBody,
           {
             headers: {
@@ -100,7 +120,7 @@ class RateQuiz extends React.Component {
           }
         );
         await this.getQuiz();
-
+        await this.getUser();
         message.success("Your review for quiz has been updated");
         this.setState({
           loading: false
@@ -127,11 +147,11 @@ class RateQuiz extends React.Component {
     return (
       <AdminWrapper>
         <div>
-          <Button
+          {/* <Button
             shape="circle"
             icon="arrow-left"
             onClick={() => window.history.back()}
-          />
+          /> */}
           {this.state.loading ? (
             <div className="loading-div">
               <Spin
@@ -145,6 +165,7 @@ class RateQuiz extends React.Component {
             </div>
           ) : (
             <>
+              {this.state.user && <UserProfile user={this.state.user} />}
               {this.state.status.onGoing &&
                 "User is currently taking the quiz."}
               {this.state.status.timeOut && (

@@ -27,14 +27,11 @@ class QuestionList extends React.Component {
 
   deleteQuestion = async id => {
     try {
-      const res = await axios.delete(
-        `http://localhost:3000/api/v1/questions/${id}`,
-        {
-          headers: {
-            authorization: JSON.parse(localStorage.authToken)
-          }
+      const res = await axios.delete(`/api/v1/questions/${id}`, {
+        headers: {
+          authorization: JSON.parse(localStorage.authToken)
         }
-      );
+      });
       message.info("Question has been deleted");
       await this.getQuestion();
     } catch (error) {
@@ -44,7 +41,7 @@ class QuestionList extends React.Component {
 
   getQuestion = async _ => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/questions/", {
+      const res = await axios.get("/api/v1/questions/", {
         headers: {
           Authorization: JSON.parse(localStorage.authToken)
         }
@@ -82,14 +79,11 @@ class QuestionList extends React.Component {
 
   editQuestion = async id => {
     try {
-      const res = await axios.get(
-        `http://localhost:3000/api/v1/questions/${id}`,
-        {
-          headers: {
-            authorization: JSON.parse(localStorage.authToken)
-          }
+      const res = await axios.get(`/api/v1/questions/${id}`, {
+        headers: {
+          authorization: JSON.parse(localStorage.authToken)
         }
-      );
+      });
       this.setState({
         editingQuestionId: id,
         editingData: {
@@ -193,7 +187,7 @@ class QuestionList extends React.Component {
       }
       try {
         const response = await axios.put(
-          `http://localhost:3000/api/v1/questions/${this.state.editingQuestionId}`,
+          `/api/v1/questions/${this.state.editingQuestionId}`,
           requestBody,
           {
             headers: {

@@ -1,5 +1,6 @@
-import React from 'react';
-import { Result, Button, Paragraph, Typography, Text } from 'antd';
+import React from "react";
+import { Result, Button, Typography } from "antd";
+const { Paragraph, Text } = Typography;
 
 export default function RejectMessage() {
   return (
@@ -14,7 +15,7 @@ export default function RejectMessage() {
             <Text
               strong
               style={{
-                fontSize: 16,
+                fontSize: 16
               }}
             >
               A message for the candidate:

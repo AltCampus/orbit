@@ -1,28 +1,30 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 
-const Mailer = require("../utils/Mailer");
-const User = require('../models/User');
-const Task = require('../models/Task');
-const auth = require('../utils/auth');
+const mailer = require("../utils/mailer");
+const User = require("../models/User");
+const Task = require("../models/Task");
+const auth = require("../utils/auth");
 
 // Get All Users
-router.get('/', auth.verifyAdminToken, async (req, res) => {
+router.get("/", auth.verifyAdminToken, async (req, res) => {
   try {
     const users = await User.find({ isAdmin: false })
       .sort({ createdAt: -1 })
-      .select('-password')
-      .populate('task')
-      .populate('quiz');
-    if (!users) res.status(200).json({ message: 'No users yet', status: true });
+      .select("-password")
+      .populate("task")
+      .populate("quiz")
+      .populate("interview");
+
+    if (!users) res.status(200).json({ message: "No users yet", status: true });
     res.status(200).json({ users, status: true });
   } catch (error) {
-    res.status(400).json({ message: 'Something went wrong', status: false });
+    res.status(400).json({ message: "Something went wrong", status: false });
   }
 });
 
 //current Login User
-router.get('/me', auth.verifyToken, async (req, res) => {
+router.get("/me", auth.verifyToken, async (req, res) => {
   try {
     return res.status(201).json({ status: true, user: req.user });
   } catch (error) {
@@ -31,14 +33,14 @@ router.get('/me', auth.verifyToken, async (req, res) => {
 });
 
 /* POST req from altcampus to orbit and create user */
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   let { name, email, phoneNo, socialProfile, motivation } = req.body;
   try {
     // validations for required profile
     if (!name || !email || !phoneNo || !socialProfile || !motivation) {
       return res.status(400).json({
         status: false,
-        message: 'Please fill all Required data'
+        message: "Please fill all Required data"
       });
     }
     hashMail =
@@ -57,18 +59,23 @@ router.post('/', async (req, res) => {
 
     res.status(201).json({ status: true, user });
 
-    // TODO: UnComment to sending mail once user Register
-    if(process.env.NODE_ENV === 'production') {
-      const mail = Mailer.mail('apply',user.email, user.name, user.hashMail);
+    if (process.env.NODE_ENV === "production") {
+      setTimeout(() => {
+        mailer.mail(
+          "40_MINS_AFTER_APPLYING",
+          user.email,
+          user.name,
+          user.hashMail
+        );
+      }, 1000 * 60 * 40);
     }
-    
   } catch (error) {
     return res.status(400).json({ status: false, error });
   }
 });
 
 //Login route
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     let { email, password } = req.body;
 
@@ -76,7 +83,7 @@ router.post('/login', async (req, res) => {
     if (!email || !password) {
       return res
         .status(400)
-        .json({ status: false, message: 'Please Fill Both Fields' });
+        .json({ status: false, message: "Please Fill Both Fields" });
     }
 
     const user = await User.findOne({ email: req.body.email });
@@ -84,35 +91,39 @@ router.post('/login', async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ status: false, message: 'User not found!!!' });
+        .json({ status: false, message: "Account does not exist" });
     }
 
     if (!user.verifyPassword(password)) {
       return res
         .status(400)
-        .json({ status: false, message: 'Invaild password' });
+        .json({ status: false, message: "Invaild password" });
     }
 
     const authToken = await auth.generateToken(user.id);
 
-    return res.status(200).json({ status: 'success', authToken });
+    return res.status(200).json({ status: "success", authToken });
   } catch (error) {
-    return res.status(400).json({ status: 'failed', error });
+    return res.status(400).json({ status: "failed", error });
   }
 });
 
 // on first login reset Password
-router.post('/:hashMail', async (req, res) => {
+router.post("/:hashMail", async (req, res) => {
   let { password } = req.body;
   if (password.length < 6) {
     return res
       .status(400)
-      .json({ status: true, message: 'Password must contain 6 letter!' });
+      .json({ status: true, message: "Password must contain 6 letter!" });
   } else {
     try {
       let { hashMail } = req.params;
       const user = await User.findOne({ hashMail });
-      if (!user.isProfileClaimed) {
+      if (!user) {
+        return res
+          .status(400)
+          .json({ status: true, message: "Invaild login link" });
+      } else if (!user.isProfileClaimed) {
         user.password = password;
 
         // Start the timer for HTML task and link it to user model.
@@ -129,43 +140,45 @@ router.post('/:hashMail', async (req, res) => {
 
         // Set user profile to be claimed.
         user.isProfileClaimed = true;
-        const updatedUser = await user.save();
-        updatedUser.password = '';
-        return res.status(201).json({ status: true, user: updatedUser });
+        await user.save();
+        return res
+          .status(201)
+          .json({ status: true, message: "Account successfully claimed!" });
       } else {
         return res.status(401).json({
           success: false,
-          message: 'User already Claimed there account'
+          message: "User already Claimed there account"
         });
       }
     } catch (error) {
-      console.log(error);
       return res
         .status(400)
-        .json({ success: false, message: 'Some error from server!' });
+        .json({ success: false, message: "Some error from server!" });
     }
   }
 });
 
 /* GET User Progress */
-router.get('/:id', auth.verifyAdminToken, async (req, res) => {
+router.get("/:id", auth.verifyAdminToken, async (req, res) => {
   const userId = req.params.id;
-  console.log(userId);
   try {
     let user = await User.findById(
       { _id: userId },
-      '-password -hashMail -__v -isAdmin -isProfileClaimed'
-    ).populate('task');
-    console.log('hel');
-    // const task = await Task.findById(user.task)
+      "-password -hashMail -__v -isAdmin -isProfileClaimed"
+    )
+      .populate("task")
+      .populate("interview")
+      .populate("quiz")
+      .populate("screener");
+
     res.status(200).json({ user, status: true });
   } catch (error) {
-    res.status(400).json({ message: 'Something went wrong', status: false });
+    res.status(400).json({ message: "Something went wrong", status: false });
   }
 });
 
 // Admin can accept for interview user route
-router.patch('/interview/:id', auth.verifyAdminToken, async (req, res) => {
+router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
     let user = await User.findOne({ _id: id });
@@ -174,11 +187,14 @@ router.patch('/interview/:id', auth.verifyAdminToken, async (req, res) => {
       user = await user.save();
       user.password = undefined;
       user.hashMail = undefined;
-      return res.status(200).json({
+      res.status(200).json({
         status: true,
         message: `${user.name} now can schedule their interview.`,
         user
       });
+      if (process.env.NODE_ENV === "production") {
+        mailer.mail("SCHEDULE_INTERVIEW_MAIL_ALERT", user.email, user.name);
+      }
     } else {
       return res.status(400).json({
         status: false,
@@ -186,30 +202,52 @@ router.patch('/interview/:id', auth.verifyAdminToken, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res
       .status(400)
-      .json({ status: false, message: 'some error occurs from Server' });
+      .json({ status: false, message: "some error occurs from Server" });
   }
 });
 
 // Admin can accept user route
-router.patch('/status/:id', auth.verifyAdminToken, async (req, res) => {
+router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
-    let user = await User.findOne({ _id: id });
+    let user = await User.findById(id);
     if (user.interview) {
-      user.status = 'accept';
+      let { dateOfJoining, selectedForBatch } = req.body;
+      dateOfJoining = new Date(dateOfJoining);
+      user.status = "accept";
+      const selectionDetails = {
+        batch: selectedForBatch,
+        dateOfJoining: new Date(
+          dateOfJoining.getFullYear(),
+          dateOfJoining.getMonth(),
+          dateOfJoining.getDate(),
+          12,
+          0,
+          0
+        )
+      };
+      user.selectionDetails = selectionDetails;
+
       user = await user.save();
       user.password = undefined;
       user.hashMail = undefined;
-      // TODO: UnComment to sending mail once user accept
-      // const mail = await Mailer.mail('accept',user.email, user.name);
-      return res.status(200).json({
+
+      res.status(200).json({
         status: true,
         message: `${user.name} now eligible for joining AltCampus`,
         user
       });
+
+      if (process.env.NODE_ENV === "production") {
+        mailer.mail(
+          "ACCEPTANCE_MAIL_AFTER_INTERVIEW",
+          user.email,
+          user.name,
+          selectionDetails.dateOfJoining.toDateString()
+        );
+      }
     } else {
       return res.status(400).json({
         status: false,
@@ -217,30 +255,44 @@ router.patch('/status/:id', auth.verifyAdminToken, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     return res
       .status(400)
-      .json({ status: false, message: 'some error occurs from Server' });
+      .json({ status: false, message: "some error occurs from Server" });
   }
 });
 
 // Admin can Reject user route
-router.delete('/status/:id', auth.verifyAdminToken, async (req, res) => {
+router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
     let user = await User.findOne({ _id: id });
     if (user.stage > 3) {
-      user.status = 'reject';
+      user.status = "reject";
       user = await user.save();
       user.password = undefined;
       user.hashMail = undefined;
-      // TODO: UnComment to sending mail once user accept
-      // const mail = await Mailer.mail('reject',user.email, user.name);
-      return res.status(200).json({
+
+      res.status(200).json({
         status: true,
         message: `${user.name} not eligible for joining AltCampus!`,
         user
       });
+
+      if (process.env.NODE_ENV === "production") {
+        if (user.interview) {
+          await mailer.mail(
+            "REJECTION_MAIL_AFTER_INTERVIEW",
+            user.email,
+            user.name
+          );
+        } else {
+          await mailer.mail(
+            "REJECTION_MAIL_BEFORE_INTERVIEW",
+            user.email,
+            user.name
+          );
+        }
+      }
     } else {
       return res.status(400).json({
         status: false,
@@ -248,10 +300,9 @@ router.delete('/status/:id', auth.verifyAdminToken, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     return res
       .status(400)
-      .json({ status: false, message: 'some error occurs from Server' });
+      .json({ status: false, message: "some error occurs from Server" });
   }
 });
 

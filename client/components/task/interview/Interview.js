@@ -1,26 +1,23 @@
 import React from "react";
-import axios from "axios";
 import { connect } from "react-redux";
-import { Icon, Menu, Dropdown, message, Button } from "antd";
+import { Divider, Typography } from "antd";
+const { Title } = Typography;
 
 import UserWrapper from "../../dashboard/user/UserWrapper";
-import ScheduleInterview from "./../../message/ScheduleInterview";
-import ScheduleSuccess from "./../../message/ScheduleSuccess";
+import ScheduleInterview from "./ScheduleInterview";
 import UnderReview from "./../../message/UnderReview";
-import { getCurrentUser } from "../../../actions/users";
+import PendingTask from "../../message/PendingTask";
 
 class Interview extends React.Component {
   render() {
     const { user } = this.props;
     return (
       <UserWrapper activeKey={"4"}>
-        {!user.canScheduleInterview ? (
-          <UnderReview />
-        ) : !user.interview ? (
-          <ScheduleInterview />
-        ) : (
-          <ScheduleSuccess />
-        )}
+        <Title level={2} style={{ marginBottom: 0 }}>
+          Round 4: Interview
+        </Title>
+        <Divider />
+        {user.stage === 4 ? <ScheduleInterview /> : <PendingTask />}
       </UserWrapper>
     );
   }
@@ -32,4 +29,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { getCurrentUser })(Interview);
+export default connect(mapStateToProps)(Interview);
