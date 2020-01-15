@@ -11,7 +11,9 @@ router.get("/", auth.verifyAdminToken, async (req, res) => {
     const questions = await Question.find({});
     return res.status(200).json({ status: true, questions });
   } catch (error) {
-    return res.status(400).json({ status: "failed", error });
+    return res
+      .status(400)
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 router.post("/", auth.verifyAdminToken, async (req, res) => {
@@ -95,11 +97,17 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
       isRandom
     });
 
-    return res.status(200).json({ status: true, newQuestion });
+    return res
+      .status(200)
+      .json({
+        status: true,
+        message: "Your question has been added!",
+        newQuestion
+      });
   } catch (error) {
     return res
       .status(400)
-      .json({ status: "failed", error: "Some Error Occured" });
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 router.get("/:id", auth.verifyAdminToken, async (req, res) => {
@@ -111,7 +119,7 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
         .json({ status: false, error: "Question not found" });
     return res.status(200).json({ status: true, question });
   } catch (error) {
-    res.status(400).json({ status: false, error: "Some Error Occured" });
+    res.status(400).json({ status: false, error: "Something went wrong!" });
   }
 });
 router.put("/:id", auth.verifyAdminToken, async (req, res) => {
@@ -212,7 +220,7 @@ router.put("/:id", auth.verifyAdminToken, async (req, res) => {
 
     res.status(200).json({ status: true, updatedQuestion });
   } catch (error) {
-    res.status(400).json({ status: false, error: "Some Error Occured" });
+    res.status(400).json({ status: false, error: "Something went wrong!" });
   }
 });
 router.delete("/:id", auth.verifyAdminToken, async (req, res) => {
@@ -220,7 +228,7 @@ router.delete("/:id", auth.verifyAdminToken, async (req, res) => {
     const deletedQuestion = await Question.findByIdAndDelete(req.params.id);
     res.status(200).json({ status: true, message: "Question deleted." });
   } catch (error) {
-    res.status(400).json({ status: false, error: "Some Error Occured" });
+    res.status(400).json({ status: false, error: "Something went wrong!" });
   }
 });
 

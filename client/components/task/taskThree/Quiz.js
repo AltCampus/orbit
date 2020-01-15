@@ -53,7 +53,7 @@ class Quiz extends Component {
          */
         message.error(error.response.data.error);
       } else {
-        message.error("An error occured");
+        message.error("Something went wrong!");
       }
       this.setState({ loading: false });
     }
@@ -125,7 +125,7 @@ class Quiz extends Component {
          */
         message.error(error.response.data.error);
       } else {
-        message.error("An error occured");
+        message.error("Something went wrong!");
       }
     }
   };
@@ -176,7 +176,7 @@ class Quiz extends Component {
          */
         message.error(error.response.data.error);
       } else {
-        message.error("An error occured");
+        message.error("Something went wrong!");
       }
       this.setState({ loading: false });
     }
@@ -204,12 +204,12 @@ class Quiz extends Component {
          */
         message.error(error.response.data.error);
       } else {
-        message.error("An error occured");
+        message.error("Something went wrong!");
       }
       this.setState({ loading: false });
     }
   };
-  Better;
+
   render() {
     const currentQuestion =
       this.state.questions &&

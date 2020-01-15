@@ -35,6 +35,9 @@ const taskSchema = new Schema(
       endTime: {
         type: Date
       },
+      forceSubmitTime: {
+        type: Date
+      },
       katasSolved: {
         type: Number
       },

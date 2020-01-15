@@ -42,11 +42,22 @@ const timelineCreator = (action, payload = {}) => {
         description: `${payload.name} submitted their <a href="https://codewars.com/users/${payload.codewarsUsername}" target="_blank">Codewars username</a>.`,
         time: new Date()
       };
+    case "TASK_TWO_ENDED":
+      return {
+        title: "Task 2 Started",
+        description: `${payload.name}'s <a href="https://codewars.com/users/${payload.codewarsUsername}" target="_blank">Codewars task</a> timer ended.`,
+        time: new Date(payload.endTime)
+      };
     case "TASK_TWO_REVIEWED":
       return {
         title: "Task 2 Reviewed",
         description: `<author class="orange-text">${payload.adminName}</author> reviewed their <a href="https://codewars.com/users/${payload.codewarsUsername}" target="_blank">Codewars Profile</a> and assigned ${payload.point} points.`,
         time: new Date()
+      };
+    case "FORCEFULLY_SUBMITTED_TASK_THREE":
+      return {
+        title: "Task 3 Submitted",
+        description: `${payload.name} marked codewars task completed before timer ends.`
       };
     case "STAGE_UPDATED_TO_THREE":
       return {
@@ -105,6 +116,12 @@ const timelineCreator = (action, payload = {}) => {
           ${payload.name} 
           for joining batch ${payload.batch} and requested to arrive by 
           ${new Date(payload.joiningDate).toDateString()}.`,
+        time: new Date()
+      };
+    default:
+      return {
+        title: "Something went wrong!",
+        description: "Something went wrong here!",
         time: new Date()
       };
   }

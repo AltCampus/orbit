@@ -39,7 +39,7 @@ class RateQuiz extends React.Component {
       if (error.response) {
         return message.error(error.response.data.error);
       }
-      message.error("An error occurred.");
+      message.error("Something went wrong!");
     }
   };
   getQuiz = async _ => {
@@ -83,7 +83,7 @@ class RateQuiz extends React.Component {
       });
     } catch (error) {
       this.setState({ quizId: null, loading: false });
-      message.error("Some error occured");
+      message.error("Something went wrong!");
     }
   };
 
@@ -133,7 +133,7 @@ class RateQuiz extends React.Component {
           return message.error("You are not connected to internet!");
         }
         this.setState({ loading: false });
-        message.error("Some error occured");
+        message.error("Something went wrong!");
         this.setState({ visible: false });
       }
     });

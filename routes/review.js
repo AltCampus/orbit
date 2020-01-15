@@ -32,11 +32,13 @@ router.post("/html", auth.verifyAdminToken, async (req, res) => {
         csbLink: newTask.html.taskUrl
       })
     });
-    res.status(200).json({ status: true });
+    res
+      .status(200)
+      .json({ status: true, message: "Your review has been updated!" });
   } catch (error) {
     return res
       .status(400)
-      .json({ status: false, error: "Some Error Occurred" });
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 
@@ -61,11 +63,13 @@ router.post("/codewars", auth.verifyAdminToken, async (req, res) => {
         codewarsUsername: newTask.codewars.codewarsUsername
       })
     });
-    res.status(200).json({ status: true });
+    res
+      .status(200)
+      .json({ status: true, message: "Your review has been updated!" });
   } catch (error) {
     return res
       .status(400)
-      .json({ status: false, error: "Some Error Occurred" });
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 

@@ -1,5 +1,14 @@
 import React from "react";
-import { Table, Divider, Tag, message, Typography } from "antd";
+import {
+  Table,
+  Divider,
+  Tag,
+  message,
+  Typography,
+  Popover,
+  Button
+} from "antd";
+import { Link } from "react-router-dom";
 const { Title } = Typography;
 const { Column } = Table;
 
@@ -31,19 +40,42 @@ function SlotList({ sortedSlots, slots, deleteSlot }) {
                         new Date(a.startTime).valueOf() -
                         new Date(b.startTime).valueOf()
                     )
-                    .map(slot => (
-                      <Tag
-                        closable
-                        color={slot.user ? "green" : ""}
-                        onClose={e => {
-                          e.preventDefault();
-                          deleteSlot(slot._id);
-                        }}
-                      >
-                        {new Date(slot.startTime).toLocaleTimeString()} -{" "}
-                        {new Date(slot.endTime).toLocaleTimeString()}
-                      </Tag>
-                    ))}
+                    .map(slot =>
+                      slot.user ? (
+                        <Popover
+                          content={
+                            <Button href={`/user/${slot.user._id}`}>
+                              Click here to go to profile
+                            </Button>
+                          }
+                          title={slot.user.name}
+                          trigger="click"
+                        >
+                          <Tag
+                            closable
+                            color="green"
+                            onClose={e => {
+                              e.preventDefault();
+                              deleteSlot(slot._id);
+                            }}
+                          >
+                            {new Date(slot.startTime).toLocaleTimeString()} -{" "}
+                            {new Date(slot.endTime).toLocaleTimeString()}
+                          </Tag>
+                        </Popover>
+                      ) : (
+                        <Tag
+                          closable
+                          onClose={e => {
+                            e.preventDefault();
+                            deleteSlot(slot._id);
+                          }}
+                        >
+                          {new Date(slot.startTime).toLocaleTimeString()} -{" "}
+                          {new Date(slot.endTime).toLocaleTimeString()}
+                        </Tag>
+                      )
+                    )}
                 </div>
                 <Divider />
               </div>

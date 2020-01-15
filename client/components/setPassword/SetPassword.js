@@ -42,7 +42,7 @@ class SetPassword extends React.Component {
       this.setState({ isLoading: false });
       error.response && error.response.data.message
         ? message.error(error.response.data.message)
-        : message.error("An error occurred");
+        : message.error("Something went wrong!");
     }
   };
 

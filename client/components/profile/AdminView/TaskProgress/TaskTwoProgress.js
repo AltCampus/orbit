@@ -71,19 +71,6 @@ class RenderCodeWarsProgress extends Component {
       );
       this.setState({ katasSolved: response.data.data.katasSolved });
     } catch (err) {}
-    // try {
-    //   await axios.post(
-    //     `http://localhost:3000/api/v1/task/review/codewars/`,
-    //     { data: props},
-    //     {
-    //       headers: {
-    //         authorization: JSON.parse(localStorage.authToken)
-    //       }
-    //     }
-    //   );
-    // } catch (err) {
-    //   console.log(err, 'P2');
-    // }
   };
 
   componentDidMount() {
@@ -182,43 +169,43 @@ class TaskTwoProgress extends Component {
                 onCreate={this.handleCreate}
                 initialValue={codewars.score}
               />
-              <Descriptions>
-                <Descriptions.Item label="Submission Date">
-                  {new Date(codewars.startTime).toLocaleString().split(",")[0]}
-                </Descriptions.Item>
-              </Descriptions>
-              <Descriptions>
+              <Descriptions column={1}>
                 <Descriptions.Item label="Submission Time">
-                  {new Date(codewars.startTime).toLocaleString().split(",")[1]}
+                  {new Date(codewars.startTime).toDateString() +
+                    " " +
+                    new Date(codewars.startTime).toLocaleTimeString()}{" "}
                 </Descriptions.Item>
-              </Descriptions>
-              <Descriptions>
-                <Descriptions.Item label="End Date">
-                  {new Date(codewars.endTime).toLocaleString().split(",")[0]}
+                <Descriptions.Item label="End time">
+                  {new Date(codewars.endTime).toDateString() +
+                    " " +
+                    new Date(codewars.endTime).toLocaleTimeString()}{" "}
                 </Descriptions.Item>
+                {codewars.forceSubmitTime && (
+                  <Descriptions.Item label="Force Submit Time">
+                    <span className="red-text">
+                      {new Date(codewars.forceSubmitTime).toDateString() +
+                        " " +
+                        new Date(codewars.forceSubmitTime).toLocaleTimeString()}
+                    </span>
+                  </Descriptions.Item>
+                )}
+                >
+                {codewars.katasSolved != null ? (
+                  <Descriptions.Item label="Kata's Solved">
+                    {codewars.katasSolved}
+                  </Descriptions.Item>
+                ) : (
+                  <div>
+                    {codewars.endTime > new Date().toISOString() ? (
+                      <div className="red-text">
+                        Time Limit is not over yet.
+                      </div>
+                    ) : (
+                      <div>{<RenderCodeWarsProgress props={this.props} />}</div>
+                    )}
+                  </div>
+                )}
               </Descriptions>
-              <Descriptions>
-                <Descriptions.Item label="End Time">
-                  {new Date(codewars.endTime).toLocaleString().split(",")[1]}
-                </Descriptions.Item>
-              </Descriptions>
-              {codewars.katasSolved != null ? (
-                <div>
-                  <Descriptions>
-                    <Descriptions.Item label="Kata's Solved">
-                      {codewars.katasSolved}
-                    </Descriptions.Item>
-                  </Descriptions>
-                </div>
-              ) : (
-                <div>
-                  {codewars.endTime > new Date().toISOString() ? (
-                    <div>Time Limit is not over yet.</div>
-                  ) : (
-                    <div>{<RenderCodeWarsProgress props={this.props} />}</div>
-                  )}
-                </div>
-              )}
             </div>
           ) : (
             ""

@@ -32,7 +32,7 @@ function Interview() {
         }, {})
       );
     } catch (error) {
-      message.error("Failed to load slots");
+      message.error("Failed to load slots!");
     }
   };
   const deleteSlot = async id => {
@@ -42,13 +42,13 @@ function Interview() {
           authorization: JSON.parse(localStorage.authToken)
         }
       });
-      message.info("Slot has been deleted");
+      message.info(res.data.message);
       await getSlots();
     } catch (error) {
       if (error.response) {
         return message.error(error.response.data.error);
       }
-      message.error("An error occured");
+      message.error("Something went wrong!");
     }
   };
 

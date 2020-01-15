@@ -12,13 +12,15 @@ import {
   Spin,
   Icon,
   Divider,
-  Typography
+  Typography,
+  Modal
 } from "antd";
-const { Title } = Typography;
 import UserWrapper from "../../dashboard/user/UserWrapper";
 import TaskCompleted from "../taskCompleted/TaskCompleted";
 import CodeWarsTimer from "./CodeWarsTimer";
 import PendingTask from "../../message/PendingTask";
+const { Title } = Typography;
+const { confirm } = Modal;
 class TaskTwo extends Component {
   state = {
     username: "",
@@ -77,7 +79,7 @@ class TaskTwo extends Component {
          */
         message.error(error.response.data.error);
       } else {
-        message.error("An error occured");
+        message.error("Something went wrong!");
       }
     }
   }
@@ -129,9 +131,40 @@ class TaskTwo extends Component {
          */
         message.error(error.response.data.error);
       } else {
-        message.error("An error occured");
+        message.error("Something went wrong!");
       }
     }
+  };
+  forceSubmit = async () => {
+    try {
+      this.setState({ loading: true });
+      const token = JSON.parse(localStorage.getItem("authToken"));
+      const res = await axios.delete(`/api/v1/tasks/2/end`, {
+        headers: {
+          authorization: token
+        }
+      });
+      this.setState({ loading: false });
+      message.success(res.data.message);
+      this.props.userStageUpgrade();
+    } catch (error) {
+      this.setState({ loading: false });
+      if (error.response) {
+        message.error(error.response.data.error);
+      } else {
+        message.error("Something went wrong!");
+      }
+    }
+  };
+  confirmForceSubmit = () => {
+    confirm({
+      title: "Do you want to mark this round as completed?",
+      okType: "danger",
+      okText: "Mark it as completed",
+      onOk: () => {
+        this.forceSubmit();
+      }
+    });
   };
 
   render() {
@@ -159,98 +192,203 @@ class TaskTwo extends Component {
             {this.props.user.stage == 2 && (
               <>
                 {this.state.onGoing ? (
-                  <CodeWarsTimer timeLeft={this.state.timeLeft} />
+                  <>
+                    <div className="codewars-control">
+                      <CodeWarsTimer timeLeft={this.state.timeLeft} />
+                      <div className="text">
+                        If you want to mark this task as completed before timer
+                        ends, You can mark it as completed by clicking button
+                        below!
+                      </div>
+                      <div className="red-text">
+                        <span className="strong-text">Note:</span> Once you
+                        marked it as completed, your progress you've made till
+                        now would be saved. You would be moved to next round and
+                        won't be able to continue this round. Number of katas
+                        you've solved would be captured. The kata you solved
+                        after marking this completed won't be counted.
+                      </div>
+                      <Button type="danger" onClick={this.confirmForceSubmit}>
+                        Mark this task as completed
+                      </Button>
+                    </div>
+                    <div className="task-container">
+                      <Title level={2}>Instructions:-</Title>
+                      <Row>
+                        <Col>
+                          <div>
+                            <ul>
+                              <li>
+                                <p>
+                                  Create an account on{" "}
+                                  <a
+                                    href="https://codewars.com"
+                                    target="_blank"
+                                  >
+                                    https://codewars.com.
+                                  </a>{" "}
+                                  It’s a problem solving platform.
+                                </p>
+                              </li>
+                              <li>
+                                <p>
+                                  A problem on the platform is called a ‘Kata’.
+                                </p>
+                              </li>
+                              <li>
+                                <p>
+                                  This task is to test your problem solving
+                                  skills, critical thinking and ability to
+                                  learn. You have to take help from the
+                                  resources and solve the katas based on your
+                                  learning.
+                                </p>
+                              </li>
+                              <li>
+                                <p>
+                                  Start solving problems on{" "}
+                                  <a
+                                    href="https://codewars.com"
+                                    target="_blank"
+                                  >
+                                    https://codewars.com.
+                                  </a>{" "}
+                                  There is no such limit, or minimum
+                                  requirement, solve as many problems as you can
+                                  before the given date.
+                                </p>
+                              </li>
+                              <li>
+                                <p>
+                                  Send us your codewars profile via email. We
+                                  would like to see the progress you have made.
+                                </p>
+                              </li>
+                            </ul>
+                          </div>
+                          <div>
+                            <h2>Resources</h2>
+                            <ul>
+                              <li>
+                                <p>
+                                  You can learn basics of JS from{" "}
+                                  <a
+                                    href="http://javascript.info"
+                                    target="_blank"
+                                  >
+                                    http://javascript.info{" "}
+                                  </a>
+                                  or{" "}
+                                  <a
+                                    href="https://www.learn-js.org"
+                                    target="_blank"
+                                  >
+                                    https://www.learn-js.org/
+                                  </a>{" "}
+                                  which ever you feel comfortable with.
+                                </p>
+                              </li>
+                              <li>
+                                <p>
+                                  CodeWars, the platform, might take some time
+                                  to getting used to. Try to figure out how to
+                                  use it, Google is your friend. Again, don’t
+                                  give up. YOU CAN DO IT.
+                                </p>
+                              </li>
+                            </ul>
+                          </div>
+                        </Col>
+                      </Row>
+                    </div>
+                  </>
                 ) : (
                   <>
                     <div className="task-container">
                       <Row>
                         <Col>
-                          <Card bordered={false}>
-                            <div>
-                              <ul>
-                                <li>
-                                  <p>
-                                    Create an account on{" "}
-                                    <a
-                                      href="https://codewars.com"
-                                      target="_blank"
-                                    >
-                                      https://codewars.com.
-                                    </a>{" "}
-                                    It’s a problem solving platform.
-                                  </p>
-                                </li>
-                                <li>
-                                  <p>
-                                    A problem on the platform is called a
-                                    ‘Kata’.
-                                  </p>
-                                </li>
-                                <li>
-                                  <p>
-                                    This task is to test your problem solving
-                                    skills, critical thinking and ability to
-                                    learn. You have to take help from the
-                                    resources and solve the katas based on your
-                                    learning.
-                                  </p>
-                                </li>
-                                <li>
-                                  <p>
-                                    Start solving problems on{" "}
-                                    <a
-                                      href="https://codewars.com"
-                                      target="_blank"
-                                    >
-                                      https://codewars.com.
-                                    </a>{" "}
-                                    There is no such limit, or minimum
-                                    requirement, solve as many problems as you
-                                    can before the given date.
-                                  </p>
-                                </li>
-                                <li>
-                                  <p>
-                                    Send us your codewars profile via email. We
-                                    would like to see the progress you have
-                                    made.
-                                  </p>
-                                </li>
-                              </ul>
-                            </div>
-                            <div>
-                              <h2>Resources</h2>
-                              <ul>
-                                <li>
-                                  <p>
-                                    You can learn basics of JS from{" "}
-                                    <a
-                                      href="http://javascript.info"
-                                      target="_blank"
-                                    >
-                                      http://javascript.info{" "}
-                                    </a>
-                                    or{" "}
-                                    <a
-                                      href="https://www.learn-js.org"
-                                      target="_blank"
-                                    >
-                                      https://www.learn-js.org/
-                                    </a>{" "}
-                                    which ever you feel comfortable with.
-                                  </p>
-                                </li>
-                                <li>
-                                  <p>
-                                    CodeWars, the platform, might take some time
-                                    to getting used to. Try to figure out how to
-                                    use it, Google is your friend. Again, don’t
-                                    give up. YOU CAN DO IT.
-                                  </p>
-                                </li>
-                              </ul>
-                            </div>
-                          </Card>
+                          <div>
+                            <ul>
+                              <li>
+                                <p>
+                                  Create an account on{" "}
+                                  <a
+                                    href="https://codewars.com"
+                                    target="_blank"
+                                  >
+                                    https://codewars.com.
+                                  </a>{" "}
+                                  It’s a problem solving platform.
+                                </p>
+                              </li>
+                              <li>
+                                <p>
+                                  A problem on the platform is called a ‘Kata’.
+                                </p>
+                              </li>
+                              <li>
+                                <p>
+                                  This task is to test your problem solving
+                                  skills, critical thinking and ability to
+                                  learn. You have to take help from the
+                                  resources and solve the katas based on your
+                                  learning.
+                                </p>
+                              </li>
+                              <li>
+                                <p>
+                                  Start solving problems on{" "}
+                                  <a
+                                    href="https://codewars.com"
+                                    target="_blank"
+                                  >
+                                    https://codewars.com.
+                                  </a>{" "}
+                                  There is no such limit, or minimum
+                                  requirement, solve as many problems as you can
+                                  before the given date.
+                                </p>
+                              </li>
+                              <li>
+                                <p>
+                                  Send us your codewars profile via email. We
+                                  would like to see the progress you have made.
+                                </p>
+                              </li>
+                            </ul>
+                          </div>
+                          <div>
+                            <h2>Resources</h2>
+                            <ul>
+                              <li>
+                                <p>
+                                  You can learn basics of JS from{" "}
+                                  <a
+                                    href="http://javascript.info"
+                                    target="_blank"
+                                  >
+                                    http://javascript.info{" "}
+                                  </a>
+                                  or{" "}
+                                  <a
+                                    href="https://www.learn-js.org"
+                                    target="_blank"
+                                  >
+                                    https://www.learn-js.org/
+                                  </a>{" "}
+                                  which ever you feel comfortable with.
+                                </p>
+                              </li>
+                              <li>
+                                <p>
+                                  CodeWars, the platform, might take some time
+                                  to getting used to. Try to figure out how to
+                                  use it, Google is your friend. Again, don’t
+                                  give up. YOU CAN DO IT.
+                                </p>
+                              </li>
+                            </ul>
+                          </div>
                         </Col>
                       </Row>
                     </div>

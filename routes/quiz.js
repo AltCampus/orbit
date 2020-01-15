@@ -65,22 +65,25 @@ router.get("/status", auth.verifyToken, async (req, res, next) => {
 
     return res
       .status(403)
-      .json({ error: "Some Error occured. Please try again." });
+      .json({ status: false, error: "Something went wrong!" });
   } catch (error) {
     return res
       .status(403)
-      .json({ error: "Some Error occured. Please try again." });
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 
 router.get("/generate", auth.verifyToken, async (req, res, next) => {
   if (!req.user.canTakeQuiz) {
-    return res.status(403).json({ error: "You've already taken the quiz" });
-  }
-  if (req.user.stage <= 2) {
     return res
       .status(403)
-      .json({ error: "You're not eligible for taking quiz yet." });
+      .json({ status: false, error: "You've already taken the quiz" });
+  }
+  if (req.user.stage <= 2) {
+    return res.status(403).json({
+      status: false,
+      error: "You're not eligible for taking quiz yet."
+    });
   }
 
   // User is eligible to take quiz. We can generate quiz with questions in random order
@@ -127,7 +130,7 @@ router.get("/generate", auth.verifyToken, async (req, res, next) => {
   } catch (error) {
     return res
       .status(403)
-      .json({ error: "Some Error occured. Please try again." });
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 router.get("/current", auth.verifyToken, async (req, res, next) => {
@@ -136,6 +139,7 @@ router.get("/current", auth.verifyToken, async (req, res, next) => {
     const user = await User.findById(req.user.id);
     if (!user.quiz) {
       return res.status(403).send({
+        status: false,
         error: "You've not taken the quiz yet."
       });
     }
@@ -146,10 +150,12 @@ router.get("/current", auth.verifyToken, async (req, res, next) => {
     if (quiz.submittedTime) {
       return res
         .status(403)
-        .json({ error: "You've already submitted the quiz." });
+        .json({ status: false, error: "You've already submitted the quiz." });
     }
     if (quiz.endTime.valueOf() < Date.now()) {
-      return res.status(403).json({ error: "You've ran out of time." });
+      return res
+        .status(403)
+        .json({ status: false, error: "You've ran out of time." });
     }
     let questionsToSend = quiz.questions;
     if (quiz.answers && quiz.answers.length > 0) {
@@ -174,7 +180,7 @@ router.get("/current", auth.verifyToken, async (req, res, next) => {
   } catch (error) {
     return res
       .status(403)
-      .json({ error: "Some Error occured. Please try again." });
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 router.put("/current", auth.verifyToken, async (req, res, next) => {
@@ -184,6 +190,7 @@ router.put("/current", auth.verifyToken, async (req, res, next) => {
     if (!user.quiz) {
       // User have not taken quiz yet.
       return res.status(403).send({
+        status: false,
         error: "You've not taken the quiz yet."
       });
     }
@@ -193,11 +200,13 @@ router.put("/current", auth.verifyToken, async (req, res, next) => {
       // User has already submitted quiz
       return res
         .status(403)
-        .json({ error: "You've already submitted the quiz." });
+        .json({ status: false, error: "You've already submitted the quiz." });
     }
     if (quiz.endTime.valueOf() + 60000 < Date.now()) {
       // User failed to submit quiz on time
-      return res.status(403).json({ error: "You've ran out of time." });
+      return res
+        .status(403)
+        .json({ status: false, error: "You've ran out of time." });
     }
     const questionIds = quiz.questions.map(question => String(question));
     const answers = req.body.answers.map(question => {
@@ -206,13 +215,13 @@ router.put("/current", auth.verifyToken, async (req, res, next) => {
     if (answers.length !== quiz.questions.length) {
       return res
         .status(403)
-        .json({ error: "Please answer all the questions." });
+        .json({ status: false, error: "Please answer all the questions." });
     }
     for (let i = 0; i < answers.length; i++) {
       if (questionIds.indexOf(answers[i].question) === -1) {
         return res
           .status(403)
-          .json({ error: "Don't try to manipulate with data" });
+          .json({ status: false, error: "Don't try to manipulate with data" });
       }
     }
     const answerIds = answers.map(question => question.question);
@@ -220,7 +229,7 @@ router.put("/current", auth.verifyToken, async (req, res, next) => {
       if (answerIds.indexOf(String(quiz.questions[i])) === -1) {
         return res
           .status(403)
-          .json({ error: "Don't try to manipulate with data" });
+          .json({ status: false, error: "Don't try to manipulate with data" });
       }
     }
 
@@ -233,7 +242,7 @@ router.put("/current", auth.verifyToken, async (req, res, next) => {
   } catch (error) {
     return res
       .status(403)
-      .json({ error: "Some Error occured. Please try again." });
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 router.post("/current", auth.verifyToken, async (req, res, next) => {
@@ -243,6 +252,7 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
     if (!user.quiz) {
       // User have not taken quiz yet.
       return res.status(403).send({
+        status: false,
         error: "You've not taken the quiz yet."
       });
     }
@@ -252,11 +262,13 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
       // User has already submitted quiz
       return res
         .status(403)
-        .json({ error: "You've already submitted the quiz." });
+        .json({ status: false, error: "You've already submitted the quiz." });
     }
     if (quiz.endTime.valueOf() + 60000 < Date.now()) {
       // User failed to submit quiz on time
-      return res.status(403).json({ error: "You've ran out of time." });
+      return res
+        .status(403)
+        .json({ status: false, error: "You've ran out of time." });
     }
     const questionIds = quiz.questions.map(question => String(question));
     const answers = req.body.answers
@@ -270,13 +282,13 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
     if (answers.length !== quiz.questions.length) {
       return res
         .status(403)
-        .json({ error: "Please answer all the questions." });
+        .json({ status: false, error: "Please answer all the questions." });
     }
     for (let i = 0; i < answers.length; i++) {
       if (questionIds.indexOf(answers[i].question) === -1) {
         return res
           .status(403)
-          .json({ error: "Don't try to manipulate with data" });
+          .json({ status: false, error: "Don't try to manipulate with data" });
       }
     }
     const answerIds = answers.map(question => question.question);
@@ -284,7 +296,7 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
       if (answerIds.indexOf(String(quiz.questions[i])) === -1) {
         return res
           .status(403)
-          .json({ error: "Don't try to manipulate with data" });
+          .json({ status: false, error: "Don't try to manipulate with data" });
       }
     }
     await Quiz.findByIdAndUpdate(quiz._id, {
@@ -305,7 +317,7 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
   } catch (error) {
     return res
       .status(403)
-      .json({ error: "Some Error occured. Please try again." });
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 router.get("/all", auth.verifyAdminToken, async (req, res) => {
@@ -319,7 +331,7 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
     const quizId = req.params.id;
     let quiz = await Quiz.findById(quizId);
     if (!quiz) {
-      return res.status(404).json({ error: "Quiz not found." });
+      return res.status(404).json({ status: false, error: "Quiz not found." });
     }
     if (quiz.answers) {
       quiz = await Quiz.findById(quizId).populate("answers.question");
@@ -368,7 +380,9 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
       }
     }
   } catch (error) {
-    return res.status(403).json({ error: "Some Error occured" });
+    return res
+      .status(403)
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 
@@ -378,17 +392,20 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
     const quizId = req.params.id;
     let quiz = await Quiz.findById(quizId).populate("questions");
     if (!quiz) {
-      return res.status(404).json({ error: "Quiz not found." });
+      return res.status(404).json({ status: false, error: "Quiz not found." });
     }
     if (!quiz.answers) {
-      return res.status(403).json({
-        error: "Quiz has no answers to rate this quiz submission."
-      });
+      return res
+        .status(403)
+        .json({
+          status: false,
+          error: "Quiz has no answers to rate this quiz submission."
+        });
     }
     if (!quiz.submittedTime) {
       return res
         .status(403)
-        .json({ error: "Quiz was never submitted by user." });
+        .json({ status: false, error: "Quiz was never submitted by user." });
     }
     for (let i = 0; i < quiz.answers.length; i++) {
       quiz.answers[i].score = req.body[quiz.answers[i].question];
@@ -410,7 +427,9 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
     });
     res.status(200).json({ success: true });
   } catch (error) {
-    return res.status(403).json({ error: "Some Error occured" });
+    return res
+      .status(403)
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 module.exports = router;

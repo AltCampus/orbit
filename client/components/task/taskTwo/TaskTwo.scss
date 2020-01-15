@@ -1,0 +1,19 @@
+.codewars-control {
+  padding: 1rem 2rem;
+  border: 1px solid lightgrey;
+  border-radius: 1rem;
+  margin: 1rem 0;
+  .center-text {
+    text-align: center;
+  }
+  .text,
+  .red-text {
+    font-size: 1.1rem;
+  }
+  .timer-container {
+    margin-bottom: 2rem;
+  }
+  .strong-text {
+    font-weight: bold;
+  }
+}

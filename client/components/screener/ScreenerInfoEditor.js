@@ -47,7 +47,7 @@ export class DrawerInfo extends React.Component {
         if (!navigator.onLine) {
           return message.error("You are not connected to internet!");
         }
-        message.error("Some error occured");
+        message.error("Something went wrong!");
       }
     });
   };
