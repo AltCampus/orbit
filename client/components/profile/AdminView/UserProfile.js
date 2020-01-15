@@ -225,6 +225,39 @@ class UserProfile extends Component {
         return status;
     }
   };
+  calculateTimeTaken = user => {
+    const convertInFormat = seconds => {
+      return seconds > 86400 * 7 ? (
+        <span className="orange-text">
+          {`${parseInt(seconds / 86400)} days ${parseInt(seconds / 3600) %
+            24} hours ${parseInt(seconds / 60) % 60} minutes`}
+        </span>
+      ) : (
+        <span className="green-text">
+          {`${parseInt(seconds / 86400)} days ${parseInt(seconds / 3600) %
+            24} hours ${parseInt(seconds / 60) % 60} minutes`}
+        </span>
+      );
+    };
+    const timeTaken =
+      user.stage === 4 ? (
+        convertInFormat(
+          parseInt(
+            (Math.max(
+              new Date(user.quiz && user.quiz.submittedTime).valueOf(),
+              new Date(
+                user.task.codewars && user.task.codewars.endTime
+              ).valueOf()
+            ) -
+              new Date(user.createdAt).valueOf()) /
+              1000
+          )
+        )
+      ) : (
+        <span className="red-text">Not reached yet!</span>
+      );
+    return timeTaken;
+  };
 
   render() {
     const {
@@ -232,7 +265,8 @@ class UserProfile extends Component {
       quiz,
       interview,
       canScheduleInterview,
-      canTakeQuiz
+      canTakeQuiz,
+      createdAt
     } = this.props.user;
     const { html, codewars } = task;
     return (
@@ -280,6 +314,13 @@ class UserProfile extends Component {
                       <span className="red-text">No</span>
                     )}
                   </Descriptions.Item>
+                  <Descriptions.Item label="SignUp Time">
+                    {new Date(createdAt).toDateString() +
+                      " " +
+                      new Date(createdAt).toLocaleTimeString()}
+                  </Descriptions.Item>
+                </Descriptions>
+                <Descriptions column={2}>
                   <Descriptions.Item label="HTML Task">
                     {html.submitTime ? (
                       html.score == null ? (
@@ -318,6 +359,9 @@ class UserProfile extends Component {
                     ) : (
                       <Tag color="gold">Quiz not submitted</Tag>
                     )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Time Taken to reach stage 4">
+                    {this.calculateTimeTaken(this.props.user)}
                   </Descriptions.Item>
                   <Descriptions.Item label="Interview">
                     {interview ? (

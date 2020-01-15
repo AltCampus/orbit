@@ -155,24 +155,35 @@ const columns = [
     // sortDirections: ["descend"],
     render: (time, user) => {
       const convertInFormat = seconds => {
-        return `${parseInt(seconds / 86400)} days ${parseInt(seconds / 3600) %
-          24} hours ${parseInt(seconds / 60) % 60} minutes`;
+        return seconds > 86400 * 7 ? (
+          <Tag color="blue">
+            {`${parseInt(seconds / 86400)} days ${parseInt(seconds / 3600) %
+              24} hours ${parseInt(seconds / 60) % 60} minutes`}
+          </Tag>
+        ) : (
+          <Tag color="green">
+            {`${parseInt(seconds / 86400)} days ${parseInt(seconds / 3600) %
+              24} hours ${parseInt(seconds / 60) % 60} minutes`}
+          </Tag>
+        );
       };
       const timeTaken =
-        user.stage === 4
-          ? convertInFormat(
-              parseInt(
-                (Math.max(
-                  new Date(user.quiz && user.quiz.submittedTime).valueOf(),
-                  new Date(
-                    user.task.codewars && user.task.codewars.endTime
-                  ).valueOf()
-                ) -
-                  new Date(time).valueOf()) /
-                  1000
-              )
+        user.stage === 4 ? (
+          convertInFormat(
+            parseInt(
+              (Math.max(
+                new Date(user.quiz && user.quiz.submittedTime).valueOf(),
+                new Date(
+                  user.task.codewars && user.task.codewars.endTime
+                ).valueOf()
+              ) -
+                new Date(time).valueOf()) /
+                1000
             )
-          : "Not completed yet!";
+          )
+        ) : (
+          <Tag color="volcano">Not completed yet!</Tag>
+        );
       return (
         <div
           style={{
