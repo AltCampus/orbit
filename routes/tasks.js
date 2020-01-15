@@ -9,11 +9,13 @@ const Quiz = require("../models/Quiz");
 const Interview = require("../models/Interview");
 const auth = require("../utils/auth");
 const config = require("../utils/config");
+const Timeline = require("../models/Timeline");
+const timelineCreator = require("../utils/timelineCreator");
 
 router.get("/all/status", auth.verifyToken, async (req, res) => {
   try {
     const task = await Task.findById(req.user.task);
-    const stageUpdated = false;
+    let stageUpdated = false;
     if (req.user.stage === 1) {
       // user has not submitted any task yet
       return res.status(200).json({
@@ -47,6 +49,12 @@ router.get("/all/status", auth.verifyToken, async (req, res) => {
           // Timer is complete. User is now on stage 3
           await User.findByIdAndUpdate(req.user.id, { stage: 3 });
           req.user.stage = 3;
+          await Timeline.create({
+            user: req.user._id,
+            ...timelineCreator("STAGE_UPDATED_TO_THREE", {
+              name: req.user.name
+            })
+          });
           stageUpdated = true;
         } else {
           // Timer is currently running
@@ -342,6 +350,7 @@ router.get("/all/status", auth.verifyToken, async (req, res) => {
       }
     });
   } catch (error) {
+    console.log(error);
     return res
       .status(400)
       .json({ status: false, error: "Some Error Occurred" });
@@ -379,6 +388,14 @@ router.post("/1/save", auth.verifyToken, async (req, res) => {
 
     // Update user stage to 2
     await User.findByIdAndUpdate(req.user.id, { stage: 2 });
+    // Add to timeline that task 1 was submitted
+    await Timeline.create({
+      user: req.user._id,
+      ...timelineCreator("TASK_ONE_SUBMITTED", {
+        name: req.user.name,
+        csbLink: url
+      })
+    });
     return res.status(201).json({ status: true, success: true });
   } catch (error) {
     return res.status(400).json({ status: false, error: "Some Error Occured" });
@@ -408,6 +425,10 @@ router.get("/2/status", auth.verifyToken, async (req, res) => {
   if (req.user.stage === 2 && task.codewars.endTime < Date.now()) {
     // Update user stage to 3
     await User.findByIdAndUpdate(req.user.id, { stage: 3 });
+    await Timeline.create({
+      user: req.user._id,
+      ...timelineCreator("STAGE_UPDATED_TO_THREE", { name: req.user.name })
+    });
     return res.status(200).json({
       stageUpdated: true,
       onGoing: false,
@@ -458,6 +479,13 @@ router.post("/2/save", auth.verifyToken, (req, res) => {
               ...codewarsTask
             };
             await newTask.save();
+            await Timeline.create({
+              user: req.user._id,
+              ...timelineCreator("TASK_TWO_STARTED", {
+                name: req.user.name,
+                codewarsUsername: username
+              })
+            });
 
             return res.status(201).json({
               status: true,

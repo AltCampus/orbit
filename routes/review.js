@@ -4,6 +4,8 @@ const router = express.Router();
 const Task = require("../models/Task");
 const auth = require("../utils/auth");
 const calculateScore = require("../utils/calculateScore");
+const Timeline = require("../models/Timeline");
+const timelineCreator = require("../utils/timelineCreator");
 
 // Save Score & Review
 
@@ -22,6 +24,14 @@ router.post("/html", auth.verifyAdminToken, async (req, res) => {
     };
     await newTask.save();
     await calculateScore(newTask.user);
+    await Timeline.create({
+      user: newTask.user,
+      ...timelineCreator("TASK_ONE_REVIEWED", {
+        adminName: req.user.name,
+        point: score,
+        csbLink: newTask.html.taskUrl
+      })
+    });
     res.status(200).json({ status: true });
   } catch (error) {
     return res
@@ -43,6 +53,14 @@ router.post("/codewars", auth.verifyAdminToken, async (req, res) => {
     };
     await newTask.save();
     await calculateScore(newTask.user);
+    await Timeline.create({
+      user: newTask.user,
+      ...timelineCreator("TASK_TWO_REVIEWED", {
+        adminName: req.user.name,
+        point: score,
+        codewarsUsername: newTask.codewars.codewarsUsername
+      })
+    });
     res.status(200).json({ status: true });
   } catch (error) {
     return res

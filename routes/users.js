@@ -4,6 +4,8 @@ var router = express.Router();
 const mailer = require("../utils/mailer");
 const User = require("../models/User");
 const Task = require("../models/Task");
+const Timeline = require("../models/Timeline");
+const timelineCreator = require("../utils/timelineCreator");
 const auth = require("../utils/auth");
 
 // Get All Users
@@ -56,10 +58,13 @@ router.post("/", async (req, res) => {
       motivation,
       hashMail
     });
-
-    res.status(201).json({ status: true, user });
-
+    await Timeline.create({
+      user: user._id,
+      ...timelineCreator("USER_REGISTERED", { name: user.name })
+    });
     if (process.env.NODE_ENV === "production") {
+      res.status(201).json({ status: true });
+
       setTimeout(() => {
         mailer.mail(
           "40_MINS_AFTER_APPLYING",
@@ -68,9 +73,13 @@ router.post("/", async (req, res) => {
           user.hashMail
         );
       }, 1000 * 60 * 40);
+    } else {
+      res.status(201).json({ status: true, user });
     }
   } catch (error) {
-    return res.status(400).json({ status: false, error });
+    return res
+      .status(400)
+      .json({ status: false, message: "Something went wrong!" });
   }
 });
 
@@ -141,6 +150,10 @@ router.post("/:hashMail", async (req, res) => {
         // Set user profile to be claimed.
         user.isProfileClaimed = true;
         await user.save();
+        await Timeline.create({
+          user: user._id,
+          ...timelineCreator("ACCOUNT_CLAIMED", { name: user.name })
+        });
         return res
           .status(201)
           .json({ status: true, message: "Account successfully claimed!" });
@@ -170,9 +183,10 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
       .populate("interview")
       .populate("quiz")
       .populate("screener");
-
-    res.status(200).json({ user, status: true });
+    let timeline = await Timeline.find({ user: userId });
+    res.status(200).json({ status: true, user, timeline });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: "Something went wrong", status: false });
   }
 });
@@ -192,11 +206,19 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
       user = await user.save();
       user.password = undefined;
       user.hashMail = undefined;
+      await Timeline.create({
+        user: user._id,
+        ...timelineCreator("ACCEPTED_FOR_INTERVIEW", {
+          name: user.name,
+          adminName: req.user.name
+        })
+      });
       res.status(200).json({
         status: true,
         message: `${user.name} can schedule their interview now.`,
         user
       });
+
       if (process.env.NODE_ENV === "production") {
         mailer.mail("SCHEDULE_INTERVIEW_MAIL_ALERT", user.email, user.name);
       }
@@ -239,9 +261,19 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
       user.password = undefined;
       user.hashMail = undefined;
 
+      await Timeline.create({
+        user: user._id,
+        ...timelineCreator("APPLICATION_ACCEPTED", {
+          name: user.name,
+          adminName: req.user.name,
+          joiningDate: selectionDetails.dateOfJoining,
+          batch: selectionDetails.batch
+        })
+      });
+
       res.status(200).json({
         status: true,
-        message: `${user.name} now eligible for joining AltCampus`,
+        message: `${user.name} accepted for joining AltCampus`,
         user
       });
 
@@ -277,10 +309,16 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
       user.password = undefined;
       user.hashMail = undefined;
 
+      await Timeline.create({
+        user: user._id,
+        ...timelineCreator("APPLICATION_REJECTED", {
+          name: user.name,
+          adminName: req.user.name
+        })
+      });
       res.status(200).json({
         status: true,
-        message: `${user.name} not eligible for joining AltCampus!`,
-        user
+        message: `${user.name} rejected for joining AltCampus!`
       });
 
       if (process.env.NODE_ENV === "production") {
@@ -305,6 +343,7 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
     return res
       .status(400)
       .json({ status: false, message: "some error occurs from Server" });

@@ -7,6 +7,7 @@ import ScreenerInfoEditor from "../../screener/ScreenerInfoEditor";
 import { Icon, message } from "antd";
 import AdminWrapper from "../../dashboard/admin/AdminWrapper";
 import ScreenerInfo from "../../screener/ScreenerInfo";
+import UserTimeline from "./UserTimeline";
 
 export class AdminView extends Component {
   constructor(props) {
@@ -32,6 +33,9 @@ export class AdminView extends Component {
       );
       this.setState({
         user: response.data.user,
+        timeline: response.data.timeline.sort(
+          (a, b) => new Date(a.time) - new Date(b.time)
+        ),
         loading: false
       });
     } catch (error) {
@@ -61,6 +65,7 @@ export class AdminView extends Component {
               <UserProgress user={this.state.user} fetchUsers={this.getUser} />
             </div>
             <ScreenerInfo user={this.state.user} fetchUser={this.getUser} />
+            <UserTimeline timeline={this.state.timeline} />
           </section>
         )}
       </AdminWrapper>
