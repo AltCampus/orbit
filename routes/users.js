@@ -186,7 +186,6 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
     let timeline = await Timeline.find({ user: userId });
     res.status(200).json({ status: true, user, timeline });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ message: "Something went wrong", status: false });
   }
 });
@@ -343,7 +342,6 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     return res
       .status(400)
       .json({ status: false, message: "some error occurs from Server" });

@@ -71,19 +71,6 @@ class RenderCodeWarsProgress extends Component {
       );
       this.setState({ katasSolved: response.data.data.katasSolved });
     } catch (err) {}
-    // try {
-    //   await axios.post(
-    //     `http://localhost:3000/api/v1/task/review/codewars/`,
-    //     { data: props},
-    //     {
-    //       headers: {
-    //         authorization: JSON.parse(localStorage.authToken)
-    //       }
-    //     }
-    //   );
-    // } catch (err) {
-    //   console.log(err, 'P2');
-    // }
   };
 
   componentDidMount() {

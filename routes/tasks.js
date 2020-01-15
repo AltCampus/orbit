@@ -358,10 +358,9 @@ router.get("/all/status", auth.verifyToken, async (req, res) => {
       }
     });
   } catch (error) {
-    console.log(error);
     return res
       .status(400)
-      .json({ status: false, error: "Some Error Occurred" });
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 router.post("/1/save", auth.verifyToken, async (req, res) => {
@@ -406,7 +405,9 @@ router.post("/1/save", auth.verifyToken, async (req, res) => {
     });
     return res.status(201).json({ status: true, success: true });
   } catch (error) {
-    return res.status(400).json({ status: false, error: "Some Error Occured" });
+    return res
+      .status(400)
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 
@@ -445,7 +446,7 @@ router.get("/2/status", auth.verifyToken, async (req, res) => {
         completed: true
       });
     }
-    res.json({ error: "Some error occured." });
+    res.json({ error: "Something went wrong!" });
   } catch (error) {
     return res
       .status(400)
@@ -511,7 +512,7 @@ router.post("/2/save", auth.verifyToken, (req, res) => {
           } catch (error) {
             return res
               .status(400)
-              .json({ status: false, error: "Some Error Occured" });
+              .json({ status: false, error: "Something went wrong!" });
           }
         } else {
           // Username is invalid
@@ -524,7 +525,7 @@ router.post("/2/save", auth.verifyToken, (req, res) => {
     .on("error", e => {
       return res
         .status(400)
-        .json({ status: false, error: "Some Error Occurred" });
+        .json({ status: false, error: "Something went wrong!" });
     });
 });
 
@@ -599,7 +600,9 @@ router.post("/two/katas", auth.verifyAdminToken, (req, res) => {
         .status(200)
         .json({ data: { katasSolved }, status: true, message: "success" });
     } catch (error) {
-      return res.status(400).json({ status: false });
+      return res
+        .status(400)
+        .json({ status: false, error: "Something went wrong!" });
     }
   };
   getKatas();

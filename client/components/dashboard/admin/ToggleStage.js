@@ -122,18 +122,6 @@ const columns = [
       { text: "More than a week", value: 2 }
     ],
     onFilter: (value, user) => {
-      console.log(
-        user.stage === 4 &&
-          parseInt(
-            Math.max(
-              new Date(user.quiz && user.quiz.submittedTime).valueOf(),
-              new Date(
-                user.task.codewars && user.task.codewars.endTime
-              ).valueOf()
-            ) - new Date(user.createdAt).valueOf()
-          ),
-        86400 * 7 * 1000
-      );
       return (
         (user.stage === 4
           ? parseInt(
