@@ -183,13 +183,18 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
     const { id } = req.params;
     let user = await User.findOne({ _id: id });
     if (user.stage > 3) {
+      if (user.canScheduleInterview) {
+        return res.status(400).json({
+          message: `${user.name} has already been accepted for interview!`
+        });
+      }
       user.canScheduleInterview = true;
       user = await user.save();
       user.password = undefined;
       user.hashMail = undefined;
       res.status(200).json({
         status: true,
-        message: `${user.name} now can schedule their interview.`,
+        message: `${user.name} can schedule their interview now.`,
         user
       });
       if (process.env.NODE_ENV === "production") {

@@ -46,15 +46,17 @@ class UserProfile extends Component {
           authorization: token
         }
       });
-      this.setState({ user: res.data.user, interviewloading: false });
+      this.setState({ interviewloading: false });
       await this.props.fetchUser();
       message.success(res.data.message);
     } catch (error) {
       this.setState({ interviewloading: false });
       if (error.response) {
-        return message.error(error.response.data.message);
+        message.error(error.response.data.message);
+      } else {
+        message.error("Something went wrong!");
       }
-      message.error("An error occurred");
+      if (navigator.onLine) await this.props.fetchUser();
     }
   };
 
@@ -74,15 +76,17 @@ class UserProfile extends Component {
           }
         }
       );
-      this.setState({ user: res.data.user, acceptloading: false });
+      this.setState({ acceptloading: false });
       await this.props.fetchUser();
       message.success(res.data.message);
     } catch (error) {
       this.setState({ acceptloading: false });
       if (error.response) {
-        return message.error(error.response.data.message);
+        message.error(error.response.data.message);
+      } else {
+        message.error("Something went wrong!");
       }
-      message.error("An error occurred");
+      if (navigator.onLine) await this.props.fetchUser();
     }
   };
 
@@ -95,15 +99,17 @@ class UserProfile extends Component {
           authorization: token
         }
       });
-      this.setState({ user: res.data.user, loading: false });
+      this.setState({ loading: false });
       message.error(res.data.message);
       await this.props.fetchUser();
     } catch (error) {
       this.setState({ loading: false });
       if (error.response) {
-        return message.error(error.response.data.message);
+        message.error(error.response.data.message);
+      } else {
+        message.error("Something went wrong!");
       }
-      message.error("An error occurred");
+      if (navigator.onLine) await this.props.fetchUser();
     }
   };
 
