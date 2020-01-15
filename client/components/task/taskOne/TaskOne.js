@@ -64,7 +64,7 @@ class TaskOne extends Component {
          */
         message.error(error.response.data.error);
       } else {
-        message.error("An error occured");
+        message.error("Something went wrong!");
       }
     }
   };

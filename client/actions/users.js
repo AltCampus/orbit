@@ -30,7 +30,7 @@ export const getCurrentUser = (invalidToken, cb) => {
   if (!localStorage.authToken) {
     return;
   }
-  return async (dispatch) => {
+  return async dispatch => {
     try {
       await dispatch({
         type: GET_USER_PENDING
@@ -50,15 +50,15 @@ export const getCurrentUser = (invalidToken, cb) => {
       }
     } catch (error) {
       if (error.response) {
-        await invalidToken(error.response.data.message);
+        await invalidToken(error.response.data.error);
       }
       dispatch({ type: NO_TOKEN });
     }
   };
 };
 
-export const userLogin = (data) => {
-  return async (dispatch) => {
+export const userLogin = data => {
+  return async dispatch => {
     try {
       await dispatch({ type: USER_LOGIN_PENDING });
 
@@ -74,9 +74,9 @@ export const userLogin = (data) => {
       dispatch({ type: USER_LOGIN_FAILED });
       if (error.response) {
         dispatch({ type: SET_ERROR });
-        return message.error(error.response.data.message);
+        return message.error(error.response.data.error);
       }
-      message.error("An error occurred");
+      message.error("Something went wrong!");
     }
   };
 };
@@ -87,7 +87,7 @@ export const userStageUpgrade = () => {
   };
 };
 
-export const userLogOut = (callback) => {
+export const userLogOut = callback => {
   // Clear the localStorage
   localStorage.clear();
   // Invoke the callback function

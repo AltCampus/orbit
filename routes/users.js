@@ -94,7 +94,7 @@ router.post("/login", async (req, res) => {
     if (!email || !password) {
       return res
         .status(400)
-        .json({ status: false, message: "Please Fill Both Fields!" });
+        .json({ status: false, error: "Please Fill Both Fields!" });
     }
 
     const user = await User.findOne({ email: req.body.email });
@@ -102,13 +102,13 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ status: false, message: "Account does not exist!" });
+        .json({ status: false, error: "Account does not exist!" });
     }
 
     if (!user.verifyPassword(password)) {
       return res
         .status(400)
-        .json({ status: false, message: "Invaild password!" });
+        .json({ status: false, error: "Invalid password. Please try again!" });
     }
 
     const authToken = await auth.generateToken(user.id);
@@ -191,7 +191,7 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
     let timeline = await Timeline.find({ user: userId });
     res.status(200).json({ status: true, user, timeline });
   } catch (error) {
-    res.status(400).json({ message: "Something went wrong!", status: false });
+    res.status(400).json({ error: "Something went wrong!", status: false });
   }
 });
 

@@ -35,7 +35,7 @@ class QuestionList extends React.Component {
       message.info("Question has been deleted");
       await this.getQuestion();
     } catch (error) {
-      message.error("An error occured");
+      message.error("Something went wrong!");
     }
   };
 
@@ -48,7 +48,7 @@ class QuestionList extends React.Component {
       });
       this.setState({ data: res.data.questions });
     } catch (error) {
-      message.error("Some error occured");
+      message.error("Something went wrong!");
     }
   };
 
@@ -117,7 +117,7 @@ class QuestionList extends React.Component {
         visible: true
       });
     } catch (error) {
-      message.error("An error occured");
+      message.error("Something went wrong!");
     }
   };
   handleCancel = () => {
@@ -212,7 +212,7 @@ class QuestionList extends React.Component {
         if (!navigator.onLine) {
           return message.error("You are not connected to internet!");
         }
-        message.error("Some error occured");
+        message.error("Something went wrong!");
       }
     });
   };

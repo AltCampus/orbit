@@ -454,7 +454,7 @@ router.get("/2/status", auth.verifyToken, async (req, res) => {
         completed: true
       });
     }
-    res.json({ error: "Something went wrong!" });
+    res.status(400).json({ error: "Something went wrong!" });
   } catch (error) {
     return res
       .status(400)
@@ -604,13 +604,11 @@ router.post("/two/katas", auth.verifyAdminToken, (req, res) => {
         await newTask.save();
       } catch (err) {}
 
-      return res
-        .status(200)
-        .json({
-          data: { katasSolved },
-          status: true,
-          message: "Successfully fetch data from codewars API!"
-        });
+      return res.status(200).json({
+        data: { katasSolved },
+        status: true,
+        message: "Successfully fetch data from codewars API!"
+      });
     } catch (error) {
       return res
         .status(400)

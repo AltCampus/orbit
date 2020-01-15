@@ -97,7 +97,13 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
       isRandom
     });
 
-    return res.status(200).json({ status: true, newQuestion });
+    return res
+      .status(200)
+      .json({
+        status: true,
+        message: "Your question has been added!",
+        newQuestion
+      });
   } catch (error) {
     return res
       .status(400)

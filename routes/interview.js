@@ -180,7 +180,7 @@ Router.put("/review/:id", auth.verifyAdminToken, async (req, res) => {
       await calculateScore(interview.user);
       return res.json({
         success: true,
-        message: "Review Updated."
+        message: "Your review has been updated!"
       });
     } else {
       return res.status(403).json({
@@ -264,7 +264,9 @@ Router.delete("/:id", auth.verifyAdminToken, async (req, res) => {
     const interview = await Interview.findById(req.params.id);
     if (interview.user == null) {
       await Interview.findByIdAndDelete(req.params.id);
-      return res.status(200).json({ status: true, message: "Slot deleted." });
+      return res
+        .status(200)
+        .json({ status: true, message: "Slot has been deleted." });
     } else {
       return res
         .status(400)

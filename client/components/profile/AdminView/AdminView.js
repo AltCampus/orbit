@@ -44,7 +44,7 @@ export class AdminView extends Component {
       if (error.response) {
         return message.error(error.response.data.error);
       }
-      message.error("An error occurred.");
+      message.error("Something went wrong!");
     }
   };
   render() {

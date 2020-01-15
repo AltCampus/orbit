@@ -250,18 +250,20 @@ class NewQuestionModal extends React.Component {
           }
         });
 
-        message.success("Your question has been added");
+        message.success(response.data.message);
         this.props.getQuestion();
         form.resetFields();
         this.setState({ visible: false });
       } catch (error) {
         if (error.response) {
-          return message.error(error.response.message);
+          return message.error(
+            error.response.data.message || error.response.data.error
+          );
         }
-        if (navigator.online) {
+        if (!navigator.onLine) {
           return message.error("You are not connected to internet!");
         }
-        message.error("Some error occured");
+        message.error("Something went wrong!");
       }
     });
   };

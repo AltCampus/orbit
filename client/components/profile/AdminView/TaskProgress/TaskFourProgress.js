@@ -91,13 +91,13 @@ const TaskFourProgress = ({ user, fetchUser }) => {
             }
           }
         );
-        message.success("Your review has been updated");
+        message.success(response.data.message);
         await fetchUser();
       } catch (error) {
         if (error.response) {
           return message.error(error.response.data.error);
         }
-        message.error("Some error occured");
+        message.error("Something went wrong!");
       }
     });
   };
