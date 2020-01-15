@@ -76,7 +76,7 @@ const columns = [
   {
     title: "Score",
     dataIndex: "totalScore",
-    key: "_id",
+    key: "totalScore",
     sorter: (objA, objB) => objA.totalScore - objB.totalScore,
     sortDirections: ["ascend", "descend"]
   },
@@ -111,6 +111,80 @@ const columns = [
           new Date(time).toLocaleTimeString()}
       </div>
     )
+  },
+  {
+    title: "Time Taken to Reach Stage 4",
+    dataIndex: "createdAt",
+    key: "timeTakenToReachStage",
+    filters: [
+      { text: "Not completed yet", value: 0 },
+      { text: "Less than a week", value: 1 },
+      { text: "More than a week", value: 2 }
+    ],
+    onFilter: (value, user) => {
+      console.log(
+        user.stage === 4 &&
+          parseInt(
+            Math.max(
+              new Date(user.quiz && user.quiz.submittedTime).valueOf(),
+              new Date(
+                user.task.codewars && user.task.codewars.endTime
+              ).valueOf()
+            ) - new Date(user.createdAt).valueOf()
+          ),
+        86400 * 7 * 1000
+      );
+      return (
+        (user.stage === 4
+          ? parseInt(
+              Math.max(
+                new Date(user.quiz && user.quiz.submittedTime).valueOf(),
+                new Date(
+                  user.task.codewars && user.task.codewars.endTime
+                ).valueOf()
+              ) - new Date(user.createdAt).valueOf()
+            ) >
+            86400 * 7 * 1000
+            ? 2
+            : 1
+          : 0) === value
+      );
+    },
+    // sorter: (objA, objB) =>
+    //   Number(new Date(objB.createdAt)) - Number(new Date(objA.createdAt)),
+    // sortDirections: ["descend"],
+    render: (time, user) => {
+      const convertInFormat = seconds => {
+        return `${parseInt(seconds / 86400)} days ${parseInt(seconds / 3600) %
+          24} hours ${parseInt(seconds / 60) % 60} minutes`;
+      };
+      const timeTaken =
+        user.stage === 4
+          ? convertInFormat(
+              parseInt(
+                (Math.max(
+                  new Date(user.quiz && user.quiz.submittedTime).valueOf(),
+                  new Date(
+                    user.task.codewars && user.task.codewars.endTime
+                  ).valueOf()
+                ) -
+                  new Date(time).valueOf()) /
+                  1000
+              )
+            )
+          : "Not completed yet!";
+      return (
+        <div
+          style={{
+            wordWrap: "break-word",
+            wordBreak: "break-word",
+            width: "max-content"
+          }}
+        >
+          {timeTaken}
+        </div>
+      );
+    }
   },
   {
     title: "Task 1 Status",
