@@ -64,7 +64,7 @@ Router.get("/", auth.verifyToken, async (req, res) => {
   try {
     const data = await Interview.find({
       user: null,
-      startTime: { $gt: Date.now() }
+      startTime: { $gt: new Date(Date.now() + 86400 * 1000) }
     });
     res.json({ availableSlots: data });
   } catch (error) {
