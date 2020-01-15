@@ -12,6 +12,7 @@ import {
   Modal
 } from "antd";
 import AcceptModal from "./AcceptModal";
+const { confirm } = Modal;
 
 const Content = ({ children, extra }) => {
   return (
@@ -113,6 +114,26 @@ class UserProfile extends Component {
     }
   };
 
+  acceptUserInterviewConfirm = id => {
+    confirm({
+      title: "Do you want to accept this user for interview?",
+      onOk: () => {
+        this.acceptUserInterview(id);
+      }
+    });
+  };
+
+  rejectUserConfirm = id => {
+    confirm({
+      title: "Do you want to reject this user?",
+      okType: "danger",
+      okText: "Reject",
+      onOk: () => {
+        this.handleUserReject(id);
+      }
+    });
+  };
+
   extraContent = ({ user }) => {
     if (user.status === "reject") return;
     return (
@@ -146,7 +167,7 @@ class UserProfile extends Component {
             <Button
               type="primary"
               loading={this.state.interviewloading}
-              onClick={() => this.acceptUserInterview(user._id)}
+              onClick={() => this.acceptUserInterviewConfirm(user._id)}
             >
               Accept for Interview
             </Button>
@@ -181,7 +202,7 @@ class UserProfile extends Component {
             <Button
               type="danger"
               loading={this.state.loading}
-              onClick={() => this.handleUserReject(user._id)}
+              onClick={() => this.rejectUserConfirm(user._id)}
             >
               Reject
             </Button>
@@ -230,7 +251,7 @@ class UserProfile extends Component {
               title={this.props.user.name}
             >
               <Content extra={this.extraContent(this.props)}>
-                <Descriptions size="small" column={3}>
+                <Descriptions size="small" column={2}>
                   <Descriptions.Item label="Status">
                     {this.getStatus(this.props.user.status)}
                   </Descriptions.Item>
