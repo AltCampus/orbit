@@ -58,7 +58,7 @@ Router.get("/status", auth.verifyToken, async (req, res) => {
   } catch (error) {
     return res
       .status(403)
-      .json({ status: "failed", error: "Some error occurred." });
+      .json({ status: false, error: "Something went wrong" });
   }
 });
 Router.get("/", auth.verifyToken, async (req, res) => {
@@ -72,7 +72,7 @@ Router.get("/", auth.verifyToken, async (req, res) => {
   } catch (error) {
     return res
       .status(403)
-      .json({ status: "failed", error: "Some error occurred." });
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 
@@ -83,7 +83,7 @@ Router.put("/book/:id", auth.verifyToken, async (req, res) => {
 
     if (!req.user.canScheduleInterview) {
       return res.status(403).json({
-        status: "failed",
+        status: false,
         error: "You are not authorized to book this Interview slot."
       });
     }
@@ -121,18 +121,18 @@ Router.put("/book/:id", auth.verifyToken, async (req, res) => {
       } else {
         // Slot is already been booked by other user
         return res.status(403).json({
-          status: "failed",
+          status: false,
           error: "Slot is already booked."
         });
       }
     } else {
       return res.status(403).json({
-        status: "failed",
+        status: false,
         error: "Could not found the selected Interview slot."
       });
     }
   } catch (error) {
-    res.status(400).json({ status: false, error });
+    res.status(400).json({ status: false, error: "Something went wrong!" });
   }
 });
 
@@ -146,7 +146,9 @@ Router.get("/all", auth.verifyAdminToken, async (req, res) => {
     }).populate("user");
     return res.status(200).json({ status: true, slots });
   } catch (error) {
-    return res.status(400).json({ status: "failed", error });
+    return res
+      .status(400)
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 
@@ -157,7 +159,9 @@ Router.get("/scheduled", auth.verifyAdminToken, async (req, res) => {
     }).populate("user");
     return res.status(200).json({ status: true, scheduledInterviews });
   } catch (error) {
-    return res.status(400).json({ status: "failed", error });
+    return res
+      .status(400)
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 
@@ -180,12 +184,12 @@ Router.put("/review/:id", auth.verifyAdminToken, async (req, res) => {
       });
     } else {
       return res.status(403).json({
-        status: "failed",
+        status: false,
         error: "Could not found the selected Interview slot."
       });
     }
   } catch (error) {
-    res.status(400).json({ status: false, error: "Some error occured" });
+    res.status(400).json({ status: false, error: "Something went wrong!" });
   }
 });
 
@@ -251,7 +255,7 @@ Router.post("/", auth.verifyAdminToken, async (req, res) => {
       message: "Interview created"
     });
   } catch (error) {
-    res.status(400).json({ status: false, error });
+    res.status(400).json({ status: false, error: "Something went wrong!" });
   }
 });
 Router.delete("/:id", auth.verifyAdminToken, async (req, res) => {
@@ -267,7 +271,7 @@ Router.delete("/:id", auth.verifyAdminToken, async (req, res) => {
         .json({ status: false, error: "Slot has been booked" });
     }
   } catch (error) {
-    res.status(400).json({ status: false, error: "Some Error Occured" });
+    res.status(400).json({ status: false, error: "Something went wrong!" });
   }
 });
 

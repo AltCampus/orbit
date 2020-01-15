@@ -35,9 +35,14 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
         })
       });
     }
-    res.status(201).json({ status: true, message: "User data recorded" });
+    res
+      .status(201)
+      .json({
+        status: true,
+        message: "Screener information has been updated!"
+      });
   } catch (error) {
-    res.json({ status: false, message: "Some error from console" });
+    res.json({ status: false, message: "Something went wrong!" });
   }
 });
 

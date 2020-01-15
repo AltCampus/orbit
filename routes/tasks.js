@@ -437,6 +437,14 @@ router.get("/2/status", auth.verifyToken, async (req, res) => {
       await User.findByIdAndUpdate(req.user.id, { stage: 3 });
       await Timeline.create({
         user: req.user._id,
+        ...timelineCreator("TASK_TWO_ENDED", {
+          name: req.user.name,
+          endTime: task.codewars.endTime,
+          codewarsUsername: task.codewars.codewarsUsername
+        })
+      });
+      await Timeline.create({
+        user: req.user._id,
         ...timelineCreator("STAGE_UPDATED_TO_THREE", { name: req.user.name })
       });
       return res.status(200).json({
@@ -598,7 +606,11 @@ router.post("/two/katas", auth.verifyAdminToken, (req, res) => {
 
       return res
         .status(200)
-        .json({ data: { katasSolved }, status: true, message: "success" });
+        .json({
+          data: { katasSolved },
+          status: true,
+          message: "Successfully fetch data from codewars API!"
+        });
     } catch (error) {
       return res
         .status(400)

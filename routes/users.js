@@ -30,7 +30,9 @@ router.get("/me", auth.verifyToken, async (req, res) => {
   try {
     return res.status(201).json({ status: true, user: req.user });
   } catch (error) {
-    return res.status(400).json({ status: false, error });
+    return res
+      .status(400)
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 
@@ -92,7 +94,7 @@ router.post("/login", async (req, res) => {
     if (!email || !password) {
       return res
         .status(400)
-        .json({ status: false, message: "Please Fill Both Fields" });
+        .json({ status: false, message: "Please Fill Both Fields!" });
     }
 
     const user = await User.findOne({ email: req.body.email });
@@ -100,20 +102,22 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ status: false, message: "Account does not exist" });
+        .json({ status: false, message: "Account does not exist!" });
     }
 
     if (!user.verifyPassword(password)) {
       return res
         .status(400)
-        .json({ status: false, message: "Invaild password" });
+        .json({ status: false, message: "Invaild password!" });
     }
 
     const authToken = await auth.generateToken(user.id);
 
     return res.status(200).json({ status: "success", authToken });
   } catch (error) {
-    return res.status(400).json({ status: "failed", error });
+    return res
+      .status(400)
+      .json({ status: false, error: "Something went wrong!" });
   }
 });
 
@@ -131,7 +135,7 @@ router.post("/:hashMail", async (req, res) => {
       if (!user) {
         return res
           .status(400)
-          .json({ status: true, message: "Invaild login link" });
+          .json({ status: true, message: "Invaild login link!" });
       } else if (!user.isProfileClaimed) {
         user.password = password;
 
@@ -154,19 +158,20 @@ router.post("/:hashMail", async (req, res) => {
           user: user._id,
           ...timelineCreator("ACCOUNT_CLAIMED", { name: user.name })
         });
-        return res
-          .status(201)
-          .json({ status: true, message: "Account successfully claimed!" });
+        return res.status(201).json({
+          status: true,
+          message: "You've successfully claimed your account!"
+        });
       } else {
         return res.status(401).json({
           success: false,
-          message: "User already Claimed there account"
+          message: "User already claimed his/her account!"
         });
       }
     } catch (error) {
       return res
         .status(400)
-        .json({ success: false, message: "Some error from server!" });
+        .json({ success: false, message: "Something went wrong!" });
     }
   }
 });
@@ -186,7 +191,7 @@ router.get("/:id", auth.verifyAdminToken, async (req, res) => {
     let timeline = await Timeline.find({ user: userId });
     res.status(200).json({ status: true, user, timeline });
   } catch (error) {
-    res.status(400).json({ message: "Something went wrong", status: false });
+    res.status(400).json({ message: "Something went wrong!", status: false });
   }
 });
 
@@ -228,9 +233,7 @@ router.patch("/interview/:id", auth.verifyAdminToken, async (req, res) => {
       });
     }
   } catch (error) {
-    res
-      .status(400)
-      .json({ status: false, message: "some error occurs from Server" });
+    res.status(400).json({ status: false, message: "Something went wrong!" });
   }
 });
 
@@ -287,13 +290,13 @@ router.patch("/status/:id", auth.verifyAdminToken, async (req, res) => {
     } else {
       return res.status(400).json({
         status: false,
-        message: `${user.name}, not been through the interview process.`
+        message: `${user.name} has not been through the interview process.`
       });
     }
   } catch (error) {
     return res
       .status(400)
-      .json({ status: false, message: "some error occurs from Server" });
+      .json({ status: false, message: "Something went wrong!" });
   }
 });
 
@@ -344,7 +347,7 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
   } catch (error) {
     return res
       .status(400)
-      .json({ status: false, message: "some error occurs from Server" });
+      .json({ status: false, message: "Something went wrong!" });
   }
 });
 
