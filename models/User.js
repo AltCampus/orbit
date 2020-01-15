@@ -26,13 +26,11 @@ const userSchema = new Schema(
     password: String,
     phoneNo: {
       type: Number,
-      required: true,
-      minlength: 10,
-      maxlength: 10
+      required: true
     },
     hashMail: { type: String, unique: true },
     socialProfile: { type: String, required: true },
-    motivation: { type: String, required: true, maxlength: 200 },
+    motivation: { type: String, required: true },
     task: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Task"
