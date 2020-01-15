@@ -6,6 +6,8 @@ const Question = require("../models/Question");
 const Quiz = require("../models/Quiz");
 const config = require("../utils/config");
 const calculateScore = require("../utils/calculateScore");
+const Timeline = require("../models/Timeline");
+const timelineCreator = require("../utils/timelineCreator");
 
 router.get("/status", auth.verifyToken, async (req, res, next) => {
   // Route for getting status of stage 3
@@ -111,6 +113,13 @@ router.get("/generate", auth.verifyToken, async (req, res, next) => {
       quiz: newQuiz.id,
       canTakeQuiz: false
     });
+    // Add to timeline that user started the quiz
+    await Timeline.create({
+      user: req.user.id,
+      ...timelineCreator("QUIZ_STARTED", {
+        name: req.user.name
+      })
+    });
     res.json({
       questions: quizQuestions,
       timeLeft: newQuiz.endTime.valueOf() - Date.now()
@@ -169,7 +178,7 @@ router.get("/current", auth.verifyToken, async (req, res, next) => {
   }
 });
 router.put("/current", auth.verifyToken, async (req, res, next) => {
-  // Route for submitting current quiz
+  // Route for updating current quiz submission
   try {
     const user = await User.findById(req.user.id);
     if (!user.quiz) {
@@ -284,6 +293,12 @@ router.post("/current", auth.verifyToken, async (req, res, next) => {
     });
     // Update user stage to 4
     await User.findByIdAndUpdate(req.user.id, { stage: 4 });
+    await Timeline.create({
+      user: req.user.id,
+      ...timelineCreator("QUIZ_SUBMITTED", {
+        name: user.name
+      })
+    });
     res
       .status(200)
       .json({ success: true, message: "Your answers has been submitted" });
@@ -385,6 +400,14 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
     quiz.maximumScore = quiz.questions.reduce((acc, val) => acc + val.point, 0);
     await quiz.save();
     await calculateScore(quiz.user);
+    await Timeline.create({
+      user: quiz.user,
+      ...timelineCreator("QUIZ_REVIEWED", {
+        adminName: req.user.name,
+        score: quiz.totalScore,
+        maximumScore: quiz.maximumScore
+      })
+    });
     res.status(200).json({ success: true });
   } catch (error) {
     return res.status(403).json({ error: "Some Error occured" });

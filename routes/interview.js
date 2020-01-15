@@ -4,6 +4,8 @@ const Router = express.Router();
 const auth = require("./../utils/auth");
 const User = require("./../models/User");
 const Interview = require("../models/Interview");
+const Timeline = require("../models/Timeline");
+const timelineCreator = require("../utils/timelineCreator");
 const calculateScore = require("../utils/calculateScore");
 
 Router.get("/status", auth.verifyToken, async (req, res) => {
@@ -99,6 +101,14 @@ Router.put("/book/:id", auth.verifyToken, async (req, res) => {
           canScheduleInterview: false
         });
         const { startTime, endTime } = scheduledInterview;
+        await Timeline.create({
+          user: req.user._id,
+          ...timelineCreator("INTERVIEW_BOOKED", {
+            name: req.user.name,
+            startTime,
+            endTime
+          })
+        });
         res.status(201).json({
           status: true,
           message: "Interview Scheduled",
@@ -125,6 +135,8 @@ Router.put("/book/:id", auth.verifyToken, async (req, res) => {
     res.status(400).json({ status: false, error });
   }
 });
+
+/** ADMIN ROUTES */
 
 // Admin list all slot
 Router.get("/all", auth.verifyAdminToken, async (req, res) => {
