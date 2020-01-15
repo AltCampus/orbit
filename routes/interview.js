@@ -141,7 +141,9 @@ Router.put("/book/:id", auth.verifyToken, async (req, res) => {
 // Admin list all slot
 Router.get("/all", auth.verifyAdminToken, async (req, res) => {
   try {
-    const slots = await Interview.find({});
+    const slots = await Interview.find({
+      startTime: { $gt: Date.now() }
+    }).populate("user");
     return res.status(200).json({ status: true, slots });
   } catch (error) {
     return res.status(400).json({ status: "failed", error });
