@@ -209,7 +209,7 @@ class Quiz extends Component {
       this.setState({ loading: false });
     }
   };
-  Better;
+
   render() {
     const currentQuestion =
       this.state.questions &&

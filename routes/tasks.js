@@ -51,6 +51,14 @@ router.get("/all/status", auth.verifyToken, async (req, res) => {
           req.user.stage = 3;
           await Timeline.create({
             user: req.user._id,
+            ...timelineCreator("TASK_TWO_ENDED", {
+              name: req.user.name,
+              endTime: task.codewars.endTime,
+              codewarsUsername: task.codewars.codewarsUsername
+            })
+          });
+          await Timeline.create({
+            user: req.user._id,
             ...timelineCreator("STAGE_UPDATED_TO_THREE", {
               name: req.user.name
             })
@@ -106,7 +114,7 @@ router.get("/all/status", auth.verifyToken, async (req, res) => {
       completed: true,
       username: task.codewars.codewarsUsername,
       startTime: task.codewars.startTime,
-      endTime: task.codewars.endTime
+      endTime: task.codewars.forceSubmitTime || task.codewars.endTime
     };
     if (req.user.stage === 3) {
       if (!req.user.quiz && req.user.canTakeQuiz) {
@@ -404,39 +412,45 @@ router.post("/1/save", auth.verifyToken, async (req, res) => {
 
 // Check status of codewars task
 router.get("/2/status", auth.verifyToken, async (req, res) => {
-  let { id } = req.user;
-  // send request to codewars api to validate username
-  if (req.user.stage > 2) {
-    // Check if user is not on stage 2
+  try {
+    let { id } = req.user;
+    // send request to codewars api to validate username
+    if (req.user.stage > 2) {
+      // Check if user is not on stage 2
+      return res
+        .status(200)
+        .json({ onGoing: false, completed: true, timeLeft: null });
+    }
+    const task = await Task.findById(req.user.task);
+
+    if (req.user.stage === 2 && task.codewars.endTime > Date.now()) {
+      return res.status(200).json({
+        onGoing: true,
+        completed: false,
+        timeLeft: task.codewars.endTime - Date.now()
+      });
+    }
+
+    if (req.user.stage === 2 && task.codewars.endTime < Date.now()) {
+      // Update user stage to 3
+      await User.findByIdAndUpdate(req.user.id, { stage: 3 });
+      await Timeline.create({
+        user: req.user._id,
+        ...timelineCreator("STAGE_UPDATED_TO_THREE", { name: req.user.name })
+      });
+      return res.status(200).json({
+        stageUpdated: true,
+        onGoing: false,
+        timeLeft: null,
+        completed: true
+      });
+    }
+    res.json({ error: "Some error occured." });
+  } catch (error) {
     return res
-      .status(200)
-      .json({ onGoing: false, completed: true, timeLeft: null });
+      .status(400)
+      .json({ status: false, error: "Something went wrong!" });
   }
-  const task = await Task.findById(req.user.task);
-
-  if (req.user.stage === 2 && task.codewars.endTime > Date.now()) {
-    return res.status(200).json({
-      onGoing: true,
-      completed: false,
-      timeLeft: task.codewars.endTime - Date.now()
-    });
-  }
-
-  if (req.user.stage === 2 && task.codewars.endTime < Date.now()) {
-    // Update user stage to 3
-    await User.findByIdAndUpdate(req.user.id, { stage: 3 });
-    await Timeline.create({
-      user: req.user._id,
-      ...timelineCreator("STAGE_UPDATED_TO_THREE", { name: req.user.name })
-    });
-    return res.status(200).json({
-      stageUpdated: true,
-      onGoing: false,
-      timeLeft: null,
-      completed: true
-    });
-  }
-  res.json({ error: "Some error occured." });
 });
 
 // Save CodeWars username
@@ -512,6 +526,41 @@ router.post("/2/save", auth.verifyToken, (req, res) => {
         .status(400)
         .json({ status: false, error: "Some Error Occurred" });
     });
+});
+
+router.delete("/2/end", auth.verifyToken, async (req, res) => {
+  try {
+    let { id } = req.user;
+    // send request to codewars api to validate username
+    if (req.user.stage !== 2) {
+      // Check if user is not on stage 2
+      return res
+        .status(400)
+        .json({ status: false, error: "You're not on stage 2." });
+    }
+
+    // Update task with start time and username
+    const newTask = await Task.findById(req.user.task);
+    newTask.codewars.forceSubmitTime = Date.now();
+    await newTask.save();
+
+    // Update user stage to 3
+    await User.findByIdAndUpdate(req.user.id, { stage: 3 });
+    await Timeline.create({
+      user: req.user._id,
+      ...timelineCreator("FORCEFULLY_SUBMITTED_TASK_THREE", {
+        name: req.user.name
+      })
+    });
+    return res.status(200).json({
+      status: true,
+      message: "Your CodeWars task was marked as completed!"
+    });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ status: false, error: "Something went wrong!" });
+  }
 });
 
 // Get Number Of Kata's Solved by User
