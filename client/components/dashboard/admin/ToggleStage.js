@@ -9,9 +9,22 @@ const columns = [
     title: "Name",
     dataIndex: "name",
     fixed: "left",
+    // textWrap: "word-break",
+
     sorter: (objA, objB) => objA.name.localeCompare(objB.name),
     sortDirections: ["ascend", "descend"],
-    render: (id, data) => <Link to={`/user/${data._id}`}> {id}</Link>
+    render: (id, data) => (
+      <div
+        style={{
+          wordWrap: "break-word",
+          wordBreak: "break-word",
+          width: "max-content"
+        }}
+      >
+        {" "}
+        <Link to={`/user/${data._id}`}> {id}</Link>
+      </div>
+    )
   },
   {
     title: "Email",
@@ -232,11 +245,11 @@ const columns = [
             <Tag color="lime">Interview To Be Reviewed</Tag>
           );
         } else {
-          return <Tag color="lime">Interview Scheduled</Tag>;
+          return <Tag color="gold">Interview Scheduled</Tag>;
         }
       } else {
         if (user.canScheduleInterview) {
-          return <Tag color="gold">Can Schedule Interview</Tag>;
+          return <Tag color="blue">Can Schedule Interview</Tag>;
         } else {
           return <Tag color="volcano">Not Accepted for Interview</Tag>;
         }
