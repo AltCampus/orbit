@@ -80,7 +80,15 @@ class ScheduleInterview extends Component {
         ) : (
           <>
             <Title level={3}>List of slots</Title>
-            <Text type="danger">Click on any slot to book it!</Text>
+            {this.props.availableSlots &&
+            this.props.availableSlots.length !== 0 ? (
+              <Text type="danger">Click on any slot to book it!</Text>
+            ) : (
+              <Text type="danger">
+                No slots available right now! Once available you can schedule
+                your interview.{" "}
+              </Text>
+            )}
             {sortedSlots &&
               Object.keys(sortedSlots)
                 .sort((a, b) => convertStringToDate(a) - convertStringToDate(b))
