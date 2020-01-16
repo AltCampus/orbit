@@ -1,6 +1,26 @@
 .wrapper {
   height: 100vh;
 }
+.clock-value {
+  color: #1890ff;
+}
+.timer-container {
+  background: lightgrey;
+  padding: 1rem 0.5rem;
+  margin-right: 1rem;
+  border-radius: 1rem;
+}
+.nav-left-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0.5rem;
+  span {
+    line-height: 1;
+  }
+}
 
 .trigger {
   font-size: 18px;
@@ -56,11 +76,6 @@
 
 .menu-icon {
   margin-left: 1rem;
-}
-
-.button-logout {
-  margin-right: 20px;
-  margin-top: 15px;
 }
 
 .profile-name {
