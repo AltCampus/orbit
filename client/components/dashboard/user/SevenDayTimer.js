@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Icon } from "antd";
+import { Icon, Tooltip } from "antd";
 
 const Timer = ({ timeLeft }) => {
   return (
-    <span className="timer-container">
+    <>
       <span key="time-heading" level={3} className="center-text">
         <Icon type="clock-circle" /> Time Left:{" "}
       </span>
@@ -21,7 +21,7 @@ const Timer = ({ timeLeft }) => {
       <span key="seconds">
         <span className="clock-value">{timeLeft % 60}</span> Seconds{" "}
       </span>
-    </span>
+    </>
   );
 };
 class SevenDayTimer extends Component {
@@ -48,6 +48,8 @@ class SevenDayTimer extends Component {
           this.startTimer();
         }
       );
+    } else {
+      this.setState({ loading: false });
     }
   }
   intervalId = React.createRef();
@@ -68,17 +70,23 @@ class SevenDayTimer extends Component {
   }
   render() {
     return (
-      <>
-        {!this.state.loading && (
-          <>
-            {this.state.timeLeft ? (
-              <Timer timeLeft={this.state.timeLeft} />
-            ) : (
-              <span className="red-text">You're running Late</span>
-            )}
-          </>
-        )}
-      </>
+      <Tooltip
+        title={
+          "Those who submit their first 3 tasks within 7 days have higher chance of getting selected. You would still have chance to submit after timer is completed!"
+        }
+      >
+        <span className="timer-container">
+          {!this.state.loading && (
+            <>
+              {this.state.timeLeft ? (
+                <Timer timeLeft={this.state.timeLeft} />
+              ) : (
+                <span className="red-text">You're running Late</span>
+              )}
+            </>
+          )}
+        </span>
+      </Tooltip>
     );
   }
 }
