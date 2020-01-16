@@ -45,6 +45,11 @@ class UserProfile extends Component {
                   <Descriptions.Item label="Motivation">
                     {this.props.user.motivation}
                   </Descriptions.Item>
+                  <Descriptions.Item label="SignUp Time">
+                    {new Date(this.props.user.createdAt).toDateString() +
+                      " " +
+                      new Date(this.props.user.createdAt).toLocaleTimeString()}
+                  </Descriptions.Item>
                 </Descriptions>
               </div>
             </div>

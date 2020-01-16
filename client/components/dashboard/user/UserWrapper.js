@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Layout, Menu, Icon, Avatar, Button, Steps } from "antd";
 const { Step } = Steps;
 import { userLogOut } from "../../../actions/users";
+import SevenDayTimer from "./SevenDayTimer";
 
 const { Header, Sider, Content } = Layout;
 
@@ -171,7 +172,10 @@ function UserWrapper(props) {
               padding: "16px"
             }}
           />
-          <div>
+          <div className="nav-left-container">
+            {user.stage !== 4 && (
+              <SevenDayTimer accountCreationTime={user.createdAt} />
+            )}
             <span className="profile-name">
               Howdy, <Link to="/profile">{props.user.name}</Link>
             </span>
