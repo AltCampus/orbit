@@ -17,22 +17,39 @@ export default function Instructions() {
           <p className="task-introduction">
             <ul>
               <li>
-                There are four parts to the assignment. Instructions, tips and
-                resources are provided below for each task.
+                There are four parts to the application process. 1. HTML/CSS 2. CodeWars 3. Questionnaire 4. Interview
               </li>
               <li>
                 {" "}
-                The tasks consists of questions carefully designed to help you
-                self-assess your comprehension of the information presented on
-                the topics covered in the module.
+                All tasks are compulsory and need to be done sequentially. You can't attempt the next task without completing the ongoing task first.
               </li>
               <li>
-                All tasks are compulsory. One cannot attempt the further tasks
-                unless the active task is completed.
+                {" "}
+                Detailed instructions and resources on the particular task are given under the corresponding section.
               </li>
               <li>
-                The total score for the quiz is based on your responses to all
-                questions.
+                {" "}
+                In total you have 7 days to complete the first 3 tasks.
+              </li>
+              <li>
+                {" "}
+                Task 1(HTML/CSS) is untimed but should take you around 1-2 days. 
+              </li>
+              <li>
+                {" "}
+                Task 2(CodeWars) is timed and maximum time allowed for it is 3 days. You need to learn and solve as many problems as possible. There is no minimum or maximum requirement. The more the better.
+              </li>
+              <li>
+                {" "}
+                Task 3(Questionnaire) is timed and you will be given 30 minutes to attempt it. 
+              </li>
+              <li>
+                {" "}
+                Once you are done with first 3 tasks, your submissions will be reviewed and based on that you will either be selected for the final online interview or turned down.
+              </li>
+              <li>
+                {" "}
+                Once your submissions is reviewed and accepted for next round, you can book an interview slot.
               </li>
               <li>
                 Even if you have no prior programming experience you will be
@@ -48,7 +65,7 @@ export default function Instructions() {
               <h1 className="task-heading">Task one:</h1>
               <Timeline>
                 <Timeline.Item>
-                  Read the instructions of taks one carefully.
+                  Read the instructions of task one carefully.
                 </Timeline.Item>
                 <Timeline.Item>
                   Take help from the provided resources.
@@ -72,7 +89,7 @@ export default function Instructions() {
                 </Timeline.Item>
                 <Timeline.Item>Create a CodeWars account.</Timeline.Item>
                 <Timeline.Item>
-                  Solve as many katas based on your learning.
+                  Solve as many katas as possible based on your learning.
                 </Timeline.Item>
                 <Timeline.Item>
                   Submit your CodeWars username after completing the task.
