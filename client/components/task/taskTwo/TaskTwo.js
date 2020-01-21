@@ -171,7 +171,7 @@ class TaskTwo extends Component {
     return (
       <UserWrapper activeKey={"2"}>
         <Title level={2} style={{ marginBottom: 0 }}>
-          Round 2: CodeWars Task
+          Task 2: CodeWars
         </Title>
         <Divider />
         {this.state.loading ? (

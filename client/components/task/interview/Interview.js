@@ -14,7 +14,7 @@ class Interview extends React.Component {
     return (
       <UserWrapper activeKey={"4"}>
         <Title level={2} style={{ marginBottom: 0 }}>
-          Round 4: Interview
+          Task 4: Interview
         </Title>
         <Divider />
         {user.stage === 4 ? <ScheduleInterview /> : <PendingTask />}

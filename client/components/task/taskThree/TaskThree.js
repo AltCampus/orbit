@@ -15,7 +15,7 @@ class TaskThree extends Component {
     return (
       <UserWrapper activeKey={"3"}>
         <Title level={2} style={{ marginBottom: 0 }}>
-          Round 3: Quiz
+          Task 3: Quiz
         </Title>
         <Divider />
         {this.props.user.user.stage === 3 ? (

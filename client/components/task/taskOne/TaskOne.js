@@ -73,7 +73,7 @@ class TaskOne extends Component {
     return (
       <UserWrapper activeKey={"1"}>
         <Title level={2} style={{ marginBottom: 0 }}>
-          Round 1: HTML Task
+          Task 1: HTML/CSS and Questionnaire
         </Title>
         <Divider />
         {this.props.user.stage > 1 && <TaskCompleted />}
