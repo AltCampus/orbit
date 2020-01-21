@@ -17,7 +17,7 @@ exports.getRejectionMailAfterInterview = (studentName) => {
 }
 
 exports.getAcceptMail = (studentName, batchStartDate) => {
-  return finalAcceptanceMail(studentName);
+  return finalAcceptanceMail(studentName, batchStartDate);
 }
 
 exports.scheduleInterviewMail = (studentName) => {
