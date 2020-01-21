@@ -89,3 +89,19 @@ a {
     margin: 1rem 0;
   }
 }
+
+li {
+  padding: 3px 0px;
+}
+
+.flash {
+  &.warning {
+    background-color: #ffb734de;
+    padding: 1rem;
+    border-radius: 2px;
+  }
+}
+
+.margin-bt-1 {
+  margin-bottom: 1rem;
+}

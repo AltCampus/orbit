@@ -226,7 +226,7 @@ function UserWrapper(props) {
                 ? "wait"
                 : "finish"
             }
-            title="Quiz"
+            title="Questionnaire"
           />
           {user.status === "reject" && !user.interview && (
             <Step status={"error"} title="Rejected" />

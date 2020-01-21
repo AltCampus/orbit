@@ -158,7 +158,7 @@ class TaskTwo extends Component {
   };
   confirmForceSubmit = () => {
     confirm({
-      title: "Do you want to mark this round as completed?",
+      title: "Do you want to mark this task as completed?",
       okType: "danger",
       okText: "Mark it as completed",
       onOk: () => {
@@ -191,16 +191,14 @@ class TaskTwo extends Component {
             {this.props.user.stage > 2 && <TaskCompleted />}
             {this.props.user.stage == 2 && (
               <>
-                {this.state.onGoing ? (
+                {this.state.onGoing && (
                   <>
                     <div className="codewars-control">
                       <CodeWarsTimer timeLeft={this.state.timeLeft} />
-                      <div className="text">
-                        If you want to mark this task as completed before timer
-                        ends, You can mark it as completed by clicking button
-                        below!
+                      <div className="text margin-bt-1">
+                        If you want to mark this task to be completed before the timer ends, you can do so by clicking on the button below.
                       </div>
-                      <div className="red-text">
+                      <div className="flash warning margin-bt-1">
                         <span className="strong-text">Note:</span> Once you
                         marked it as completed, your progress you've made till
                         now would be saved. You would be moved to next round and
@@ -212,186 +210,88 @@ class TaskTwo extends Component {
                         Mark this task as completed
                       </Button>
                     </div>
-                    <div className="task-container">
-                      <Title level={2}>Instructions:-</Title>
-                      <Row>
-                        <Col>
-                          <div>
-                            <ul>
-                              <li>
-                                <p>
-                                  Create an account on{" "}
-                                  <a
-                                    href="https://codewars.com"
-                                    target="_blank"
-                                  >
-                                    https://codewars.com.
-                                  </a>{" "}
-                                  It’s a problem solving platform.
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  A problem on the platform is called a ‘Kata’.
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  This task is to test your problem solving
-                                  skills, critical thinking and ability to
-                                  learn. You have to take help from the
-                                  resources and solve the katas based on your
-                                  learning.
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  Start solving problems on{" "}
-                                  <a
-                                    href="https://codewars.com"
-                                    target="_blank"
-                                  >
-                                    https://codewars.com.
-                                  </a>{" "}
-                                  There is no such limit, or minimum
-                                  requirement, solve as many problems as you can
-                                  before the given date.
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  Send us your codewars profile via email. We
-                                  would like to see the progress you have made.
-                                </p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div>
-                            <h2>Resources</h2>
-                            <ul>
-                              <li>
-                                <p>
-                                  You can learn basics of JS from{" "}
-                                  <a
-                                    href="http://javascript.info"
-                                    target="_blank"
-                                  >
-                                    http://javascript.info{" "}
-                                  </a>
-                                  or{" "}
-                                  <a
-                                    href="https://www.learn-js.org"
-                                    target="_blank"
-                                  >
-                                    https://www.learn-js.org/
-                                  </a>{" "}
-                                  which ever you feel comfortable with.
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  CodeWars, the platform, might take some time
-                                  to getting used to. Try to figure out how to
-                                  use it, Google is your friend. Again, don’t
-                                  give up. YOU CAN DO IT.
-                                </p>
-                              </li>
-                            </ul>
-                          </div>
-                        </Col>
-                      </Row>
-                    </div>
+                    
                   </>
-                ) : (
+                )}
+                  <div className="task-container">
+                    <Title level={4}>Instructions</Title>
+                    <Row>
+                      <Col>
+                        <div>
+                          <ul>
+                            <li>
+                              Create an account on{" "}
+                              <a
+                                href="https://codewars.com"
+                                target="_blank"
+                              >
+                                CodeWars.
+                                </a>{" "}
+                              It’s a problem solving platform.
+                              </li>
+                            <li>
+                              A problem on the platform is called a ‘Kata’.
+                              </li>
+                            <li>
+                              This task is to test your problem solving
+                              skills, critical thinking and ability to
+                              learn. You have to take help from the
+                              resources and solve the katas based on your
+                              learning.
+                            </li>
+                            <li>
+                              Make an account on CodeWars. Submitting your username below will start this task. You will be given 3 days to do as many katas as possible. The task will automatically be marked completed after the timer ends.
+                            </li>
+                            <li>
+                              Start solving problems on{" "}
+                              <a
+                                href="https://codewars.com"
+                                target="_blank"
+                              >
+                                https://codewars.com.
+                                </a>{" "}
+                              There is no minimum or maximum
+                              requirement, solve as many problems as you can
+                              before the timer ends.
+                            </li>                            
+                          </ul>
+                        </div>
+                        <div className="flash warning margin-bt-1">
+                          Note - You should first create an account on CodeWars, submit your username here and then start solving problems there.
+                        </div>
+                        <div>
+                          <Title level={4}>Resources</Title>
+                          <ul>
+                            <li>
+                              You can learn basics of JS from{" "}
+                              <a
+                                href="http://javascript.info"
+                                target="_blank"
+                              >
+                                http://javascript.info{" "}
+                              </a>
+                              or{" "}
+                              <a
+                                href="https://www.learn-js.org"
+                                target="_blank"
+                              >
+                                https://www.learn-js.org/
+                                  </a>{" "}
+                              which ever you feel comfortable with.
+                              </li>
+                            <li>
+                              CodeWars, the platform, might take some time
+                              to getting used to. Try to figure out how to
+                              use it, Google is your friend. Again, don’t
+                              give up. YOU CAN DO IT.
+                              </li>
+                          </ul>
+                        </div>
+                      </Col>
+                    </Row>
+                  </div>
+                 { !this.state.onGoing && (
                   <>
-                    <div className="task-container">
-                      <Row>
-                        <Col>
-                          <div>
-                            <ul>
-                              <li>
-                                <p>
-                                  Create an account on{" "}
-                                  <a
-                                    href="https://codewars.com"
-                                    target="_blank"
-                                  >
-                                    https://codewars.com.
-                                  </a>{" "}
-                                  It’s a problem solving platform.
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  A problem on the platform is called a ‘Kata’.
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  This task is to test your problem solving
-                                  skills, critical thinking and ability to
-                                  learn. You have to take help from the
-                                  resources and solve the katas based on your
-                                  learning.
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  Start solving problems on{" "}
-                                  <a
-                                    href="https://codewars.com"
-                                    target="_blank"
-                                  >
-                                    https://codewars.com.
-                                  </a>{" "}
-                                  There is no such limit, or minimum
-                                  requirement, solve as many problems as you can
-                                  before the given date.
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  Send us your codewars profile via email. We
-                                  would like to see the progress you have made.
-                                </p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div>
-                            <h2>Resources</h2>
-                            <ul>
-                              <li>
-                                <p>
-                                  You can learn basics of JS from{" "}
-                                  <a
-                                    href="http://javascript.info"
-                                    target="_blank"
-                                  >
-                                    http://javascript.info{" "}
-                                  </a>
-                                  or{" "}
-                                  <a
-                                    href="https://www.learn-js.org"
-                                    target="_blank"
-                                  >
-                                    https://www.learn-js.org/
-                                  </a>{" "}
-                                  which ever you feel comfortable with.
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  CodeWars, the platform, might take some time
-                                  to getting used to. Try to figure out how to
-                                  use it, Google is your friend. Again, don’t
-                                  give up. YOU CAN DO IT.
-                                </p>
-                              </li>
-                            </ul>
-                          </div>
-                        </Col>
-                      </Row>
-                    </div>
                     <div className="url-input">
                       <form onSubmit={this.handleSubmit}>
                         <Input

@@ -18,6 +18,7 @@ import TextArea from "antd/lib/input/TextArea";
 import TaskCompleted from "../taskCompleted/TaskCompleted";
 import QuizPagination from "./QuizPagination";
 const { Text, Title } = Typography;
+
 class Quiz extends Component {
   constructor(props) {
     super();
@@ -339,8 +340,21 @@ class Quiz extends Component {
         ) : this.state.canTakeQuiz ? (
           <div class="quiz-info">
             <Text strong>Time Limit: 30 min</Text>
-            <Text type="danger">*All questions are compulsory to answer.</Text>
-            <Button onClick={() => this.startQuiz()}>Start Quiz</Button>
+            <Title level={4}>
+              Instructions 
+            </Title>
+            <ul>
+              <li>
+                All questions are compulsory to answer.
+              </li>
+              <li>
+                Once you start the questionnaire, you will be given 30 minutes to complete it.
+              </li>
+              <li>
+                Please keep a notebook and pen handy while doing this questionnaire.
+              </li>
+            </ul>
+            <Button onClick={() => this.startQuiz()}>Start Questionnaire</Button>
           </div>
         ) : this.state.onGoing ? (
           <div class="quiz-info">

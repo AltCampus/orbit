@@ -11,11 +11,12 @@ class TaskThree extends Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <UserWrapper activeKey={"3"}>
         <Title level={2} style={{ marginBottom: 0 }}>
-          Task 3: Quiz
+          Task 3: Questionnaire
         </Title>
         <Divider />
         {this.props.user.user.stage === 3 ? (
@@ -29,6 +30,7 @@ class TaskThree extends Component {
     );
   }
 }
+
 const mapStateToProps = state => ({
   user: state.currentUser
 });

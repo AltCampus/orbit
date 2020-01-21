@@ -83,45 +83,55 @@ class TaskOne extends Component {
               <Row gutter={16}>
                 <Card bordered={false}>
                   <div>
+                    <Title level={4}>
+                      Instructions
+                    </Title>
                     <ul>
                       <li>
-                        <p>
-                          In this folder there is an image called
-                          "html-css-assignment.png".
-                        </p>
+                        <a
+                          href="https://i.ibb.co/7WqkWMD/html-css-assignment.png"
+                          download
+                          target="_blank"
+                        >
+                          Download this image.
+                        </a>
                       </li>
                       <li>
-                        <p>
-                          All you have to do is convert the layout given in the
-                          PNG image into HTML/CSS format on this CodeSandbox
-                          platform -
+                          <span>
+                            All you have to do is convert the layout given in the
+                            PNG image into HTML/CSS format on  
+                          </span>
+                          <span> </span>
                           <a href="https://codesandbox.io" target="_blank">
-                            https://codesandbox.io
+                            CodeSandbox platform.
                           </a>
-                        </p>
                       </li>
                       <li>
-                        <p>
+                        There are a few resources provided below for you to learn HTML/CSS quickly.
+                      </li>
+                      <li>
+                        Please write your answer to the questions in the layout.  
+                      </li>
+                      <li>
                           You won’t need any JavaScript. You can use the
-                          following sandbox, as the starting point -
+                          following sandbox, as the starting point - 
                           <a
                             target="_blank"
                             href="https://codesandbox.io/s/github/codesandbox-app/static-template"
                           >
                             https://codesandbox.io/s/github/codesandbox-app/static-template
                           </a>
-                        </p>
                       </li>
                       <li>
-                        <p>
-                          Write all the HTML/CSS code there and submit us the
-                          link of the sandbox in response.
-                        </p>
+                          Write all the HTML/CSS code there and submit the
+                          link of the sandbox in response below.
                       </li>
                     </ul>
                   </div>
                   <div>
-                    <h2>Resources</h2>
+                    <Title level={4}>
+                      Resources
+                    </Title>
                     <ul>
                       <li>
                         <a
@@ -148,17 +158,6 @@ class TaskOne extends Component {
                         </a>
                       </li>
                     </ul>
-                  </div>
-                  <div>
-                    <a
-                      href="https://i.ibb.co/7WqkWMD/html-css-assignment.png"
-                      download
-                      target="_blank"
-                    >
-                      <Button type="primary" icon="download">
-                        Download
-                      </Button>
-                    </a>
                   </div>
                 </Card>
               </Row>

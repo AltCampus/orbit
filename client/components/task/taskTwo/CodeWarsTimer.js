@@ -6,7 +6,7 @@ const CodeWarsTimer = ({ timeLeft }) => {
   return (
     <div className="timer-container">
       <Title level={3} className="center-text">
-        <Icon type="clock-circle" /> Timer OnGoing
+        <Icon type="clock-circle" /> Time remaining for CodeWars
       </Title>
       <Row gutter={16}>
         <Col span={6} className="center-text">

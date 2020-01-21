@@ -22,12 +22,12 @@ const TaskThreeProgress = ({ quiz, loading }) => {
           : quiz.onGoing
           ? [
               <Link to={`/task/3`}>
-                <Button type="primary">Resume Quiz</Button>
+                <Button type="primary">Resume Questionnaire</Button>
               </Link>
             ]
           : [
               <Link to={`/task/3`}>
-                <Button type="primary">Start Quiz</Button>
+                <Button type="primary">Start Questionnaire</Button>
               </Link>
             ]
       }
@@ -72,9 +72,9 @@ const TaskThreeProgress = ({ quiz, loading }) => {
               </Descriptions>
             </>
           )}
-          {quiz.canTakeQuiz && <Text>You're now eligible to take quiz</Text>}
+          {quiz.canTakeQuiz && <Text>You're now eligible to take questionnaire</Text>}
           {quiz.failedToSubmit && (
-            <Text>You've failed to submit quiz on time</Text>
+              <Text>You've failed to submit questionnaire on time</Text>
           )}
         </>
       )}
