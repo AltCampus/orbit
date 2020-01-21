@@ -7,9 +7,9 @@ const LandingPage = () => {
     <>
       <Header />
       <div className='banner-container'>
-        <h1 className='banner-heading'>ORBIT</h1>
-        <p className='banner-description'>
-          AltCampus' apllication process management system
+        <h1 className='banner-heading' style={{ color: "#30ba67" }}>GALAXY</h1>
+        <p className='banner-description' style={{ color: "#20386a" }}>
+          AltCampus' Application Management System
         </p>
       </div>
       <Footer />

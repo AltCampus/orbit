@@ -5,7 +5,7 @@ export default function Footer() {
     <>
       <footer>
         <div className='footer__container'>
-          &copy; Made by AltCampus students.
+          &copy; Made in the ⛰️ by AltCampus students.
         </div>
       </footer>
     </>

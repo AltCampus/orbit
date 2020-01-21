@@ -10,6 +10,7 @@
 
 .banner-heading {
   font-size: 5rem;
+  font-weight: bold;
 }
 
 .banner-description {
@@ -68,4 +69,15 @@ header {
   border-top: 0.03px solid lightgray;
   width: 100%;
   background-color: #f5f5f5;
+}
+
+
+@media all and (max-width: 576px) {
+  .banner-heading {
+    font-size: 3rem;
+  }
+
+  .banner-description {
+    font-size: 1rem;
+  }
 }
