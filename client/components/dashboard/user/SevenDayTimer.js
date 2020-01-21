@@ -12,14 +12,11 @@ const Timer = ({ timeLeft }) => {
       </span>
       <span key="hours">
         <span className="clock-value">{parseInt(timeLeft / 3600) % 24}</span>{" "}
-        Hours,{" "}
+        Hours, and {" "}
       </span>
       <span key="minutes">
         <span className="clock-value">{parseInt(timeLeft / 60) % 60}</span>{" "}
-        Minutes and{" "}
-      </span>
-      <span key="seconds">
-        <span className="clock-value">{timeLeft % 60}</span> Seconds{" "}
+        Minutes
       </span>
     </>
   );
