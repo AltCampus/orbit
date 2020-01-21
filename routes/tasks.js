@@ -454,8 +454,17 @@ router.get("/2/status", auth.verifyToken, async (req, res) => {
         completed: true
       });
     }
+    if (req.user.stage === 2 && !task.codewars.codewarsUsername) {
+      return res.status(200).json({
+        stageUpdated: false,
+        onGoing: false,
+        timeLeft: null,
+        completed: false
+      });
+    }
     res.status(400).json({ error: "Something went wrong!" });
   } catch (error) {
+    console.log(error);
     return res
       .status(400)
       .json({ status: false, error: "Something went wrong!" });
