@@ -8,7 +8,7 @@ function ScheduleSuccess(props) {
     <>
       <Result
         status="success"
-        title="Your interview has been scheduled successfully"
+        title="Your interview has been scheduled successfully."
         subTitle={`Your interview has been scheduled for ${new Date(
           props.interviewStartTime
         ).toDateString()} ${new Date(
@@ -17,6 +17,9 @@ function ScheduleSuccess(props) {
           props.interviewEndTime
         ).toLocaleTimeString()}`}
         extra={[
+          <div className="flash warning margin-bt-1">
+            We do calls via - <a href="https://whereby.com/altcampus" target="_blank">Whereby AltCampus</a> room. Please be there on time for the call. 
+          </div>,
           <Button type="primary">
             <Link to="/profile">See Profile</Link>
           </Button>

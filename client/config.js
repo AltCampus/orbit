@@ -1,5 +1,5 @@
 const config = {
-  productionRootURL: "https://galaxy.altcampus.xyz"
+  productionRootURL: "http://localhost:3000" || "https://galaxy.altcampus.xyz"
 }
 
 export default config;

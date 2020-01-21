@@ -85,14 +85,16 @@ export default function Instructions() {
                   Read the instructions of task two carefully.
                 </Timeline.Item>
                 <Timeline.Item>
+                  Create a CodeWars account.
+                </Timeline.Item>
+                <Timeline.Item>
+                  Submit your CodeWars username.
+                </Timeline.Item>
+                <Timeline.Item>
                   Use the resources to learn JavaScript.
                 </Timeline.Item>
-                <Timeline.Item>Create a CodeWars account.</Timeline.Item>
                 <Timeline.Item>
                   Solve as many katas as possible based on your learning.
-                </Timeline.Item>
-                <Timeline.Item>
-                  Submit your CodeWars username after completing the task.
                 </Timeline.Item>
               </Timeline>
             </div>
@@ -128,9 +130,6 @@ export default function Instructions() {
                 <Timeline.Item>
                   The applicant can then schedule the interview based on the
                   available slots.
-                </Timeline.Item>
-                <Timeline.Item>
-                  The interviewer will inform the appllicant via email.{" "}
                 </Timeline.Item>
                 <Timeline.Item>
                   After the interview is done, the result of the application

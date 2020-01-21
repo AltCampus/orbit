@@ -5,5 +5,7 @@ module.exports = {
   SCORE_FOR_HTML: 20,
   SCORE_FOR_CODEWARS: 20,
   SCORE_FOR_QUIZ: 20,
-  SCORE_FOR_INTERVIEW: 40
+  SCORE_FOR_INTERVIEW: 40,
+
+  TIME_FOR_FIRST_INTRO_MAIL: 0.1, // number in minutes
 };

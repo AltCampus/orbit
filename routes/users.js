@@ -7,6 +7,7 @@ const Task = require("../models/Task");
 const Timeline = require("../models/Timeline");
 const timelineCreator = require("../utils/timelineCreator");
 const auth = require("../utils/auth");
+const config = require("../utils/config");
 
 // Get All Users
 router.get("/", auth.verifyAdminToken, async (req, res) => {
@@ -74,7 +75,7 @@ router.post("/", async (req, res) => {
           user.name,
           user.hashMail
         );
-      }, 1000 * 60 * 40);
+      }, (config.TIME_FOR_FIRST_INTRO_MAIL * 1000 * 60));
     } else {
       res.status(201).json({ status: true, user });
     }

@@ -73,7 +73,7 @@ class TaskOne extends Component {
     return (
       <UserWrapper activeKey={"1"}>
         <Title level={2} style={{ marginBottom: 0 }}>
-          Task 1: HTML/CSS and Questionnaire
+          Task 1: HTML/CSS
         </Title>
         <Divider />
         {this.props.user.stage > 1 && <TaskCompleted />}
@@ -89,7 +89,7 @@ class TaskOne extends Component {
                     <ul>
                       <li>
                         <a
-                          href="https://i.ibb.co/7WqkWMD/html-css-assignment.png"
+                          href="/images/html-css-assignment.png"
                           download
                           target="_blank"
                         >

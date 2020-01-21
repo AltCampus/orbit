@@ -34,7 +34,7 @@ function AdminWrapper(props) {
         collapsedWidth={broken ? "0" : "80"}
         collapsed={collapsed}
       >
-        <div className="logo"> Alt Campus </div>
+        <div className="logo"> AltCampus </div>
         <Menu
           theme="dark"
           mode="inline"

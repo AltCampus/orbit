@@ -233,8 +233,8 @@ class TaskTwo extends Component {
                               A problem on the platform is called a ‘Kata’.
                               </li>
                             <li>
-                              This task is to test your problem solving
-                              skills, critical thinking and ability to
+                              This task is designed to test your problem solving
+                              skills and ability to
                               learn. You have to take help from the
                               resources and solve the katas based on your
                               learning.
