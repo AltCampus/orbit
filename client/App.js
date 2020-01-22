@@ -23,6 +23,7 @@ import UserView from "./components/profile/UserView/UserView";
 import RateQuiz from "./components/questionnaire/RateQuiz";
 import { message, Spin, Icon } from "antd";
 import InterviewsList from "./components/interview/InterviewsList";
+import ResetPassword from "./components/resetPassword/ResetPassword";
 
 class App extends Component {
   protectedRoutes = () => {
@@ -61,6 +62,7 @@ class App extends Component {
       <Switch>
         <Route exact path="/" component={LandingPage} />
         <Route path="/account/claim/:hashmail" component={SetPassword} />
+        <Route path="/account/password/reset" component={ResetPassword} />
         <Route path="/login" component={Login} />
         <Route path="/" component={Error404}></Route>
       </Switch>
@@ -69,7 +71,7 @@ class App extends Component {
 
   componentDidMount = () => {
     if (localStorage.getItem("authToken")) {
-      const invalidToken = async (msg) => {
+      const invalidToken = async msg => {
         message.error(`${msg}, Redirect to Login please wait!`);
         await localStorage.clear();
         setTimeout(() => this.props.history.push("/login"), 1000);
@@ -104,7 +106,7 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const {
     user,
     tokenValidationInProgress,

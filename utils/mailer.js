@@ -19,7 +19,10 @@ exports.mail = function(status, toAddress, studentName, payLoad) {
     case "REJECTION_MAIL_AFTER_INTERVIEW":
       content = mailTemplate.getRejectMailAfterInterview(studentName);
       break;
-    default: 
+    case "RESET_ACCOUNT_PASSWORD":
+      content = mailTemplate.getResetPasswordMail(studentName, payLoad);
+      break;
+    default:
       return;
   }
 
@@ -38,8 +41,8 @@ exports.mail = function(status, toAddress, studentName, payLoad) {
           Authorization: `Zoho-authtoken ${process.env.oAuthToken}`
         }
       }
-    )
+    );
   } catch (error) {
-    console.log(error, ' error in mail');
+    console.log(error, " error in mail");
   }
 };

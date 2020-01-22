@@ -52,6 +52,11 @@ module.exports = {
                 .status(401)
                 .json({ status: false, message: "User not found" });
             }
+            if (!user) {
+              return res
+                .status(401)
+                .json({ status: false, message: "User not found" });
+            }
             if (user.isAdmin !== true) {
               return res
                 .status(401)
