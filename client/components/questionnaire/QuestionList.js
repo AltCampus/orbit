@@ -90,6 +90,7 @@ class QuestionList extends React.Component {
           questionTitle: res.data.question.questionTitle,
           point: res.data.question.point,
           questionType: res.data.question.type,
+          questionDescription: res.data.question.questionDescription,
           answer: res.data.question.answer,
           isRandom: res.data.question.isRandom,
           isActive: res.data.question.isActive,
@@ -136,6 +137,7 @@ class QuestionList extends React.Component {
       }
       const requestBody = {
         questionTitle: values.questionTitle,
+        questionDescription: values.questionDescription,
         type: values.questionType,
         point: values.point,
         isActive: values.isActive,

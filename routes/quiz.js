@@ -31,7 +31,7 @@ router.get("/status", auth.verifyToken, async (req, res, next) => {
     }
     const quiz = await Quiz.findById(user.quiz).populate(
       "questions",
-      "questionTitle type options"
+      "questionTitle questionDescription type options"
     );
     if (!user.canTakeQuiz && quiz.submittedTime) {
       return res.status(200).json({
@@ -94,7 +94,7 @@ router.get("/generate", auth.verifyToken, async (req, res, next) => {
       {
         isActive: true
       },
-      "_id type options questionTitle"
+      "_id type options questionTitle questionDescription"
     );
 
     const getRandomIndex = array => Math.floor(Math.random() * array.length);
@@ -145,7 +145,7 @@ router.get("/current", auth.verifyToken, async (req, res, next) => {
     }
     const quiz = await Quiz.findById(user.quiz).populate(
       "questions",
-      "questionTitle type options"
+      "questionTitle questionDescription type options"
     );
     if (quiz.submittedTime) {
       return res
@@ -163,11 +163,18 @@ router.get("/current", auth.verifyToken, async (req, res, next) => {
         const answerLinked = quiz.answers.filter(answer => {
           return String(answer.question) === String(question._id);
         })[0];
-        const { _id, questionTitle, type, options } = question;
+        const {
+          _id,
+          questionTitle,
+          questionDescription,
+          type,
+          options
+        } = question;
         return {
           _id,
           questionTitle,
           type,
+          questionDescription,
           options,
           answer: answerLinked && answerLinked.answerSubmitted
         };
@@ -395,12 +402,10 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
       return res.status(404).json({ status: false, error: "Quiz not found." });
     }
     if (!quiz.answers) {
-      return res
-        .status(403)
-        .json({
-          status: false,
-          error: "Quiz has no answers to rate this quiz submission."
-        });
+      return res.status(403).json({
+        status: false,
+        error: "Quiz has no answers to rate this quiz submission."
+      });
     }
     if (!quiz.submittedTime) {
       return res

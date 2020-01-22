@@ -13,6 +13,7 @@ import {
   Checkbox,
   message
 } from "antd";
+const { TextArea } = Input;
 
 const EditQuestionModal = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
@@ -49,6 +50,11 @@ const EditQuestionModal = Form.create({ name: "form_in_modal" })(
                 ],
                 initialValue: this.props.editingData.questionTitle
               })(<Input />)}
+            </Form.Item>
+            <Form.Item label="Question Description">
+              {getFieldDecorator("questionDescription", {
+                initialValue: this.props.editingData.questionDescription
+              })(<TextArea rows={4} />)}
             </Form.Item>
             <Form.Item label="Enter number of point for answering question correctly">
               {getFieldDecorator("point", {

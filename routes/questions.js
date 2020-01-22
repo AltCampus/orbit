@@ -21,6 +21,7 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
   try {
     const {
       questionTitle,
+      questionDescription,
       isRandom,
       isActive,
       point,
@@ -85,6 +86,7 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
     const newQuestion = await Question.create({
       questionTitle,
       type,
+      questionDescription,
       options: {
         a: options.a,
         b: options.b,
@@ -97,13 +99,11 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
       isRandom
     });
 
-    return res
-      .status(200)
-      .json({
-        status: true,
-        message: "Your question has been added!",
-        newQuestion
-      });
+    return res.status(200).json({
+      status: true,
+      message: "Your question has been added!",
+      newQuestion
+    });
   } catch (error) {
     return res
       .status(400)
@@ -127,6 +127,7 @@ router.put("/:id", auth.verifyAdminToken, async (req, res) => {
     const updates = {};
     const {
       questionTitle,
+      questionDescription,
       isRandom,
       isActive,
       point,
@@ -143,6 +144,9 @@ router.put("/:id", auth.verifyAdminToken, async (req, res) => {
           .json({ status: false, message: "Invalid Question" });
       }
       updates.questionTitle = questionTitle;
+    }
+    if (questionDescription) {
+      updates.questionDescription = questionDescription;
     }
     if (isRandom) {
       // If isRandom is to be updated

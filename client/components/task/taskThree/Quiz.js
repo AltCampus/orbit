@@ -250,6 +250,11 @@ class Quiz extends Component {
               <div className="middle">
                 <Divider orientation="left">Question</Divider>
                 <p className="question">{currentQuestion.questionTitle}</p>
+                {currentQuestion.questionDescription && (
+                  <pre className="review-question-description">
+                    {currentQuestion.questionDescription}
+                  </pre>
+                )}
                 {/* <Divider orientation="left">Answer</Divider> */}
                 {currentQuestion.type === "MCQ" ? (
                   <Radio.Group
@@ -274,7 +279,7 @@ class Quiz extends Component {
                     placeholder="Enter your answer here..."
                     value={currentQuestion.answer}
                     onChange={this.onValueChange}
-                    autoSize={{maxRows: 10, minRows: 4}}
+                    autoSize={{ maxRows: 10, minRows: 4 }}
                   />
                 )}
               </div>
@@ -341,21 +346,21 @@ class Quiz extends Component {
         ) : this.state.canTakeQuiz ? (
           <div class="quiz-info">
             <Text strong>Time Limit: 30 min</Text>
-            <Title level={4}>
-              Instructions 
-            </Title>
+            <Title level={4}>Instructions</Title>
             <ul>
+              <li>All questions are compulsory to answer.</li>
               <li>
-                All questions are compulsory to answer.
+                Once you start the questionnaire, you will be given 30 minutes
+                to complete it.
               </li>
               <li>
-                Once you start the questionnaire, you will be given 30 minutes to complete it.
-              </li>
-              <li>
-                Please keep a notebook and pen handy while doing this questionnaire.
+                Please keep a notebook and pen handy while doing this
+                questionnaire.
               </li>
             </ul>
-            <Button onClick={() => this.startQuiz()}>Start Questionnaire</Button>
+            <Button onClick={() => this.startQuiz()}>
+              Start Questionnaire
+            </Button>
           </div>
         ) : this.state.onGoing ? (
           <div class="quiz-info">

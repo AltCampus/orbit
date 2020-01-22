@@ -62,6 +62,7 @@ class RateQuiz extends React.Component {
             ...acc,
             [val.question._id]: {
               questionTitle: val.question.questionTitle,
+              questionDescription: val.question.questionDescription,
               answer: val.answerSubmitted,
               correctAnswer:
                 val.question.options &&
