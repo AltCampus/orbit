@@ -42,7 +42,26 @@ router.get("/status", auth.verifyToken, async (req, res, next) => {
       });
     }
     if (quiz.endTime.valueOf() < Date.now()) {
-      true;
+      if (quiz.answers) {
+        await Quiz.findByIdAndUpdate(quiz._id, {
+          submittedTime: Date.now()
+        });
+        // Update user stage to 4
+        await User.findByIdAndUpdate(req.user.id, { stage: 4 });
+        await Timeline.create({
+          user: req.user.id,
+          ...timelineCreator("QUIZ_AUTO_SUBMITTED", {
+            name: user.name,
+            endTime: quiz.endTime
+          })
+        });
+        return res.status(200).json({
+          canTakeQuiz: false,
+          onGoing: false,
+          submitted: true,
+          stageUpgraded: true
+        });
+      }
       return res.status(200).json({
         canTakeQuiz: false,
         onGoing: false,

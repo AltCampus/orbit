@@ -77,6 +77,16 @@ const timelineCreator = (action, payload = {}) => {
         description: `${payload.name} submitted the quiz.`,
         time: new Date()
       };
+    case "QUIZ_AUTO_SUBMITTED":
+      return {
+        title: "Quiz Auto Submitted",
+        description: `${
+          payload.name
+        }'s quiz was marked as submit(end time was : ${new Date(
+          payload.endTime
+        ).toLocaleString()}) as they had ran out of time.`,
+        time: new Date()
+      };
     case "QUIZ_REVIEWED":
       return {
         title: "Quiz Reviewed",

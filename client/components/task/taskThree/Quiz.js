@@ -34,12 +34,18 @@ class Quiz extends Component {
     this.intervalId = React.createRef();
   }
   async componentDidMount() {
+    this.getStatus();
+  }
+  getStatus = async () => {
     try {
       const res = await axios.get("/api/v1/quiz/status", {
         headers: {
           authorization: JSON.parse(localStorage.authToken)
         }
       });
+      if (res.data.stageUpgraded) {
+        this.props.userStageUpgrade();
+      }
       this.setState({
         canTakeQuiz: res.data.canTakeQuiz,
         onGoing: res.data.onGoing,
@@ -58,15 +64,16 @@ class Quiz extends Component {
       }
       this.setState({ loading: false });
     }
-  }
+  };
   componentWillUnmount() {
     window.clearInterval(this.intervalId);
   }
   startTimer = () => {
-    this.intervalId = window.setInterval(() => {
+    this.intervalId = window.setInterval(async () => {
       if (this.state.timeLeft === 0) {
         window.clearInterval(this.intervalId);
-        return this.submitQuiz();
+        await this.autosaveQuiz();
+        return await this.getStatus();
       }
       this.setState({ timeLeft: this.state.timeLeft - 1 });
       if (this.state.timeLeft % 60 === 0 && !this.state.requestOnGoing) {
