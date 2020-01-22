@@ -70,6 +70,11 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
             <Form.Item label="Question Description(or any code snippet)">
               {getFieldDecorator("questionDescription")(<TextArea rows={4} />)}
             </Form.Item>
+            <Form.Item label="Enter time alloted for this question (in seconds)">
+              {getFieldDecorator("time", {
+                initialValue: 60
+              })(<InputNumber min={1} max={999} name="time" />)}
+            </Form.Item>
             <Form.Item label="Enter number of point for answering question correctly">
               {getFieldDecorator("point", {
                 initialValue: 10
@@ -199,6 +204,7 @@ class NewQuestionModal extends React.Component {
       const requestBody = {
         questionTitle: values.questionTitle,
         questionDescription: values.questionDescription,
+        time: values.time,
         type: values.questionType,
         point: values.point,
         isActive: values.isActive,

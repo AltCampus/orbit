@@ -34,8 +34,8 @@ const EditQuestionModal = Form.create({ name: "form_in_modal" })(
       return (
         <Modal
           visible={visible}
-          title="Add question"
-          okText="Create"
+          title="Edit question"
+          okText="Update"
           onCancel={onCancel}
           onOk={onCreate}
         >
@@ -55,6 +55,11 @@ const EditQuestionModal = Form.create({ name: "form_in_modal" })(
               {getFieldDecorator("questionDescription", {
                 initialValue: this.props.editingData.questionDescription
               })(<TextArea rows={4} />)}
+            </Form.Item>
+            <Form.Item label="Enter time alloted for this question (in seconds)">
+              {getFieldDecorator("time", {
+                initialValue: this.props.editingData.time
+              })(<InputNumber min={1} max={999} name="time" />)}
             </Form.Item>
             <Form.Item label="Enter number of point for answering question correctly">
               {getFieldDecorator("point", {

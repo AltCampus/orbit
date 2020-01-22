@@ -23,6 +23,7 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
       questionTitle,
       questionDescription,
       isRandom,
+      time,
       isActive,
       point,
       type,
@@ -87,6 +88,7 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
       questionTitle,
       type,
       questionDescription,
+      time,
       options: {
         a: options.a,
         b: options.b,
@@ -128,6 +130,7 @@ router.put("/:id", auth.verifyAdminToken, async (req, res) => {
     const {
       questionTitle,
       questionDescription,
+      time,
       isRandom,
       isActive,
       point,
@@ -148,7 +151,10 @@ router.put("/:id", auth.verifyAdminToken, async (req, res) => {
     if (questionDescription) {
       updates.questionDescription = questionDescription;
     }
-    if (isRandom) {
+    if (time) {
+      updates.time = time;
+    }
+    if (isRandom != null) {
       // If isRandom is to be updated
       if (typeof isRandom !== "boolean") {
         return res.status(400).json({
@@ -158,7 +164,7 @@ router.put("/:id", auth.verifyAdminToken, async (req, res) => {
       }
       updates.isRandom = isRandom;
     }
-    if (isActive) {
+    if (isActive != null) {
       // If isActive is to be updated
       if (typeof isActive !== "boolean") {
         return res.status(400).json({

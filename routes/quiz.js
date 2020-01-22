@@ -94,7 +94,7 @@ router.get("/generate", auth.verifyToken, async (req, res, next) => {
       {
         isActive: true
       },
-      "_id type options questionTitle questionDescription"
+      "_id type options time questionTitle questionDescription"
     );
 
     const getRandomIndex = array => Math.floor(Math.random() * array.length);
@@ -103,14 +103,13 @@ router.get("/generate", auth.verifyToken, async (req, res, next) => {
       quizQuestions.push(fixedQuestions[randomIndex]); // Push random question to quiz
       fixedQuestions.splice(randomIndex, 1); // Delete that random question from array of random questions
     }
+    const totalTime = quizQuestions.reduce((acc, val) => acc + val.time, 0);
     // Add validation that number of questions required are been sent
     const newQuiz = await Quiz.create({
       user: req.user.id,
       questions: quizQuestions.map(question => question.id),
       startTime: Date.now(),
-      endTime: new Date(
-        Date.now() + config.TIME_FOR_QUIZ_ASSIGNMENT * 60 * 1000
-      )
+      endTime: new Date(Date.now() + totalTime * 1000)
     });
     await User.findByIdAndUpdate(req.user.id, {
       quiz: newQuiz.id,
