@@ -3,7 +3,9 @@ const Schema = mongoose.Schema;
 
 const questionSchema = new Schema({
   questionTitle: { type: String, required: true },
+  questionDescription: { type: String },
   type: { type: String, required: true, enum: ["MCQ", "subjective"] },
+  time: { type: Number, default: 60 },
   options: {
     a: { type: String },
     b: { type: String },

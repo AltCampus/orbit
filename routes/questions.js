@@ -21,7 +21,9 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
   try {
     const {
       questionTitle,
+      questionDescription,
       isRandom,
+      time,
       isActive,
       point,
       type,
@@ -85,6 +87,8 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
     const newQuestion = await Question.create({
       questionTitle,
       type,
+      questionDescription,
+      time,
       options: {
         a: options.a,
         b: options.b,
@@ -97,13 +101,11 @@ router.post("/", auth.verifyAdminToken, async (req, res) => {
       isRandom
     });
 
-    return res
-      .status(200)
-      .json({
-        status: true,
-        message: "Your question has been added!",
-        newQuestion
-      });
+    return res.status(200).json({
+      status: true,
+      message: "Your question has been added!",
+      newQuestion
+    });
   } catch (error) {
     return res
       .status(400)
@@ -127,6 +129,8 @@ router.put("/:id", auth.verifyAdminToken, async (req, res) => {
     const updates = {};
     const {
       questionTitle,
+      questionDescription,
+      time,
       isRandom,
       isActive,
       point,
@@ -144,7 +148,13 @@ router.put("/:id", auth.verifyAdminToken, async (req, res) => {
       }
       updates.questionTitle = questionTitle;
     }
-    if (isRandom) {
+    if (questionDescription) {
+      updates.questionDescription = questionDescription;
+    }
+    if (time) {
+      updates.time = time;
+    }
+    if (isRandom != null) {
       // If isRandom is to be updated
       if (typeof isRandom !== "boolean") {
         return res.status(400).json({
@@ -154,7 +164,7 @@ router.put("/:id", auth.verifyAdminToken, async (req, res) => {
       }
       updates.isRandom = isRandom;
     }
-    if (isActive) {
+    if (isActive != null) {
       // If isActive is to be updated
       if (typeof isActive !== "boolean") {
         return res.status(400).json({

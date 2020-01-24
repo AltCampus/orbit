@@ -36,6 +36,11 @@ const ReviewQuizForm = Form.create({ name: "form_in_modal" })(
               <Text className="question" strong>
                 {index + 1}. {answers[questionId].questionTitle}
               </Text>
+              {answers[questionId].questionDescription && (
+                <pre className="review-question-description">
+                  {answers[questionId].questionDescription}
+                </pre>
+              )}
               <br />
               <Text strong underline>
                 {" "}
@@ -56,6 +61,7 @@ const ReviewQuizForm = Form.create({ name: "form_in_modal" })(
                   </Text>
                 </>
               )}
+
               <div>Max points - {answers[questionId].maximumPoint}</div>
               <Form.Item label="Point: ">
                 {getFieldDecorator(questionId, {

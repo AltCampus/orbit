@@ -31,7 +31,7 @@ router.get("/status", auth.verifyToken, async (req, res, next) => {
     }
     const quiz = await Quiz.findById(user.quiz).populate(
       "questions",
-      "questionTitle type options"
+      "questionTitle questionDescription type options"
     );
     if (!user.canTakeQuiz && quiz.submittedTime) {
       return res.status(200).json({
@@ -42,7 +42,26 @@ router.get("/status", auth.verifyToken, async (req, res, next) => {
       });
     }
     if (quiz.endTime.valueOf() < Date.now()) {
-      true;
+      if (quiz.answers) {
+        await Quiz.findByIdAndUpdate(quiz._id, {
+          submittedTime: Date.now()
+        });
+        // Update user stage to 4
+        await User.findByIdAndUpdate(req.user.id, { stage: 4 });
+        await Timeline.create({
+          user: req.user.id,
+          ...timelineCreator("QUIZ_AUTO_SUBMITTED", {
+            name: user.name,
+            endTime: quiz.endTime
+          })
+        });
+        return res.status(200).json({
+          canTakeQuiz: false,
+          onGoing: false,
+          submitted: true,
+          stageUpgraded: true
+        });
+      }
       return res.status(200).json({
         canTakeQuiz: false,
         onGoing: false,
@@ -94,7 +113,7 @@ router.get("/generate", auth.verifyToken, async (req, res, next) => {
       {
         isActive: true
       },
-      "_id type options questionTitle"
+      "_id type options time questionTitle questionDescription"
     );
 
     const getRandomIndex = array => Math.floor(Math.random() * array.length);
@@ -103,14 +122,13 @@ router.get("/generate", auth.verifyToken, async (req, res, next) => {
       quizQuestions.push(fixedQuestions[randomIndex]); // Push random question to quiz
       fixedQuestions.splice(randomIndex, 1); // Delete that random question from array of random questions
     }
+    const totalTime = quizQuestions.reduce((acc, val) => acc + val.time, 0);
     // Add validation that number of questions required are been sent
     const newQuiz = await Quiz.create({
       user: req.user.id,
       questions: quizQuestions.map(question => question.id),
       startTime: Date.now(),
-      endTime: new Date(
-        Date.now() + config.TIME_FOR_QUIZ_ASSIGNMENT * 60 * 1000
-      )
+      endTime: new Date(Date.now() + totalTime * 1000)
     });
     await User.findByIdAndUpdate(req.user.id, {
       quiz: newQuiz.id,
@@ -145,7 +163,7 @@ router.get("/current", auth.verifyToken, async (req, res, next) => {
     }
     const quiz = await Quiz.findById(user.quiz).populate(
       "questions",
-      "questionTitle type options"
+      "questionTitle questionDescription type options"
     );
     if (quiz.submittedTime) {
       return res
@@ -163,11 +181,18 @@ router.get("/current", auth.verifyToken, async (req, res, next) => {
         const answerLinked = quiz.answers.filter(answer => {
           return String(answer.question) === String(question._id);
         })[0];
-        const { _id, questionTitle, type, options } = question;
+        const {
+          _id,
+          questionTitle,
+          questionDescription,
+          type,
+          options
+        } = question;
         return {
           _id,
           questionTitle,
           type,
+          questionDescription,
           options,
           answer: answerLinked && answerLinked.answerSubmitted
         };
@@ -395,12 +420,10 @@ router.post("/:id", auth.verifyAdminToken, async (req, res) => {
       return res.status(404).json({ status: false, error: "Quiz not found." });
     }
     if (!quiz.answers) {
-      return res
-        .status(403)
-        .json({
-          status: false,
-          error: "Quiz has no answers to rate this quiz submission."
-        });
+      return res.status(403).json({
+        status: false,
+        error: "Quiz has no answers to rate this quiz submission."
+      });
     }
     if (!quiz.submittedTime) {
       return res

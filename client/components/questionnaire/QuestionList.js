@@ -90,6 +90,8 @@ class QuestionList extends React.Component {
           questionTitle: res.data.question.questionTitle,
           point: res.data.question.point,
           questionType: res.data.question.type,
+          time: res.data.question.time,
+          questionDescription: res.data.question.questionDescription,
           answer: res.data.question.answer,
           isRandom: res.data.question.isRandom,
           isActive: res.data.question.isActive,
@@ -136,6 +138,8 @@ class QuestionList extends React.Component {
       }
       const requestBody = {
         questionTitle: values.questionTitle,
+        questionDescription: values.questionDescription,
+        time: values.time,
         type: values.questionType,
         point: values.point,
         isActive: values.isActive,
@@ -231,6 +235,19 @@ class QuestionList extends React.Component {
               <Column title="Question" dataIndex="questionTitle" key="_id" />
               <Column title="Type" dataIndex="type" key="age" />
               <Column title="Point" dataIndex="point" key="address" />
+              <Column title="Time(in seconds)" dataIndex="time" key="time" />
+              <Column
+                title="Is Active"
+                dataIndex="isActive"
+                key="isActive"
+                render={isActive =>
+                  isActive ? (
+                    <span className="green-text">Active</span>
+                  ) : (
+                    <span className="red-text">Not Active</span>
+                  )
+                }
+              />
               {/* <Column title="Is Active" dataIndex="isActive" key="address" />
             <Column title="Is Random" dataIndex="isRandom" key="address" /> */}
               <Column

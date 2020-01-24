@@ -464,7 +464,6 @@ router.get("/2/status", auth.verifyToken, async (req, res) => {
     }
     res.status(400).json({ error: "Something went wrong!" });
   } catch (error) {
-    console.log(error);
     return res
       .status(400)
       .json({ status: false, error: "Something went wrong!" });

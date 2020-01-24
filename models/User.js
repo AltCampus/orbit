@@ -28,7 +28,7 @@ const userSchema = new Schema(
       type: Number,
       required: true
     },
-    hashMail: { type: String, unique: true },
+    hashMail: { type: String },
     socialProfile: { type: String, required: true },
     motivation: { type: String, required: true },
     task: {

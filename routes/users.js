@@ -75,7 +75,7 @@ router.post("/", async (req, res) => {
           user.name,
           user.hashMail
         );
-      }, (config.TIME_FOR_FIRST_INTRO_MAIL * 1000 * 60));
+      }, config.TIME_FOR_FIRST_INTRO_MAIL * 1000 * 60);
     } else {
       res.status(201).json({ status: true, user });
     }
@@ -122,6 +122,41 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.post("/password/reset", async (req, res) => {
+  let { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        status: false,
+        message: "Email not found in database!"
+      });
+    }
+    user.hashMail =
+      Date.now() +
+      Math.random()
+        .toString(36)
+        .substring(2, 15);
+    await user.save();
+    res.status(200).json({
+      status: true,
+      message: "Reset Password Link has been sent to your email!"
+    });
+    if (process.env.NODE_ENV === "production") {
+      mailer.mail(
+        "RESET_ACCOUNT_PASSWORD",
+        user.email,
+        user.name,
+        user.hashMail
+      );
+    }
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ status: false, message: "Something went wrong!" });
+  }
+});
+
 // on first login reset Password
 router.post("/:hashMail", async (req, res) => {
   let { password } = req.body;
@@ -136,21 +171,24 @@ router.post("/:hashMail", async (req, res) => {
       if (!user) {
         return res
           .status(400)
-          .json({ status: true, message: "Invaild login link!" });
-      } else if (!user.isProfileClaimed) {
+          .json({ status: true, message: "Invalid login link!" });
+      } else if (user.hashMail) {
         user.password = password;
+        if(!user.isProfileClaimed){
+          // Start the timer for HTML task and link it to user model.
+          const task = await Task.create({
+            user: user.id,
+            html: {
+              startTime: Date.now()
+            }
+          });
+          user.task = task.id;
 
-        // Start the timer for HTML task and link it to user model.
-        const task = await Task.create({
-          user: user.id,
-          html: {
-            startTime: Date.now()
-          }
-        });
-        user.task = task.id;
-
-        // Set User stage to 1
-        user.stage = 1;
+          // Set User stage to 1
+          user.stage = 1;
+        } 
+        //set hashmail to null
+        user.hashMail = null;
 
         // Set user profile to be claimed.
         user.isProfileClaimed = true;
@@ -161,7 +199,7 @@ router.post("/:hashMail", async (req, res) => {
         });
         return res.status(201).json({
           status: true,
-          message: "You've successfully claimed your account!"
+          message: "You've successfully updated your account password!"
         });
       } else {
         return res.status(401).json({
@@ -170,6 +208,7 @@ router.post("/:hashMail", async (req, res) => {
         });
       }
     } catch (error) {
+      console.log(error);
       return res
         .status(400)
         .json({ success: false, message: "Something went wrong!" });
