@@ -174,19 +174,19 @@ router.post("/:hashMail", async (req, res) => {
           .json({ status: true, message: "Invalid login link!" });
       } else if (user.hashMail) {
         user.password = password;
+        if(!user.isProfileClaimed){
+          // Start the timer for HTML task and link it to user model.
+          const task = await Task.create({
+            user: user.id,
+            html: {
+              startTime: Date.now()
+            }
+          });
+          user.task = task.id;
 
-        // Start the timer for HTML task and link it to user model.
-        const task = await Task.create({
-          user: user.id,
-          html: {
-            startTime: Date.now()
-          }
-        });
-        user.task = task.id;
-
-        // Set User stage to 1
-        user.stage = 1;
-
+          // Set User stage to 1
+          user.stage = 1;
+        } 
         //set hashmail to null
         user.hashMail = null;
 
