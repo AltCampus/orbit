@@ -211,7 +211,8 @@ router.get("/all/status", auth.verifyToken, async (req, res) => {
       onGoing: false,
       submitted: true,
       startTime: quiz.startTime,
-      submittedTime: quiz.submittedTime
+      submittedTime:
+        quiz.submittedTime > quiz.endTime ? quiz.endTime : quiz.submittedTime
     };
     if (req.user.stage === 4) {
       if (req.user.canScheduleInterview) {
