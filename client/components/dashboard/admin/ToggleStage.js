@@ -162,7 +162,9 @@ const columns = [
               (Math.max(
                 new Date(user.quiz && user.quiz.submittedTime).valueOf(),
                 new Date(
-                  user.task.codewars && user.task.codewars.endTime
+                  user.task.codewars &&
+                    (user.task.codewars.forceSubmitTime ||
+                      user.task.codewars.endTime)
                 ).valueOf()
               ) -
                 new Date(time).valueOf()) /
