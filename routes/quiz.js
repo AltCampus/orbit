@@ -22,12 +22,24 @@ router.get("/status", auth.verifyToken, async (req, res, next) => {
       });
     }
     if (!user.quiz && user.canTakeQuiz) {
-      return res.status(200).send({
-        canTakeQuiz: true,
-        onGoing: false,
-        submitted: false,
-        message: "You've not taken the quiz yet."
-      });
+      try {
+        const questions = await Question.find({ isActive: true }, "time");
+        const quizTimeLength = questions.reduce(
+          (acc, question) => acc + question.time,
+          0
+        );
+        return res.status(200).send({
+          canTakeQuiz: true,
+          quizTimeLength,
+          onGoing: false,
+          submitted: false,
+          message: "You've not taken the quiz yet."
+        });
+      } catch (error) {
+        return res
+          .status(403)
+          .json({ status: false, error: "Something went wrong!" });
+      }
     }
     const quiz = await Quiz.findById(user.quiz).populate(
       "questions",

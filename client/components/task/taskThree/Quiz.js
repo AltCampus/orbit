@@ -24,6 +24,7 @@ class Quiz extends Component {
     super();
     this.state = {
       canTakeQuiz: null,
+      quizTimeLength: null,
       onGoing: null,
       loading: true,
       questions: null,
@@ -48,6 +49,7 @@ class Quiz extends Component {
       }
       this.setState({
         canTakeQuiz: res.data.canTakeQuiz,
+        quizTimeLength: res.data.quizTimeLength,
         onGoing: res.data.onGoing,
         submitted: res.data.submitted,
         loading: false
@@ -352,12 +354,19 @@ class Quiz extends Component {
           </>
         ) : this.state.canTakeQuiz ? (
           <div class="quiz-info">
-            <Text strong>Time Limit: 30 min</Text>
+            <Text strong>
+              Time Limit: {parseInt(this.state.quizTimeLength / 60)} minutes
+              {this.state.quizTimeLength % 60 !== 0 &&
+                ` and ${this.state.quizTimeLength % 60} seconds`}
+            </Text>
             <Title level={4}>Instructions</Title>
             <ul>
               <li>All questions are compulsory to answer.</li>
               <li>
-                Once you start the questionnaire, you will be given 30 minutes
+                Once you start the questionnaire, you will be given{" "}
+                {parseInt(this.state.quizTimeLength / 60)} minutes
+                {this.state.quizTimeLength % 60 !== 0 &&
+                  ` and ${this.state.quizTimeLength % 60} seconds`}{" "}
                 to complete it.
               </li>
               <li>
