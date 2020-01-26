@@ -50,7 +50,7 @@ export const getCurrentUser = (invalidToken, cb) => {
       }
     } catch (error) {
       if (error.response) {
-        await invalidToken(error.response.data.error);
+        await invalidToken(error.response.data.message);
       }
       dispatch({ type: NO_TOKEN });
     }

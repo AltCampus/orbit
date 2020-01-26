@@ -21,7 +21,7 @@ module.exports = {
           userToken.userId,
           "-password -totalScore -updatedAt -hashMail -screener -isProfileClaimed",
           (err, user) => {
-            if (err)
+            if (err || !user)
               return res
                 .status(401)
                 .json({ status: false, message: "User not found" });
