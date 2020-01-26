@@ -1,38 +1,49 @@
 const axios = require("axios");
 const mailTemplate = require("./mailTemplate");
 
-exports.mail = function(status, toAddress, studentName, payLoad) {
-  let content;
+const getSubject = status => {
   switch (status) {
     case "40_MINS_AFTER_APPLYING":
-      content = mailTemplate.getApplyMail(studentName, payLoad); // payload here is hashMail
-      break;
     case "REJECTION_MAIL_BEFORE_INTERVIEW":
-      content = mailTemplate.getRejectionMailBeforeInterview(studentName);
-      break;
     case "SCHEDULE_INTERVIEW_MAIL_ALERT":
-      content = mailTemplate.scheduleInterviewMail(studentName);
-      break;
     case "ACCEPTANCE_MAIL_AFTER_INTERVIEW":
-      content = mailTemplate.getAcceptMail(studentName, payLoad);
-      break;
     case "REJECTION_MAIL_AFTER_INTERVIEW":
-      content = mailTemplate.getRejectMailAfterInterview(studentName);
-      break;
+      return "AltCampus Application";
     case "RESET_ACCOUNT_PASSWORD":
-      content = mailTemplate.getResetPasswordMail(studentName, payLoad);
-      break;
+      return "Password Reset - Galaxy (AltCampus)";
     default:
-      return;
+      return "AltCampus Application";
   }
+};
+const getContent = (status, studentName, payload) => {
+  switch (status) {
+    case "40_MINS_AFTER_APPLYING":
+      return mailTemplate.getApplyMail(studentName, payload); // payload here is hashMail
+    case "REJECTION_MAIL_BEFORE_INTERVIEW":
+      return mailTemplate.getRejectionMailBeforeInterview(studentName);
+    case "SCHEDULE_INTERVIEW_MAIL_ALERT":
+      return mailTemplate.scheduleInterviewMail(studentName);
+    case "ACCEPTANCE_MAIL_AFTER_INTERVIEW":
+      return mailTemplate.getAcceptMail(studentName, payload);
+    case "REJECTION_MAIL_AFTER_INTERVIEW":
+      return mailTemplate.getRejectMailAfterInterview(studentName);
+    case "RESET_ACCOUNT_PASSWORD":
+      return mailTemplate.getResetPasswordMail(studentName, payload);
+    default:
+      return "Something went wrong!";
+  }
+};
 
+exports.mail = function(status, toAddress, studentName, payload) {
+  let content = getContent(status, studentName, payload);
+  let subject = getSubject(status);
   try {
     axios.post(
       `https://mail.zoho.com/api/accounts/${process.env.accountId}/messages`,
       {
         fromAddress: "prashant@altcampus.io",
         toAddress,
-        subject: "AltCampus Application",
+        subject,
         content
       },
       {
