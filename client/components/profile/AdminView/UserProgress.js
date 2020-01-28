@@ -7,8 +7,12 @@ import TaskFourProgress from "./TaskProgress/TaskFourProgress";
 const UserProgress = props => {
   return (
     <div className="progress-container">
-      <TaskOneProgress user={props.user} fetchUsers={props.fetchUsers} />
-      <TaskTwoProgress user={props.user} fetchUsers={props.fetchUsers} />
+      {props.user && props.user.task && (
+        <TaskOneProgress user={props.user} fetchUsers={props.fetchUsers} />
+      )}
+      {props.user && props.user.task && props.user.task.codewars && (
+        <TaskTwoProgress user={props.user} fetchUsers={props.fetchUsers} />
+      )}
       {props.user && props.user.quiz && <TaskThreeProgress user={props.user} />}
       {props.user && props.user.stage === 4 && (
         <TaskFourProgress user={props.user} fetchUser={props.fetchUsers} />
