@@ -270,7 +270,7 @@ class UserProfile extends Component {
       canTakeQuiz,
       createdAt
     } = this.props.user;
-    const { html, codewars } = task;
+    const { html = null, codewars = null } = task;
     return (
       <>
         {this.props.user && (
@@ -324,7 +324,7 @@ class UserProfile extends Component {
                 </Descriptions>
                 <Descriptions column={2}>
                   <Descriptions.Item label="HTML Task">
-                    {html.submitTime ? (
+                    {html && html.submitTime ? (
                       html.score == null ? (
                         <Tag color="orange">To Be Reviewed</Tag>
                       ) : (
@@ -362,9 +362,6 @@ class UserProfile extends Component {
                       <Tag color="gold">Quiz not submitted</Tag>
                     )}
                   </Descriptions.Item>
-                  <Descriptions.Item label="Time Taken to reach stage 4">
-                    {this.calculateTimeTaken(this.props.user)}
-                  </Descriptions.Item>
                   <Descriptions.Item label="Interview">
                     {interview ? (
                       new Date(interview.startTime) < new Date() ? (
@@ -381,6 +378,9 @@ class UserProfile extends Component {
                     ) : (
                       <Tag color="volcano">Not Accepted for Interview</Tag>
                     )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Time Taken to reach stage 4">
+                    {this.calculateTimeTaken(this.props.user)}
                   </Descriptions.Item>
                 </Descriptions>
               </Content>

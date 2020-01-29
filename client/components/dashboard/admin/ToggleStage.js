@@ -113,11 +113,23 @@ const columns = [
     )
   },
   {
+    title: "Screener Details",
+    dataIndex: "screener",
+    key: "screener",
+    sortDirections: ["ascend", "descend"],
+    render: screenerInfo =>
+      screenerInfo ? (
+        <Tag color="green">Screener details added</Tag>
+      ) : (
+        <Tag color="volcano">Screener details not added</Tag>
+      )
+  },
+  {
     title: "Time Taken to Reach Stage 4",
     dataIndex: "createdAt",
     key: "timeTakenToReachStage",
     filters: [
-      { text: "Not completed yet", value: 0 },
+      { text: "Not reached yet", value: 0 },
       { text: "Less than a week", value: 1 },
       { text: "More than a week", value: 2 }
     ],
@@ -172,7 +184,7 @@ const columns = [
             )
           )
         ) : (
-          <Tag color="volcano">Not completed yet!</Tag>
+          <Tag color="volcano">Not reached yet!</Tag>
         );
       return (
         <div
@@ -197,10 +209,12 @@ const columns = [
     ],
     onFilter: (value, user) => {
       const { html } = user.task;
-      return (html.submitTime ? (html.score == null ? 1 : 2) : 0) === value;
+      return (
+        (html && html.submitTime ? (html.score == null ? 1 : 2) : 0) === value
+      );
     },
     render: html => {
-      if (html.submitTime) {
+      if (html && html.submitTime) {
         if (html.score == null) {
           return <Tag color="orange">To Be Reviewed</Tag>;
         } else {
