@@ -35,7 +35,7 @@ const getContent = (status, studentName, payload) => {
 };
 
 
-const actualMailer = function(status, toAddress, studentName, payload) {
+function actualMailer(status, toAddress, studentName, payload) {
   let content = getContent(status, studentName, payload);
   let subject = getSubject(status);
   try {
@@ -59,7 +59,7 @@ const actualMailer = function(status, toAddress, studentName, payload) {
   }
 };
 
-const fakeMailer = function (status, toAddress, studentName, payload) {
+function fakeMailer (status, toAddress, studentName, payload) {
   return console.log('mailed', toAddress, status, statusName);
 };
 
