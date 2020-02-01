@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import MDReactComponent from "markdown-react-js";
 
 import { Typography, Modal, Form, InputNumber, Button, Divider } from "antd";
 const { Text, Paragraph } = Typography;
@@ -37,11 +38,12 @@ const ReviewQuizForm = Form.create({ name: "form_in_modal" })(
                 {index + 1}. {answers[questionId].questionTitle}
               </Text>
               {answers[questionId].questionDescription && (
-                <pre className="review-question-description">
-                  {answers[questionId].questionDescription}
-                </pre>
+                <div className="review-question-description">
+                  <MDReactComponent
+                    text={answers[questionId].questionDescription}
+                  />
+                </div>
               )}
-              <br />
               <Text strong underline>
                 {" "}
                 Answer Submitted:-
@@ -61,7 +63,6 @@ const ReviewQuizForm = Form.create({ name: "form_in_modal" })(
                   </Text>
                 </>
               )}
-
               <div>Max points - {answers[questionId].maximumPoint}</div>
               <Form.Item label="Point: ">
                 {getFieldDecorator(questionId, {

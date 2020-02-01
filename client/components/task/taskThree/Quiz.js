@@ -14,6 +14,7 @@ import {
 import { connect } from "react-redux";
 import { userStageUpgrade } from "../../../actions/users";
 import QuizTimer from "./QuizTimer";
+import MDReactComponent from "markdown-react-js";
 import TextArea from "antd/lib/input/TextArea";
 import TaskCompleted from "../taskCompleted/TaskCompleted";
 import QuizPagination from "./QuizPagination";
@@ -260,9 +261,11 @@ class Quiz extends Component {
                 <Divider orientation="left">Question</Divider>
                 <p className="question">{currentQuestion.questionTitle}</p>
                 {currentQuestion.questionDescription && (
-                  <pre className="review-question-description">
-                    {currentQuestion.questionDescription}
-                  </pre>
+                  <div className="review-question-description">
+                    <MDReactComponent
+                      text={currentQuestion.questionDescription}
+                    />
+                  </div>
                 )}
                 {/* <Divider orientation="left">Answer</Divider> */}
                 {currentQuestion.type === "MCQ" ? (
