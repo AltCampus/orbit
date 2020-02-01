@@ -12,7 +12,7 @@ const Timer = ({ timeLeft }) => {
       </span>
       <span key="hours">
         <span className="clock-value">{parseInt(timeLeft / 3600) % 24}</span>{" "}
-        Hours, and {" "}
+        Hours, and{" "}
       </span>
       <span key="minutes">
         <span className="clock-value">{parseInt(timeLeft / 60) % 60}</span>{" "}
@@ -82,6 +82,7 @@ class SevenDayTimer extends Component {
               )}
             </>
           )}
+          <Icon type="info-circle"></Icon>
         </span>
       </Tooltip>
     );
