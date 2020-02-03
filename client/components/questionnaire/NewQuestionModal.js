@@ -67,7 +67,7 @@ const CollectionCreateForm = Form.create({ name: "form_in_modal" })(
                 ]
               })(<Input />)}
             </Form.Item>
-            <Form.Item label="Question Description(or any code snippet)">
+            <Form.Item label="Question Description(or any code snippet) in markdown format.">
               {getFieldDecorator("questionDescription")(<TextArea rows={4} />)}
             </Form.Item>
             <Form.Item label="Enter time alloted for this question (in seconds)">

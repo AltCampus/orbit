@@ -14,7 +14,6 @@ import {
 import { connect } from "react-redux";
 import { userStageUpgrade } from "../../../actions/users";
 import QuizTimer from "./QuizTimer";
-import MDReactComponent from "markdown-react-js";
 import TextArea from "antd/lib/input/TextArea";
 import TaskCompleted from "../taskCompleted/TaskCompleted";
 import QuizPagination from "./QuizPagination";
@@ -258,13 +257,11 @@ class Quiz extends Component {
             </section>
             <div className="container">
               <div className="middle">
-                <Divider orientation="left">Question</Divider>
-                <p className="question">{currentQuestion.questionTitle}</p>
+                <Divider orientation="left"></Divider>
+                <h2 className="question">Q. {currentQuestion.questionTitle}</h2>
                 {currentQuestion.questionDescription && (
-                  <div className="review-question-description">
-                    <MDReactComponent
-                      text={currentQuestion.questionDescription}
-                    />
+                  <div className="review-question-description" dangerouslySetInnerHTML={{ __html: currentQuestion.questionDescription}}>
+                    
                   </div>
                 )}
                 {/* <Divider orientation="left">Answer</Divider> */}
@@ -356,7 +353,7 @@ class Quiz extends Component {
             </div>
           </>
         ) : this.state.canTakeQuiz ? (
-          <div class="quiz-info">
+          <div className="quiz-info">
             <Text strong>
               Time Limit: {parseInt(this.state.quizTimeLength / 60)} minutes
               {this.state.quizTimeLength % 60 !== 0 &&
@@ -382,7 +379,7 @@ class Quiz extends Component {
             </Button>
           </div>
         ) : this.state.onGoing ? (
-          <div class="quiz-info">
+          <div className="quiz-info">
             <Text strong>You still have time to resume quiz.</Text>
             <Text type="danger">Timer is running.</Text>
             <Button onClick={() => this.resumeQuiz()}>Resume Quiz</Button>
