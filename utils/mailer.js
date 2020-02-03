@@ -36,8 +36,6 @@ const getContent = (status, studentName, payload) => {
 
 
 function actualMailer(status, toAddress, studentName, payload) {
-  console.log('in mail', process.env.isMailerOn, process.env.isMailerOn == "true")
-
   if(process.env.isMailerOn !== "true") {
     return;
   }
@@ -48,7 +46,7 @@ function actualMailer(status, toAddress, studentName, payload) {
     axios.post(
       `https://mail.zoho.com/api/accounts/${process.env.accountId}/messages`,
       {
-        fromAddress: "prashant@altcampus.io",
+        fromAddress: "Prashant@altcampus.io",
         toAddress,
         subject,
         content
