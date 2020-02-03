@@ -9,6 +9,8 @@ const timelineCreator = require("../utils/timelineCreator");
 const auth = require("../utils/auth");
 const config = require("../utils/config");
 
+var cors = require('cors');
+
 
 //current Login User
 router.get("/me", auth.verifyToken, async (req, res) => {
@@ -22,7 +24,7 @@ router.get("/me", auth.verifyToken, async (req, res) => {
 });
 
 /* POST req from altcampus to orbit and create user */
-router.post("/", async (req, res) => {
+router.post("/", cors(), async (req, res) => {
   let { name, email, phoneNo, socialProfile, motivation } = req.body;
   try {
     // validations for required profile
