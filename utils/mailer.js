@@ -63,4 +63,4 @@ function fakeMailer (status, toAddress, studentName, payload) {
   return console.log('mailed');
 };
 
-exports.mail = process.env.isMailerOn ? actualMailer : fakeMailer;
+exports.mail = process.env.isMailerOn == "true" ? actualMailer : fakeMailer;
