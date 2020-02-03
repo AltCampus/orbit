@@ -60,7 +60,7 @@ function actualMailer(status, toAddress, studentName, payload) {
 };
 
 function fakeMailer (status, toAddress, studentName, payload) {
-  return console.log('mailed', toAddress, status, statusName);
+  return console.log('mailed');
 };
 
 exports.mail = process.env.isMailerOn ? actualMailer : fakeMailer;
