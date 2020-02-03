@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const logger = require("morgan");
+const expressStaticGzip = require('express-static-gzip');
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -17,6 +18,15 @@ require("dotenv").config();
 
 const app = express();
 
+const gzipOptions = {
+  enableBrotli: true,
+  customCompressions: [{
+    encodingName: 'deflate',
+    fileExtension: 'zz'
+  }],
+  orderPreference: ['br']
+}
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -25,7 +35,8 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/", express.static(path.join(__dirname, "dist")));
+// app.use("/", express.static(path.join(__dirname, "dist")));
+app.use("/", expressStaticGzip(path.join(__dirname, "dist"), gzipOptions)
 
 if (process.env.NODE_ENV === "development") {
   const webpack = require("webpack");
