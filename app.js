@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const logger = require("morgan");
+const compression = require('compression');
 const expressStaticGzip = require('express-static-gzip');
 
 const indexRouter = require("./routes/index");
@@ -20,23 +21,24 @@ const app = express();
 
 const gzipOptions = {
   enableBrotli: true,
-  customCompressions: [{
-    encodingName: 'deflate',
-    fileExtension: 'zz'
-  }],
-  orderPreference: ['br']
+  orderPreference: ['br', 'gz'],
+  setHeaders: function (res, path) {
+    res.setHeader("Cache-Control", "public, max-age=31536000");
+  }
 }
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+app.use(compression());
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 // app.use("/", express.static(path.join(__dirname, "dist")));
-app.use(expressStaticGzip(path.join(__dirname, "dist"), gzipOptions));
+app.use("/", expressStaticGzip(path.join(__dirname, "dist"), gzipOptions));
 
 if (process.env.NODE_ENV === "development") {
   const webpack = require("webpack");
