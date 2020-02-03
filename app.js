@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 // app.use("/", express.static(path.join(__dirname, "dist")));
-app.use("/", expressStaticGzip(path.join(__dirname, "dist"), gzipOptions)
+app.use("/", expressStaticGzip(path.join(__dirname, "dist"), gzipOptions));
 
 if (process.env.NODE_ENV === "development") {
   const webpack = require("webpack");
