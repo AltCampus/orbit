@@ -9,22 +9,6 @@ const timelineCreator = require("../utils/timelineCreator");
 const auth = require("../utils/auth");
 const config = require("../utils/config");
 
-// Get All Users
-router.get("/", auth.verifyAdminToken, async (req, res) => {
-  try {
-    const users = await User.find({ isAdmin: false })
-      .sort({ createdAt: -1 })
-      .select("-password")
-      .populate("task")
-      .populate("quiz")
-      .populate("interview");
-
-    if (!users) res.status(200).json({ message: "No users yet", status: true });
-    res.status(200).json({ users, status: true });
-  } catch (error) {
-    res.status(400).json({ message: "Something went wrong", status: false });
-  }
-});
 
 //current Login User
 router.get("/me", auth.verifyToken, async (req, res) => {
@@ -388,6 +372,25 @@ router.delete("/status/:id", auth.verifyAdminToken, async (req, res) => {
     return res
       .status(400)
       .json({ status: false, message: "Something went wrong!" });
+  }
+});
+
+// Get All Users
+router.get("/", auth.verifyAdminToken, async (req, res) => {
+  try {
+    const users = await User.find({ isAdmin: false })
+      .sort({ createdAt: -1 })
+      .select("-password")
+      .populate("task")
+      .populate("quiz")
+      .populate("interview");
+
+    if (!users) {
+      return res.status(200).json({ message: "No users yet", status: true });
+    }
+    res.status(200).json({ users, status: true });
+  } catch (error) {
+    res.status(400).json({ message: "Something went wrong", status: false });
   }
 });
 

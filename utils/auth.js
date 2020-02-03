@@ -9,7 +9,7 @@ module.exports = {
   },
 
   verifyToken: function(req, res, next) {
-    let token = req.headers.authorization || "";
+    let token = req.headers.authorization || req.headers.Authorization || "";
     if (token) {
       jwt.verify(token, process.env.JWT_SECRET_KEY, (err, userToken) => {
         if (err) {
@@ -34,8 +34,9 @@ module.exports = {
       res.status(401).json({ status: false, message: "Unauthorized access" });
     }
   },
+
   verifyAdminToken: function(req, res, next) {
-    let token = req.headers.authorization || "";
+    let token = req.headers.authorization || req.headers.Authorization || "";
     if (token) {
       jwt.verify(token, process.env.JWT_SECRET_KEY, (err, userToken) => {
         if (err) {
