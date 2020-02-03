@@ -36,6 +36,12 @@ const getContent = (status, studentName, payload) => {
 
 
 function actualMailer(status, toAddress, studentName, payload) {
+  console.log('in mail', process.env.isMailerOn, process.env.isMailerOn == "true")
+
+  if(process.env.isMailerOn !== "true") {
+    return;
+  }
+  
   let content = getContent(status, studentName, payload);
   let subject = getSubject(status);
   try {
@@ -59,8 +65,4 @@ function actualMailer(status, toAddress, studentName, payload) {
   }
 };
 
-function fakeMailer (status, toAddress, studentName, payload) {
-  return console.log('mailed');
-};
-
-exports.mail = process.env.isMailerOn == "true" ? actualMailer : fakeMailer;
+exports.mail = actualMailer;
