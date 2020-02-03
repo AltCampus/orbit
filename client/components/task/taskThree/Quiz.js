@@ -288,7 +288,7 @@ class Quiz extends Component {
                     placeholder="Enter your answer here..."
                     value={currentQuestion.answer}
                     onChange={this.onValueChange}
-                    autoSize={{ maxRows: 10, minRows: 4 }}
+                    autoSize={{ maxRows: 10, minRows: 6 }}
                   />
                 )}
               </div>
