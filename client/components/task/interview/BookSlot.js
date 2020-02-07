@@ -48,7 +48,7 @@ class ScheduleInterview extends Component {
     const sortedSlots =
       this.props.availableSlots &&
       this.props.availableSlots.reduce((acc, val) => {
-        const slotDate = new Date(val.startTime).toLocaleDateString();
+        const slotDate = new Date(val.startTime).toDateString();
         if (acc[slotDate]) {
           acc[slotDate].push(val);
         } else {
@@ -56,13 +56,6 @@ class ScheduleInterview extends Component {
         }
         return acc;
       }, {});
-    const convertStringToDate = dateString =>
-      new Date(
-        dateString
-          .split("/")
-          .reverse()
-          .join("-")
-      );
     return (
       <>
         {this.props.isFetchingAvailableSlots ||
@@ -91,13 +84,11 @@ class ScheduleInterview extends Component {
             )}
             {sortedSlots &&
               Object.keys(sortedSlots)
-                .sort((a, b) => convertStringToDate(a) - convertStringToDate(b))
+                .sort((a, b) => new Date(a) - new Date(b))
                 .map(date => {
                   return (
                     <div className="day-wise-slot" key={date}>
-                      <Title level={4}>
-                        {convertStringToDate(date).toDateString()}
-                      </Title>
+                      <Title level={4}>{date}</Title>
                       <div className="slots-container">
                         {sortedSlots[date]
                           .sort(
@@ -111,7 +102,7 @@ class ScheduleInterview extends Component {
                               onClick={() =>
                                 this.confirmSlot(
                                   slot._id,
-                                  convertStringToDate(date).toDateString(),
+                                  date,
                                   slot.startTime,
                                   slot.endTime
                                 )
