@@ -37,7 +37,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/docs", express.static(path.join(__dirname, "public")));
+app.use("/docs", express.static(path.join(__dirname, "public/docs")));
 // app.use("/", express.static(path.join(__dirname, "dist")));
 app.use("/bundle", expressStaticGzip(path.join(__dirname, "dist/bundle"), gzipOptions));
 
