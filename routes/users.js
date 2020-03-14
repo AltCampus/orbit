@@ -25,7 +25,15 @@ router.get("/me", auth.verifyToken, async (req, res) => {
 
 /* POST req from altcampus to orbit and create user */
 router.post("/", cors(), async (req, res) => {
+
+  var auth = req.headers.authorization || req.headers.Authorization;
+
+  if (auth !== 'am-i-a-fool') {
+    return res.status(403).send({ message: "Not allowed." });
+  }
+
   let { name, email, phoneNo, socialProfile, motivation } = req.body;
+  
   try {
     // validations for required profile
     if (!name || !email || !phoneNo || !socialProfile || !motivation) {
