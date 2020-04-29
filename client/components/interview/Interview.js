@@ -21,7 +21,7 @@ function Interview() {
         res.data.slots.reduce((acc, val) => {
           if (new Date(val.startTime) > new Date()) {
             // Filter upcoming slots
-            const slotDate = new Date(val.startTime).toLocaleDateString();
+            const slotDate = new Date(val.startTime).toDateString();
             if (acc[slotDate]) {
               acc[slotDate].push(val);
             } else {
