@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { Layout, Menu, Icon, Avatar, Button, Steps } from "antd";
+import { Layout, Menu, Icon, Avatar, Button, Steps, Alert } from "antd";
 const { Step } = Steps;
 import { userLogOut } from "../../../actions/users";
 import SevenDayTimer from "./SevenDayTimer";
@@ -257,6 +257,13 @@ function UserWrapper(props) {
             <Step status={"finish"} title="Accepted" />
           )}
         </Steps>
+        <Alert
+          message="Notice"
+          description="Applications are currently being halted at stage 4. As soon as the situation gets better, we will start reviewing applications for next offline batch."
+          type="info"
+          banner={true}
+          showIcon
+        />
         <Content
           style={{
             margin: "24px 16px 0",
