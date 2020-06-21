@@ -259,7 +259,9 @@ function UserWrapper(props) {
         </Steps>
         <Alert
           message="Notice"
-          description="Applications are currently being halted at stage 4. As soon as the situation gets better, we will start reviewing applications for next offline batch."
+          description = {
+            <div>Applications are currently being halted at stage 4. As soon as the situation with COVID-19 gets better, we will start reviewing applications for next offline batch. Meanwhile we are going to launch the course online. You can subscribe for updates on the online course here - <a href="https://altcampus.io/online" target="_blank">https://altcampus.io/online</a></div>
+          }
           type="info"
           banner={true}
           showIcon
